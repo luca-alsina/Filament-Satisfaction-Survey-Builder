@@ -5,7 +5,7 @@ namespace Tapp\FilamentFormBuilder\Tests;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Tapp\FilamentFormBuilder\FilamentFormBuilderServiceProvider;
+use Tapp\FilamentFormBuilder\FilamentSatisfactionSurveyBuilderServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -21,7 +21,7 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
-            FilamentFormBuilderServiceProvider::class,
+            FilamentSatisfactionSurveyBuilderServiceProvider::class,
             LivewireServiceProvider::class,
         ];
     }

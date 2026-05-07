@@ -15,7 +15,7 @@ use Tapp\FilamentFormBuilder\Livewire\FilamentFormUser\Show as FilamentFormUserS
 use Tapp\FilamentFormBuilder\Models\FilamentFormUser;
 use Tapp\FilamentFormBuilder\Observers\FilamentFormUserObserver;
 
-class FilamentFormBuilderServiceProvider extends PackageServiceProvider
+class FilamentSatisfactionSurveyBuilderServiceProvider extends PackageServiceProvider
 {
     public static string $name = 'filament-form-builder';
 

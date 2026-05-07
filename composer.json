@@ -1,6 +1,6 @@
 {
-    "name": "tapp/filament-form-builder",
-    "description": "User facing form builder using Filament components",
+    "name": "luca-alsina/filament-satisfaction-survey-builder",
+    "description": " Generate Satisfaction Survey forms for collecting users satisfaction in Filament PHP ",
     "keywords": [
         "tapp network",
         "filament",
@@ -10,13 +10,18 @@
         "form builder",
         "call to action"
     ],
-    "homepage": "https://github.com/TappNetwork/filament-form-builder",
+    "homepage": "https://github.com/luca-alsina/Filament-Satisfaction-Survey-Builder#",
     "license": "MIT",
     "authors": [
         {
+            "name": "Luca ALSINA",
+            "email": "contact@alsinaluca.fr",
+            "role": "Developer"
+        },
+        {
             "name": "John Wesely",
             "email": "john.wesely@tappnetwork.com",
-            "role": "Developer"
+            "role": "Original Developer"
         }
     ],
     "require": {
@@ -42,12 +47,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Tapp\\FilamentFormBuilder\\": "src"
+            "Luca\\FilamentSatisfactionSurveyBuilder\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tapp\\FilamentFormBuilder\\Tests\\": "tests/",
+            "Luca\\FilamentSatisfactionSurveyBuilder\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/"
         }
     },
@@ -69,7 +74,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Tapp\\FilamentFormBuilder\\FilamentFormBuilderServiceProvider"
+                "Luca\\FilamentSatisfactionSurveyBuilder\\FilamentSatisfactionSurveyBuilderServiceProvider"
             ]
         }
     },
