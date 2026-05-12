@@ -279,7 +279,7 @@ class Show extends Component implements HasActions, HasForms
             if ($entryModel->user_id === null) {
                 return redirect()->to(
                     URL::temporarySignedRoute(
-                        config('filament-form-builder.filament-form-user-show-route'),
+                        config('filament-satisfaction-survey-builder.filament-form-user-show-route'),
                         now()->addDays(7), // Link expires in 7 days
                         ['entry' => $entryModel->id]
                     )
@@ -287,7 +287,7 @@ class Show extends Component implements HasActions, HasForms
             }
 
             return redirect()
-                ->route(config('filament-form-builder.filament-form-user-show-route'), $entryModel);
+                ->route(config('filament-satisfaction-survey-builder.filament-form-user-show-route'), $entryModel);
         }
     }
 
@@ -328,6 +328,6 @@ class Show extends Component implements HasActions, HasForms
     public function render()
     {
         /** @phpstan-ignore-next-line */
-        return view('filament-form-builder::livewire.filament-form.show');
+        return view('filament-satisfaction-survey-builder::livewire.filament-form.show');
     }
 }

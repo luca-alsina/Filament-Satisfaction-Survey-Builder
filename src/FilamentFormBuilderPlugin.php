@@ -8,7 +8,7 @@ use Filament\Panel;
 class FilamentFormBuilderPlugin implements Plugin
 {
     protected array $styles = [
-        'filament-form-builder' => __DIR__.'/../dist/filament-form-builder.css',
+        'filament-satisfaction-survey-builder' => __DIR__.'/../dist/filament-satisfaction-survey-builder.css',
     ];
 
     public static function make(): static
@@ -18,14 +18,14 @@ class FilamentFormBuilderPlugin implements Plugin
 
     public function getId(): string
     {
-        return 'filament-form-builder';
+        return 'filament-satisfaction-survey-builder';
     }
 
     public function register(Panel $panel): void
     {
         $panel
             ->resources(
-                config('filament-form-builder.resources')
+                config('filament-satisfaction-survey-builder.resources')
             );
     }
 

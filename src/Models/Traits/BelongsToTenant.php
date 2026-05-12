@@ -13,7 +13,7 @@ trait BelongsToTenant
      */
     public static function bootBelongsToTenant(): void
     {
-        if (! config('filament-form-builder.tenancy.enabled')) {
+        if (! config('filament-satisfaction-survey-builder.tenancy.enabled')) {
             return;
         }
 
@@ -21,7 +21,7 @@ trait BelongsToTenant
         static::resolveRelationUsing(
             static::getTenantRelationshipName(),
             function ($model) {
-                return $model->belongsTo(config('filament-form-builder.tenancy.model'), static::getTenantColumnName());
+                return $model->belongsTo(config('filament-satisfaction-survey-builder.tenancy.model'), static::getTenantColumnName());
             }
         );
 
@@ -70,16 +70,16 @@ trait BelongsToTenant
     public static function getTenantRelationshipName(): string
     {
         // Use configured relationship name if provided
-        if ($relationshipName = config('filament-form-builder.tenancy.relationship_name')) {
+        if ($relationshipName = config('filament-satisfaction-survey-builder.tenancy.relationship_name')) {
             return $relationshipName;
         }
 
         // Auto-detect from tenant model class name
-        $tenantModel = config('filament-form-builder.tenancy.model');
+        $tenantModel = config('filament-satisfaction-survey-builder.tenancy.model');
 
         if (! $tenantModel) {
-            if (config('filament-form-builder.tenancy.enabled')) {
-                throw new \Exception('Tenant model not configured in filament-form-builder.tenancy.model');
+            if (config('filament-satisfaction-survey-builder.tenancy.enabled')) {
+                throw new \Exception('Tenant model not configured in filament-satisfaction-survey-builder.tenancy.model');
             }
 
             return 'tenant'; // Return a default value when tenancy is disabled
@@ -94,7 +94,7 @@ trait BelongsToTenant
     public static function getTenantColumnName(): string
     {
         // Use configured column name if provided
-        if ($columnName = config('filament-form-builder.tenancy.column')) {
+        if ($columnName = config('filament-satisfaction-survey-builder.tenancy.column')) {
             return $columnName;
         }
 
@@ -108,14 +108,14 @@ trait BelongsToTenant
      */
     public function tenant(): ?BelongsTo
     {
-        if (! config('filament-form-builder.tenancy.enabled')) {
+        if (! config('filament-satisfaction-survey-builder.tenancy.enabled')) {
             return null;
         }
 
-        $tenantModel = config('filament-form-builder.tenancy.model');
+        $tenantModel = config('filament-satisfaction-survey-builder.tenancy.model');
 
         if (! $tenantModel) {
-            throw new \Exception('Tenant model not configured in filament-form-builder.tenancy.model');
+            throw new \Exception('Tenant model not configured in filament-satisfaction-survey-builder.tenancy.model');
         }
 
         return $this->belongsTo($tenantModel, static::getTenantColumnName());

@@ -36,7 +36,7 @@ class FormSubmissionNotification extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            markdown: 'filament-form-builder::mail.submission-notification',
+            markdown: 'filament-satisfaction-survey-builder::mail.submission-notification',
         );
     }
 

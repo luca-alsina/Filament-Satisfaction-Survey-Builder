@@ -6,7 +6,7 @@ use Filament\Forms\Components\Field;
 
 class Heading extends Field
 {
-    protected string $view = 'filament-form-builder::forms.components.heading';
+    protected string $view = 'filament-satisfaction-survey-builder::forms.components.heading';
 
     protected function setUp(): void
     {

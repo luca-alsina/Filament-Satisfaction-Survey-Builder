@@ -20,8 +20,8 @@ class SetFormPanel
     {
         // If panel is not provided, determine based on authentication
         if ($panel === null) {
-            $appPanelId = config('filament-form-builder.app-panel-id', 'app');
-            $guestPanelId = config('filament-form-builder.guest-panel-id', 'guest');
+            $appPanelId = config('filament-satisfaction-survey-builder.app-panel-id', 'app');
+            $guestPanelId = config('filament-satisfaction-survey-builder.guest-panel-id', 'guest');
 
             $panel = auth()->check() ? $appPanelId : $guestPanelId;
         }

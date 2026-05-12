@@ -74,6 +74,6 @@ class Show extends Component implements HasActions, HasForms, HasInfolists
     public function render()
     {
         /** @phpstan-ignore-next-line */
-        return view('filament-form-builder::livewire.filament-form-user.show');
+        return view('filament-satisfaction-survey-builder::livewire.filament-form-user.show');
     }
 }

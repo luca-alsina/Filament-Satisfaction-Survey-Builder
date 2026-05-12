@@ -16,14 +16,14 @@ class FilamentFormBuilderFrontendPlugin implements Plugin
 
     public function getId(): string
     {
-        return 'filament-form-builder-frontend';
+        return 'filament-satisfaction-survey-builder-frontend';
     }
 
     public function register(Panel $panel): void
     {
         // Register pages for viewing forms and entries in the app panel
-        $formPageClass = config('filament-form-builder.app-panel-form-page-class');
-        $entryPageClass = config('filament-form-builder.app-panel-entry-page-class');
+        $formPageClass = config('filament-satisfaction-survey-builder.app-panel-form-page-class');
+        $entryPageClass = config('filament-satisfaction-survey-builder.app-panel-entry-page-class');
 
         // Use package defaults if not configured
         if (! $formPageClass) {

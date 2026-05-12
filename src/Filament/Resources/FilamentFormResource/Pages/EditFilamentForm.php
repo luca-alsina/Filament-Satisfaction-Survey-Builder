@@ -13,7 +13,7 @@ class EditFilamentForm extends EditRecord
 
     public function getTitle(): string
     {
-        return 'Edit '.config('filament-form-builder.admin-panel-resource-name');
+        return 'Edit '.config('filament-satisfaction-survey-builder.admin-panel-resource-name');
     }
 
     protected function getHeaderActions(): array
@@ -21,8 +21,8 @@ class EditFilamentForm extends EditRecord
         return [
             DeleteAction::make(),
             Action::make('preview')
-                ->visible(fn () => (bool) config('filament-form-builder.preview-route'))
-                ->url(fn ($record) => route(config('filament-form-builder.preview-route'), ['form' => $record->id]))
+                ->visible(fn () => (bool) config('filament-satisfaction-survey-builder.preview-route'))
+                ->url(fn ($record) => route(config('filament-satisfaction-survey-builder.preview-route'), ['form' => $record->id]))
                 ->openUrlInNewTab(),
         ];
     }

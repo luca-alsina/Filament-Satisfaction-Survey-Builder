@@ -42,7 +42,7 @@ class FilamentFormResource extends Resource
      */
     public static function isScopedToTenant(): bool
     {
-        return config('filament-form-builder.tenancy.enabled', false);
+        return config('filament-satisfaction-survey-builder.tenancy.enabled', false);
     }
 
     /**
@@ -50,7 +50,7 @@ class FilamentFormResource extends Resource
      */
     public static function getTenantOwnershipRelationshipName(): string
     {
-        if (! config('filament-form-builder.tenancy.enabled')) {
+        if (! config('filament-satisfaction-survey-builder.tenancy.enabled')) {
             return 'tenant';
         }
 
@@ -59,27 +59,27 @@ class FilamentFormResource extends Resource
 
     public static function getBreadcrumb(): string
     {
-        return config('filament-form-builder.admin-panel-resource-name-plural');
+        return config('filament-satisfaction-survey-builder.admin-panel-resource-name-plural');
     }
 
     public static function getNavigationGroup(): ?string
     {
-        return config('filament-form-builder.admin-panel-group-name');
+        return config('filament-satisfaction-survey-builder.admin-panel-group-name');
     }
 
     public static function getNavigationIcon(): ?string
     {
-        return config('filament-form-builder.admin-panel-icon');
+        return config('filament-satisfaction-survey-builder.admin-panel-icon');
     }
 
     public static function getNavigationLabel(): string
     {
-        return config('filament-form-builder.admin-panel-resource-name-plural');
+        return config('filament-satisfaction-survey-builder.admin-panel-resource-name-plural');
     }
 
     public static function getNavigationSort(): ?int
     {
-        return config('filament-form-builder.admin-panel-sort-order');
+        return config('filament-satisfaction-survey-builder.admin-panel-sort-order');
     }
 
     public static function form(Schema $schema): Schema
@@ -150,8 +150,8 @@ class FilamentFormResource extends Resource
                 ActionGroup::make([
                     EditAction::make(),
                     Action::make('preview')
-                        ->visible(fn () => (bool) config('filament-form-builder.preview-route'))
-                        ->url(fn ($record) => route(config('filament-form-builder.preview-route'), ['form' => $record->id]))
+                        ->visible(fn () => (bool) config('filament-satisfaction-survey-builder.preview-route'))
+                        ->url(fn ($record) => route(config('filament-satisfaction-survey-builder.preview-route'), ['form' => $record->id]))
                         ->openUrlInNewTab(),
                     Action::make('copy')
                         ->visible(fn (): bool => static::canCreate())
@@ -194,7 +194,7 @@ class FilamentFormResource extends Resource
                     DeleteBulkAction::make(),
                 ]),
             ])
-            ->emptyStateHeading('No '.config('filament-form-builder.admin-panel-resource-name-plural'));
+            ->emptyStateHeading('No '.config('filament-satisfaction-survey-builder.admin-panel-resource-name-plural'));
     }
 
     public static function getRelations(): array
@@ -239,7 +239,7 @@ class FilamentFormResource extends Resource
 
     protected static function getNotificationEmailsField(): Component
     {
-        $userModel = config('filament-form-builder.user_model');
+        $userModel = config('filament-satisfaction-survey-builder.user_model');
 
         // If user model is configured, use Select with user search
         if ($userModel && class_exists($userModel)) {

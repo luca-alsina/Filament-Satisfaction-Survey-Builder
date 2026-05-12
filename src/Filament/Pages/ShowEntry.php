@@ -21,11 +21,11 @@ class ShowEntry extends Page
     {
         // If authenticated and using app panel, use app panel view
         // Otherwise, use guest panel view
-        if (auth()->check() && $this->getPanel()->getId() === config('filament-form-builder.app-panel-id', 'app')) {
-            return 'filament-form-builder::pages.show-entry-app';
+        if (auth()->check() && $this->getPanel()->getId() === config('filament-satisfaction-survey-builder.app-panel-id', 'app')) {
+            return 'filament-satisfaction-survey-builder::pages.show-entry-app';
         }
 
-        return 'filament-form-builder::pages.show-entry-guest';
+        return 'filament-satisfaction-survey-builder::pages.show-entry-guest';
     }
 
     public static function getRouteName(?Panel $panel = null): string
@@ -41,8 +41,8 @@ class ShowEntry extends Page
     public function getPanel(): Panel
     {
         // Use the current panel set by middleware (app for authenticated, guest for unauthenticated)
-        $guestPanelId = config('filament-form-builder.guest-panel-id', 'guest');
-        $appPanelId = config('filament-form-builder.app-panel-id', 'app');
+        $guestPanelId = config('filament-satisfaction-survey-builder.guest-panel-id', 'guest');
+        $appPanelId = config('filament-satisfaction-survey-builder.app-panel-id', 'app');
 
         $currentPanel = Filament::getCurrentPanel();
 
@@ -56,7 +56,7 @@ class ShowEntry extends Page
 
     public function mount(FilamentFormUser $entry): void
     {
-        $loginRoute = config('filament-form-builder.login-route', 'filament.app.auth.login');
+        $loginRoute = config('filament-satisfaction-survey-builder.login-route', 'filament.app.auth.login');
 
         // For guest entries, require a valid signed URL
         if ($entry->user_id === null) {

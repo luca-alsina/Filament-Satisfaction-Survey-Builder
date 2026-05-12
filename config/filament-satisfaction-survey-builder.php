@@ -1,9 +1,9 @@
 <?php
 
-use Tapp\FilamentFormBuilder\Filament\Pages\ShowEntry;
-use Tapp\FilamentFormBuilder\Filament\Pages\ShowForm;
-use Tapp\FilamentFormBuilder\Filament\Resources\FilamentFormResource;
-use Tapp\FilamentFormBuilder\Http\Middleware\SetFormPanel;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Pages\ShowEntry;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Pages\ShowForm;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentFormResource;
+use Luca\FilamentSatisfactionSurveyBuilder\Http\Middleware\SetFormPanel;
 
 return [
     'filament-form-user-show-route' => 'filament-form-users.show',

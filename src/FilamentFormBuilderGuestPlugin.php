@@ -17,14 +17,14 @@ class FilamentFormBuilderGuestPlugin implements Plugin
 
     public function getId(): string
     {
-        return 'filament-form-builder-guest';
+        return 'filament-satisfaction-survey-builder-guest';
     }
 
     public function register(Panel $panel): void
     {
         // Register pages for viewing forms and entries in the guest panel
-        $formPageClass = config('filament-form-builder.guest-panel-form-page-class');
-        $entryPageClass = config('filament-form-builder.guest-panel-entry-page-class');
+        $formPageClass = config('filament-satisfaction-survey-builder.guest-panel-form-page-class');
+        $entryPageClass = config('filament-satisfaction-survey-builder.guest-panel-entry-page-class');
 
         // Use package defaults if not configured
         if (! $formPageClass) {

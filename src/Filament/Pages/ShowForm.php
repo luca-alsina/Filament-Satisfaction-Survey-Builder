@@ -21,16 +21,16 @@ class ShowForm extends Page
     {
         // If authenticated and using app panel, use app panel view
         // Otherwise, use guest panel view
-        if (auth()->check() && $this->getPanel()->getId() === config('filament-form-builder.app-panel-id', 'app')) {
-            return 'filament-form-builder::pages.show-form-app';
+        if (auth()->check() && $this->getPanel()->getId() === config('filament-satisfaction-survey-builder.app-panel-id', 'app')) {
+            return 'filament-satisfaction-survey-builder::pages.show-form-app';
         }
 
-        return 'filament-form-builder::pages.show-form-guest';
+        return 'filament-satisfaction-survey-builder::pages.show-form-guest';
     }
 
     public static function getRouteName(?Panel $panel = null): string
     {
-        return 'filament-form-builder.show';
+        return 'filament-satisfaction-survey-builder.show';
     }
 
     public static function shouldRegisterNavigation(): bool
@@ -41,8 +41,8 @@ class ShowForm extends Page
     public function getPanel(): Panel
     {
         // Use the current panel set by middleware (app for authenticated, guest for unauthenticated)
-        $guestPanelId = config('filament-form-builder.guest-panel-id', 'guest');
-        $appPanelId = config('filament-form-builder.app-panel-id', 'app');
+        $guestPanelId = config('filament-satisfaction-survey-builder.guest-panel-id', 'guest');
+        $appPanelId = config('filament-satisfaction-survey-builder.app-panel-id', 'app');
 
         $currentPanel = Filament::getCurrentPanel();
 
@@ -58,7 +58,7 @@ class ShowForm extends Page
     {
         // If form doesn't permit guest entries and user is not authenticated, redirect to login
         if (! auth()->check() && ! $form->permit_guest_entries) {
-            $loginRoute = config('filament-form-builder.login-route', 'filament.app.auth.login');
+            $loginRoute = config('filament-satisfaction-survey-builder.login-route', 'filament.app.auth.login');
 
             $this->redirect(route($loginRoute, [
                 'redirect' => request()->fullUrl(),

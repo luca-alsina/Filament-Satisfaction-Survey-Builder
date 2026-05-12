@@ -62,7 +62,7 @@ class FilamentFormUsersRelationManager extends RelationManager
 
     public static function getTitle(Model $ownerRecord, string $pageClass): string
     {
-        return __(config('filament-form-builder.admin-panel-filament-form-user-name-plural'));
+        return __(config('filament-satisfaction-survey-builder.admin-panel-filament-form-user-name-plural'));
     }
 
     public static function getLabel(): string
@@ -84,7 +84,7 @@ class FilamentFormUsersRelationManager extends RelationManager
     {
         return $table
             ->recordTitleAttribute('user.name')
-            ->heading(config('filament-form-builder.admin-panel-filament-form-user-name-plural'))
+            ->heading(config('filament-satisfaction-survey-builder.admin-panel-filament-form-user-name-plural'))
             ->columns([
                 TextColumn::make('user.name')
                     ->sortable()
@@ -94,7 +94,7 @@ class FilamentFormUsersRelationManager extends RelationManager
                 TextColumn::make('updated_at')
                     ->sortable(),
             ])
-            ->recordUrl(fn ($record) => route(config('filament-form-builder.filament-form-user-show-route'), $record))
+            ->recordUrl(fn ($record) => route(config('filament-satisfaction-survey-builder.filament-form-user-show-route'), $record))
             ->filters([
                 Filter::make('guest_entries')
                     ->query(fn (Builder $query): Builder => $query->whereNull('user_id')),

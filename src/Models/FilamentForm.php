@@ -50,6 +50,6 @@ class FilamentForm extends Model
 
     public function getFormLinkAttribute(): string
     {
-        return route(config('filament-form-builder.filament-form-show-route'), $this->id);
+        return route(config('filament-satisfaction-survey-builder.filament-form-show-route'), $this->id);
     }
 }
