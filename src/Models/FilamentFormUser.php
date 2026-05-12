@@ -1,6 +1,6 @@
 <?php
 
-namespace Tapp\FilamentFormBuilder\Models;
+namespace Luca\FilamentSatisfactionSurveyBuilder\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Tapp\FilamentFormBuilder\Models\Traits\BelongsToTenant;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\Traits\BelongsToTenant;
 
 /**
  * @property array $entry

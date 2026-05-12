@@ -1,6 +1,6 @@
 <?php
 
-namespace Tapp\FilamentFormBuilder\Models\Traits;
+namespace Luca\FilamentSatisfactionSurveyBuilder\Models\Traits;
 
 use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

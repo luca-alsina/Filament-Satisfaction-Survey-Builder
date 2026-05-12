@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Tapp\FilamentFormBuilder\Filament\Pages;
+namespace Luca\FilamentSatisfactionSurveyBuilder\Filament\Pages;
 
 use Filament\Facades\Filament;
 use Filament\Pages\Page;
 use Filament\Panel;
-use Tapp\FilamentFormBuilder\Models\FilamentForm;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentForm;
 
 class ShowForm extends Page
 {

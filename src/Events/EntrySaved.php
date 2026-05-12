@@ -1,11 +1,11 @@
 <?php
 
-namespace Tapp\FilamentFormBuilder\Events;
+namespace Luca\FilamentSatisfactionSurveyBuilder\Events;
 
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Tapp\FilamentFormBuilder\Models\FilamentFormUser;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentFormUser;
 
 class EntrySaved
 {

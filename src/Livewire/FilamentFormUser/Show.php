@@ -1,6 +1,6 @@
 <?php
 
-namespace Tapp\FilamentFormBuilder\Livewire\FilamentFormUser;
+namespace Luca\FilamentSatisfactionSurveyBuilder\Livewire\FilamentFormUser;
 
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
@@ -14,7 +14,7 @@ use Filament\Infolists\Concerns\InteractsWithInfolists;
 use Filament\Infolists\Contracts\HasInfolists;
 use Filament\Schemas\Schema;
 use Livewire\Component;
-use Tapp\FilamentFormBuilder\Models\FilamentFormUser;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentFormUser;
 
 class Show extends Component implements HasActions, HasForms, HasInfolists
 {

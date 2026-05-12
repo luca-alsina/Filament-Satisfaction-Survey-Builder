@@ -1,6 +1,6 @@
 <?php
 
-namespace Tapp\FilamentFormBuilder\Filament\Resources\FilamentFormResource\RelationManagers;
+namespace Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentFormResource\RelationManagers;
 
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
@@ -23,7 +23,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\RecordActionsPosition;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
-use Tapp\FilamentFormBuilder\Enums\FilamentFieldTypeEnum;
+use Luca\FilamentSatisfactionSurveyBuilder\Enums\FilamentFieldTypeEnum;
 
 class FilamentFormFieldsRelationManager extends RelationManager
 {

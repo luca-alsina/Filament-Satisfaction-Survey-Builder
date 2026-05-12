@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tapp\FilamentFormBuilder\Http\Middleware;
+namespace Luca\FilamentSatisfactionSurveyBuilder\Http\Middleware;
 
 use Closure;
 use Filament\Http\Middleware\SetUpPanel;

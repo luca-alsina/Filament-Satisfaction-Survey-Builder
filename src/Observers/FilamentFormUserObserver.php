@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Tapp\FilamentFormBuilder\Observers;
+namespace Luca\FilamentSatisfactionSurveyBuilder\Observers;
 
 use Illuminate\Support\Facades\Mail;
-use Tapp\FilamentFormBuilder\Mail\FormSubmissionNotification;
-use Tapp\FilamentFormBuilder\Models\FilamentForm;
-use Tapp\FilamentFormBuilder\Models\FilamentFormUser;
+use Luca\FilamentSatisfactionSurveyBuilder\Mail\FormSubmissionNotification;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentForm;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentFormUser;
 
 class FilamentFormUserObserver
 {

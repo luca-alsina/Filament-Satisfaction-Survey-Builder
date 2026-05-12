@@ -1,6 +1,6 @@
 <?php
 
-namespace Tapp\FilamentFormBuilder\Filament\Forms\Components;
+namespace Luca\FilamentSatisfactionSurveyBuilder\Filament\Forms\Components;
 
 use Filament\Forms\Components\Field;
 

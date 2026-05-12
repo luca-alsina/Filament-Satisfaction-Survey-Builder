@@ -1,6 +1,6 @@
 <?php
 
-namespace Tapp\FilamentFormBuilder\Filament\Resources\FilamentFormResource\RelationManagers;
+namespace Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentFormResource\RelationManagers;
 
 use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkAction;
@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
-use Tapp\FilamentFormBuilder\Exports\FilamentFormUsersExport;
+use Luca\FilamentSatisfactionSurveyBuilder\Exports\FilamentFormUsersExport;
 
 class FilamentFormUsersRelationManager extends RelationManager
 {

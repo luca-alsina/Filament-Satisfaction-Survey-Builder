@@ -1,14 +1,14 @@
 <?php
 
-namespace Tapp\FilamentFormBuilder\Models;
+namespace Luca\FilamentSatisfactionSurveyBuilder\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
-use Tapp\FilamentFormBuilder\Enums\FilamentFieldTypeEnum;
-use Tapp\FilamentFormBuilder\Models\Traits\BelongsToTenant;
+use Luca\FilamentSatisfactionSurveyBuilder\Enums\FilamentFieldTypeEnum;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\Traits\BelongsToTenant;
 
 /**
  * @property int $id

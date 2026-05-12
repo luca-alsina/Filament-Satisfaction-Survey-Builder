@@ -1,6 +1,6 @@
 <?php
 
-namespace Tapp\FilamentFormBuilder;
+namespace Luca\FilamentSatisfactionSurveyBuilder;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;

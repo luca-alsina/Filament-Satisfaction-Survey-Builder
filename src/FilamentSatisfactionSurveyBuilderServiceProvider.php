@@ -1,19 +1,19 @@
 <?php
 
-namespace Tapp\FilamentFormBuilder;
+namespace Luca\FilamentSatisfactionSurveyBuilder;
 
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Tapp\FilamentFormBuilder\Filament\Pages\ShowEntry;
-use Tapp\FilamentFormBuilder\Filament\Pages\ShowForm;
-use Tapp\FilamentFormBuilder\Http\Middleware\SetFormPanel;
-use Tapp\FilamentFormBuilder\Livewire\FilamentForm\Form as FilamentForm;
-use Tapp\FilamentFormBuilder\Livewire\FilamentForm\Show as FilamentFormShow;
-use Tapp\FilamentFormBuilder\Livewire\FilamentFormUser\Show as FilamentFormUserShow;
-use Tapp\FilamentFormBuilder\Models\FilamentFormUser;
-use Tapp\FilamentFormBuilder\Observers\FilamentFormUserObserver;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Pages\ShowEntry;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Pages\ShowForm;
+use Luca\FilamentSatisfactionSurveyBuilder\Http\Middleware\SetFormPanel;
+use Luca\FilamentSatisfactionSurveyBuilder\Livewire\FilamentForm\Form as FilamentForm;
+use Luca\FilamentSatisfactionSurveyBuilder\Livewire\FilamentForm\Show as FilamentFormShow;
+use Luca\FilamentSatisfactionSurveyBuilder\Livewire\FilamentFormUser\Show as FilamentFormUserShow;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentFormUser;
+use Luca\FilamentSatisfactionSurveyBuilder\Observers\FilamentFormUserObserver;
 
 class FilamentSatisfactionSurveyBuilderServiceProvider extends PackageServiceProvider
 {

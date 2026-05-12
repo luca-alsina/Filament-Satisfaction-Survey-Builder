@@ -1,9 +1,9 @@
 <?php
 
-namespace Tapp\FilamentFormBuilder\Filament\Resources\FilamentFormResource\Pages;
+namespace Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentFormResource\Pages;
 
 use Filament\Resources\Pages\CreateRecord;
-use Tapp\FilamentFormBuilder\Filament\Resources\FilamentFormResource;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentFormResource;
 
 class CreateFilamentForm extends CreateRecord
 {

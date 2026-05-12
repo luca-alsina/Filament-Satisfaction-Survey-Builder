@@ -1,10 +1,10 @@
 <?php
 
-namespace Tapp\FilamentFormBuilder\Filament\Resources\FilamentFormResource\Pages;
+namespace Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentFormResource\Pages;
 
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
-use Tapp\FilamentFormBuilder\Filament\Resources\FilamentFormResource;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentFormResource;
 
 class ListFilamentForms extends ListRecords
 {

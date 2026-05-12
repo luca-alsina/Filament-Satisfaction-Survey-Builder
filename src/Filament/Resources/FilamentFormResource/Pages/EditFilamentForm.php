@@ -1,11 +1,11 @@
 <?php
 
-namespace Tapp\FilamentFormBuilder\Filament\Resources\FilamentFormResource\Pages;
+namespace Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentFormResource\Pages;
 
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
-use Tapp\FilamentFormBuilder\Filament\Resources\FilamentFormResource;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentFormResource;
 
 class EditFilamentForm extends EditRecord
 {

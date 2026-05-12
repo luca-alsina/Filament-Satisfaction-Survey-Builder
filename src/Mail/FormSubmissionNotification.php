@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tapp\FilamentFormBuilder\Mail;
+namespace Luca\FilamentSatisfactionSurveyBuilder\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -11,8 +11,8 @@ use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use Tapp\FilamentFormBuilder\Models\FilamentForm;
-use Tapp\FilamentFormBuilder\Models\FilamentFormUser;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentForm;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentFormUser;
 
 class FormSubmissionNotification extends Mailable implements ShouldQueue
 {

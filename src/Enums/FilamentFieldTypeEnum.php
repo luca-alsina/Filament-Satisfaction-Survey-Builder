@@ -1,6 +1,6 @@
 <?php
 
-namespace Tapp\FilamentFormBuilder\Enums;
+namespace Luca\FilamentSatisfactionSurveyBuilder\Enums;
 
 use Filament\Support\Contracts\HasLabel;
 
@@ -82,7 +82,7 @@ enum FilamentFieldTypeEnum implements HasLabel
             self::COLOR_PICKER => 'Filament\Forms\Components\ColorPicker',
             self::FILE_UPLOAD => 'Filament\Forms\Components\SpatieMediaLibraryFileUpload',
             self::REPEATER => 'Filament\Forms\Components\Repeater',
-            self::HEADING => 'Tapp\FilamentFormBuilder\Filament\Forms\Components\Heading',
+            self::HEADING => 'Luca\FilamentSatisfactionSurveyBuilder\Filament\Forms\Components\Heading',
         };
     }
 

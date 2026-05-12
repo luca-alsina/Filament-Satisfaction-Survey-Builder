@@ -1,11 +1,11 @@
 <?php
 
-namespace Tapp\FilamentFormBuilder;
+namespace Luca\FilamentSatisfactionSurveyBuilder;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
-use Tapp\FilamentFormBuilder\Filament\Pages\ShowEntry;
-use Tapp\FilamentFormBuilder\Filament\Pages\ShowForm;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Pages\ShowEntry;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Pages\ShowForm;
 
 class FilamentFormBuilderFrontendPlugin implements Plugin
 {

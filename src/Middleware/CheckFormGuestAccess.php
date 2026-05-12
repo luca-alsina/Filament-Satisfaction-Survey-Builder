@@ -1,11 +1,11 @@
 <?php
 
-namespace Tapp\FilamentFormBuilder\Middleware;
+namespace Luca\FilamentSatisfactionSurveyBuilder\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Tapp\FilamentFormBuilder\Models\FilamentForm;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentForm;
 
 class CheckFormGuestAccess
 {

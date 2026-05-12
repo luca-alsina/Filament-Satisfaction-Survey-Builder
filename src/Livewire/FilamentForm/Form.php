@@ -1,10 +1,10 @@
 <?php
 
-namespace Tapp\FilamentFormBuilder\Livewire\FilamentForm;
+namespace Luca\FilamentSatisfactionSurveyBuilder\Livewire\FilamentForm;
 
 use Livewire\Attributes\Layout;
 use Livewire\Component;
-use Tapp\FilamentFormBuilder\Models\FilamentForm;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentForm;
 
 #[Layout('components.layouts.app')]
 class Form extends Component

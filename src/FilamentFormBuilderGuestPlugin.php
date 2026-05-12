@@ -1,12 +1,12 @@
 <?php
 
-namespace Tapp\FilamentFormBuilder;
+namespace Luca\FilamentSatisfactionSurveyBuilder;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 use Illuminate\Support\Facades\Route;
-use Tapp\FilamentFormBuilder\Filament\Pages\ShowEntry;
-use Tapp\FilamentFormBuilder\Filament\Pages\ShowForm;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Pages\ShowEntry;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Pages\ShowForm;
 
 class FilamentFormBuilderGuestPlugin implements Plugin
 {

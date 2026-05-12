@@ -1,6 +1,6 @@
 <?php
 
-namespace Tapp\FilamentFormBuilder\Livewire\FilamentForm;
+namespace Luca\FilamentSatisfactionSurveyBuilder\Livewire\FilamentForm;
 
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
@@ -14,11 +14,11 @@ use Illuminate\Support\HtmlString;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
-use Tapp\FilamentFormBuilder\Enums\FilamentFieldTypeEnum;
-use Tapp\FilamentFormBuilder\Events\EntrySaved;
-use Tapp\FilamentFormBuilder\Models\FilamentForm;
-use Tapp\FilamentFormBuilder\Models\FilamentFormField;
-use Tapp\FilamentFormBuilder\Models\FilamentFormUser;
+use Luca\FilamentSatisfactionSurveyBuilder\Enums\FilamentFieldTypeEnum;
+use Luca\FilamentSatisfactionSurveyBuilder\Events\EntrySaved;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentForm;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentFormField;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentFormUser;
 
 /**
  * @property Schema $form

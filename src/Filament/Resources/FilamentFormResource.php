@@ -1,6 +1,6 @@
 <?php
 
-namespace Tapp\FilamentFormBuilder\Filament\Resources;
+namespace Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources;
 
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
@@ -23,13 +23,13 @@ use Filament\Tables\Enums\RecordActionsPosition;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Tapp\FilamentFormBuilder\Filament\Resources\FilamentFormResource\Pages\CreateFilamentForm;
-use Tapp\FilamentFormBuilder\Filament\Resources\FilamentFormResource\Pages\EditFilamentForm;
-use Tapp\FilamentFormBuilder\Filament\Resources\FilamentFormResource\Pages\ListFilamentForms;
-use Tapp\FilamentFormBuilder\Filament\Resources\FilamentFormResource\RelationManagers\FilamentFormFieldsRelationManager;
-use Tapp\FilamentFormBuilder\Filament\Resources\FilamentFormResource\RelationManagers\FilamentFormUsersRelationManager;
-use Tapp\FilamentFormBuilder\Models\FilamentForm;
-use Tapp\FilamentFormBuilder\Models\FilamentFormField;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentFormResource\Pages\CreateFilamentForm;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentFormResource\Pages\EditFilamentForm;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentFormResource\Pages\ListFilamentForms;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentFormResource\RelationManagers\FilamentFormFieldsRelationManager;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentFormResource\RelationManagers\FilamentFormUsersRelationManager;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentForm;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentFormField;
 
 class FilamentFormResource extends Resource
 {
