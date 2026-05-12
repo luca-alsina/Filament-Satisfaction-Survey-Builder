@@ -33,7 +33,27 @@ return new class extends Migration
             $table->boolean('locked')->default(false);
         });
 
-        Schema::create('filament_satisfaction_surveys_form_fields', function (Blueprint $table) {
+        Schema::create('filament_satisfaction_surveys_form_groups', function (Blueprint $table) {
+            $table->id();
+
+            // Add tenant foreign key if tenancy is enabled
+            if (config('filament-satisfaction-survey-builder.tenancy.enabled')) {
+                $tenantModel = config('filament-satisfaction-survey-builder.tenancy.model');
+                if (! $tenantModel) {
+                    throw new \Exception('Tenant model must be configured when tenancy is enabled.');
+                }
+                $table->foreignIdFor($tenantModel)
+                    ->constrained()
+                    ->cascadeOnDelete();
+            }
+
+            $table->foreignId('filament_satisfaction_survey_form_id')->constrained()->cascadeOnDelete();
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->integer('order');
+        });
+
+        Schema::create('filament_satisfaction_surveys_form_group_fields', function (Blueprint $table) {
             $table->id();
 
             // Add tenant foreign key if tenancy is enabled
@@ -48,7 +68,7 @@ return new class extends Migration
             }
 
             $table->timestamps();
-            $table->foreignId('filament_form_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('filament_satisfaction_survey_form_group_id')->constrained()->cascadeOnDelete();
             $table->integer('order');
             $table->string('type');
             $table->string('label');
@@ -84,7 +104,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('filament_satisfaction_surveys_form_fields');
+        Schema::dropIfExists('filament_satisfaction_surveys_form_groups');
+        Schema::dropIfExists('filament_satisfaction_surveys_form_group_fields');
         Schema::dropIfExists('filament_satisfaction_surveys_form_user');
         Schema::dropIfExists('filament_satisfaction_surveys_forms');
     }
