@@ -7,6 +7,6 @@ This package is a fork of [Filament Form Builder](https://github.com/tappnetwork
 
 ## TODO
 
-- [ ] **WIP** - Add fields groups in form
+- [ ] **WIP** – Add fields groups in form
 - [ ] Add a possible link to a related model from the form (ex: we have a **Formation** model, and we want to link it to the **survey form**)
 - [ ] Create a base template system for a survey form that can be duplicated on model creation for specific entry (ex: we have a **Formation** model, we create an entry in it called "Java Formation". If a **TEMPLATE survey form** linked to **Formation** modem exists, it will be duplicated and the entry will be linked to it. The name of the form will be generated from the entry name merged with template survey form name.)
