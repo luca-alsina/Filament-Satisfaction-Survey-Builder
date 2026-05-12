@@ -10,7 +10,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('filament_forms', function (Blueprint $table): void {
+        Schema::table('filament_satisfaction_surveys_forms', function (Blueprint $table): void {
             $table->json('notification_emails')->nullable()->after('description');
         });
     }

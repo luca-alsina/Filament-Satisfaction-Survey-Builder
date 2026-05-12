@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('filament_form_fields', function (Blueprint $table) {
+        Schema::table('filament_satisfaction_surveys_form_fields', function (Blueprint $table) {
             $table->text('hint')->nullable()->change();
             $table->boolean('required')->default(false)->change();
             $table->json('schema')->nullable()->after('options');
@@ -23,7 +23,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('filament_form_fields', function (Blueprint $table) {
+        Schema::table('filament_satisfaction_surveys_form_fields', function (Blueprint $table) {
             $table->string('hint')->nullable()->change();
             $table->boolean('required')->change();
             $table->dropColumn('schema');
