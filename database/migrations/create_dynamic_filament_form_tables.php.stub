@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('filament_satisfaction_surveys_forms', function (Blueprint $table) {
+        Schema::create('filament_survey_forms', function (Blueprint $table) {
             $table->id();
 
             // Add tenant foreign key if tenancy is enabled
@@ -33,7 +33,7 @@ return new class extends Migration
             $table->boolean('locked')->default(false);
         });
 
-        Schema::create('filament_satisfaction_surveys_form_groups', function (Blueprint $table) {
+        Schema::create('filament_survey_form_groups', function (Blueprint $table) {
             $table->id();
 
             // Add tenant foreign key if tenancy is enabled
@@ -47,13 +47,13 @@ return new class extends Migration
                     ->cascadeOnDelete();
             }
 
-            $table->foreignId('filament_satisfaction_survey_form_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('filament_survey_form_id')->constrained()->cascadeOnDelete();
             $table->text('name');
             $table->text('description')->nullable();
             $table->integer('order');
         });
 
-        Schema::create('filament_satisfaction_surveys_form_group_fields', function (Blueprint $table) {
+        Schema::create('filament_survey_form_group_fields', function (Blueprint $table) {
             $table->id();
 
             // Add tenant foreign key if tenancy is enabled
@@ -68,7 +68,7 @@ return new class extends Migration
             }
 
             $table->timestamps();
-            $table->foreignId('filament_satisfaction_survey_form_group_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('filament_survey_form_group_id')->constrained()->cascadeOnDelete();
             $table->integer('order');
             $table->string('type');
             $table->string('label');
@@ -78,7 +78,7 @@ return new class extends Migration
             $table->json('options')->nullable();
         });
 
-        Schema::create('filament_satisfaction_surveys_form_user', function (Blueprint $table) {
+        Schema::create('filament_survey_form_users', function (Blueprint $table) {
             $table->id();
 
             // Add tenant foreign key if tenancy is enabled
@@ -104,9 +104,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('filament_satisfaction_surveys_form_groups');
-        Schema::dropIfExists('filament_satisfaction_surveys_form_group_fields');
-        Schema::dropIfExists('filament_satisfaction_surveys_form_user');
-        Schema::dropIfExists('filament_satisfaction_surveys_forms');
+        Schema::dropIfExists('filament_survey_form_groups');
+        Schema::dropIfExists('filament_survey_form_group_fields');
+        Schema::dropIfExists('filament_survey_form_users');
+        Schema::dropIfExists('filament_survey_forms');
     }
 };

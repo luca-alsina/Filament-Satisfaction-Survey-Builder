@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('filament_satisfaction_surveys_form_fields', function (Blueprint $table): void {
+        Schema::table('filament_survey_form_fields', function (Blueprint $table): void {
             $table->text('label')->change();
         });
     }
@@ -23,7 +23,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('filament_satisfaction_surveys_form_fields', function (Blueprint $table): void {
+        Schema::table('filament_survey_form_fields', function (Blueprint $table): void {
             $table->string('label')->change();
         });
     }
