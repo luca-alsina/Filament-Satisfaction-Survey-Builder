@@ -6,9 +6,9 @@ use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfacti
 use Luca\FilamentSatisfactionSurveyBuilder\Http\Middleware\SetFormPanel;
 
 return [
-    'filament-form-user-show-route' => 'filament-form-users.show',
+    'filament-form-user-show-route' => 'filament-satisfaction-survey-builder-users.show',
 
-    'filament-form-show-route' => 'filament-form-builder.show',
+    'filament-form-show-route' => 'filament-satisfaction-survey-builder.show',
 
     'filament-form-user-uri' => 'entries',
 
@@ -34,7 +34,7 @@ return [
 
     'admin-panel-filament-form-field-name-plural' => 'Fields',
 
-    'preview-route' => 'filament-form-builder.show',
+    'preview-route' => 'filament-satisfaction-survey-builder.show',
 
     /*
      * Panel IDs Configuration
