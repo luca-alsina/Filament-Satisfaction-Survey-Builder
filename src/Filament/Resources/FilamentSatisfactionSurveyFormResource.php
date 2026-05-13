@@ -23,15 +23,15 @@ use Filament\Tables\Enums\RecordActionsPosition;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentFormResource\Pages\CreateFilamentForm;
-use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentFormResource\Pages\EditFilamentForm;
-use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentFormResource\Pages\ListFilamentForms;
-use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentFormResource\RelationManagers\FilamentFormFieldsRelationManager;
-use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentFormResource\RelationManagers\FilamentFormUsersRelationManager;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\Pages\CreateFilamentForm;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\Pages\EditFilamentForm;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\Pages\ListFilamentForms;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\RelationManagers\FilamentFormFieldsRelationManager;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\RelationManagers\FilamentFormUsersRelationManager;
 use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentForm;
 use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentFormField;
 
-class FilamentFormResource extends Resource
+class FilamentSatisfactionSurveyFormResource extends Resource
 {
     protected static ?string $model = FilamentForm::class;
 

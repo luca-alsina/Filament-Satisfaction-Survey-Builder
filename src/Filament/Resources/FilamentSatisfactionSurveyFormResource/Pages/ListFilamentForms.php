@@ -1,14 +1,14 @@
 <?php
 
-namespace Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentFormResource\Pages;
+namespace Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\Pages;
 
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
-use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentFormResource;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource;
 
 class ListFilamentForms extends ListRecords
 {
-    protected static string $resource = FilamentFormResource::class;
+    protected static string $resource = FilamentSatisfactionSurveyFormResource::class;
 
     public function getTitle(): string
     {

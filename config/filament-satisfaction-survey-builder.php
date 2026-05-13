@@ -2,7 +2,7 @@
 
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Pages\ShowEntry;
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Pages\ShowForm;
-use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentFormResource;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource;
 use Luca\FilamentSatisfactionSurveyBuilder\Http\Middleware\SetFormPanel;
 
 return [
@@ -15,7 +15,7 @@ return [
     'filament-form-uri' => 'forms',
 
     'resources' => [
-        'FilamentFormResource' => FilamentFormResource::class,
+        'FilamentFormResource' => FilamentSatisfactionSurveyFormResource::class,
     ],
 
     'admin-panel-resource-name' => 'Form',

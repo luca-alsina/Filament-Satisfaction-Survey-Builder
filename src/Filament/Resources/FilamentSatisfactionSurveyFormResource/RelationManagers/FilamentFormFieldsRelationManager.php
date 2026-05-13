@@ -1,6 +1,6 @@
 <?php
 
-namespace Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentFormResource\RelationManagers;
+namespace Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\RelationManagers;
 
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;

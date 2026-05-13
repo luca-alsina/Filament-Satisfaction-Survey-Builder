@@ -1,15 +1,15 @@
 <?php
 
-namespace Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentFormResource\Pages;
+namespace Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\Pages;
 
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
-use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentFormResource;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource;
 
 class EditFilamentForm extends EditRecord
 {
-    protected static string $resource = FilamentFormResource::class;
+    protected static string $resource = FilamentSatisfactionSurveyFormResource::class;
 
     public function getTitle(): string
     {
