@@ -19,7 +19,7 @@ use Luca\FilamentSatisfactionSurveyBuilder\Models\Traits\BelongsToTenant;
  * @property array<int, string>|null $notification_emails
  * @property-read string $form_link
  */
-class FilamentSurveyForm extends Model
+class SurveyForm extends Model
 {
     use BelongsToTenant;
     use HasFactory;
@@ -39,13 +39,13 @@ class FilamentSurveyForm extends Model
 
     public function filamentFormFields(): HasMany
     {
-        return $this->hasMany(FilamentSurveyFormField::class)
+        return $this->hasMany(SurveyFormField::class)
             ->orderBy('order', 'asc');
     }
 
     public function filamentFormUsers(): HasMany
     {
-        return $this->hasMany(FilamentSurveyFormUser::class);
+        return $this->hasMany(SurveyFormUser::class);
     }
 
     public function getFormLinkAttribute(): string

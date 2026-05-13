@@ -5,7 +5,7 @@ namespace Luca\FilamentSatisfactionSurveyBuilder\Events;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentSurveyFormUser;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyFormUser;
 
 class EntrySaved
 {
@@ -15,6 +15,6 @@ class EntrySaved
      * Create a new event instance.
      */
     public function __construct(
-        public FilamentSurveyFormUser $entry
+        public SurveyFormUser $entry
     ) {}
 }

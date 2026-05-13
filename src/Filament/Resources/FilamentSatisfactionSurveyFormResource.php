@@ -28,12 +28,12 @@ use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfacti
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\Pages\ListFilamentForms;
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\RelationManagers\FilamentFormFieldsRelationManager;
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\RelationManagers\FilamentFormUsersRelationManager;
-use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentSurveyForm;
-use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentSurveyFormField;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyForm;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyFormField;
 
 class FilamentSatisfactionSurveyFormResource extends Resource
 {
-    protected static ?string $model = FilamentSurveyForm::class;
+    protected static ?string $model = SurveyForm::class;
 
     protected static ?int $navigationSort = 99;
 
@@ -54,7 +54,7 @@ class FilamentSatisfactionSurveyFormResource extends Resource
             return 'tenant';
         }
 
-        return FilamentSurveyForm::getTenantRelationshipName();
+        return SurveyForm::getTenantRelationshipName();
     }
 
     public static function getBreadcrumb(): string
@@ -95,8 +95,8 @@ class FilamentSatisfactionSurveyFormResource extends Resource
                     ->hint('Permit non registered users to submit this form'),
                 Toggle::make('private_entries')
                     ->hint('When enabled, entries for this form can be restricted to certain users (e.g. via a gate in your application).')
-                    ->disabled(fn (?FilamentSurveyForm $record): bool => static::userCannotChangePrivateEntries($record))
-                    ->dehydrateStateUsing(fn ($state, ?FilamentSurveyForm $record): bool => static::userCannotChangePrivateEntries($record) && $record
+                    ->disabled(fn (?SurveyForm $record): bool => static::userCannotChangePrivateEntries($record))
+                    ->dehydrateStateUsing(fn ($state, ?SurveyForm $record): bool => static::userCannotChangePrivateEntries($record) && $record
                         ? (bool) $record->private_entries
                         : (bool) $state),
                 RichEditor::make('description')
@@ -157,7 +157,7 @@ class FilamentSatisfactionSurveyFormResource extends Resource
                         ->visible(fn (): bool => static::canCreate())
                         ->authorize(fn (): bool => static::canCreate())
                         ->action(function ($record) {
-                            $formCopy = FilamentSurveyForm::create([
+                            $formCopy = SurveyForm::create([
                                 'name' => $record->name.' - (Copy)',
                                 'permit_guest_entries' => $record->permit_guest_entries,
                                 'private_entries' => $record->private_entries,
@@ -167,7 +167,7 @@ class FilamentSatisfactionSurveyFormResource extends Resource
                             ]);
 
                             $record->filamentFormFields->each(function ($field) use ($formCopy) {
-                                FilamentSurveyFormField::create([
+                                SurveyFormField::create([
                                     'filament_form_id' => $formCopy->id,
                                     'label' => $field->label,
                                     'type' => $field->type,
@@ -218,7 +218,7 @@ class FilamentSatisfactionSurveyFormResource extends Resource
      * True when the current user must not be allowed to change the private_entries toggle.
      * Used when the form is private and the app's viewEntries policy denies the user.
      */
-    protected static function userCannotChangePrivateEntries(?FilamentSurveyForm $record): bool
+    protected static function userCannotChangePrivateEntries(?SurveyForm $record): bool
     {
         if (! $record || ! $record->exists || ! (bool) $record->private_entries) {
             return false;

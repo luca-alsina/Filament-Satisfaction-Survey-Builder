@@ -4,14 +4,14 @@ namespace Luca\FilamentSatisfactionSurveyBuilder\Livewire\FilamentForm;
 
 use Livewire\Attributes\Layout;
 use Livewire\Component;
-use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentSurveyForm;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyForm;
 
 #[Layout('components.layouts.app')]
 class Form extends Component
 {
-    public FilamentSurveyForm $form;
+    public SurveyForm $form;
 
-    public function mount(FilamentSurveyForm $form)
+    public function mount(SurveyForm $form)
     {
         $this->form = $form;
     }

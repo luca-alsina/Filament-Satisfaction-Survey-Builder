@@ -5,7 +5,7 @@ namespace Luca\FilamentSatisfactionSurveyBuilder\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentSurveyForm;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyForm;
 
 class CheckFormGuestAccess
 {
@@ -19,7 +19,7 @@ class CheckFormGuestAccess
         $form = $request->route('form');
 
         // If form allows guest entries, allow access
-        if ($form instanceof FilamentSurveyForm && $form->permit_guest_entries) {
+        if ($form instanceof SurveyForm && $form->permit_guest_entries) {
             return $next($request);
         }
 

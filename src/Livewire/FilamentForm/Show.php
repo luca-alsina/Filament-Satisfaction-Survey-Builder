@@ -16,9 +16,9 @@ use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 use Luca\FilamentSatisfactionSurveyBuilder\Enums\FilamentFieldTypeEnum;
 use Luca\FilamentSatisfactionSurveyBuilder\Events\EntrySaved;
-use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentSurveyForm;
-use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentSurveyFormField;
-use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentSurveyFormUser;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyForm;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyFormField;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyFormUser;
 
 /**
  * @property Schema $form
@@ -29,7 +29,7 @@ class Show extends Component implements HasActions, HasForms
     use InteractsWithForms;
     use WithFileUploads;
 
-    public FilamentSurveyForm $filamentForm;
+    public SurveyForm $filamentForm;
 
     public bool $blockRedirect;
 
@@ -37,7 +37,7 @@ class Show extends Component implements HasActions, HasForms
 
     public ?array $data = [];
 
-    public function mount(FilamentSurveyForm $form, bool $blockRedirect = false, bool $preview = false)
+    public function mount(SurveyForm $form, bool $blockRedirect = false, bool $preview = false)
     {
         $this->preview = $preview;
 
@@ -59,7 +59,7 @@ class Show extends Component implements HasActions, HasForms
     {
         $schema = [];
 
-        /** @var FilamentSurveyFormField $fieldData */
+        /** @var SurveyFormField $fieldData */
         foreach ($this->filamentForm->filamentFormFields as $fieldData) {
             $filamentField = $fieldData->type->className()::make($fieldData->id);
 
@@ -165,7 +165,7 @@ class Show extends Component implements HasActions, HasForms
         $entry = [];
 
         foreach ($formState as $key => $value) {
-            /** @var FilamentSurveyFormField|null $field */
+            /** @var SurveyFormField|null $field */
             $field = $this->filamentForm
                 ->filamentFormFields
                 ->find($key);
@@ -218,7 +218,7 @@ class Show extends Component implements HasActions, HasForms
         }
 
         if (Auth::check()) {
-            $entryModel = FilamentSurveyFormUser::updateOrCreate(
+            $entryModel = SurveyFormUser::updateOrCreate(
                 [
                     'user_id' => Auth::user()->id ?? null,
                     'filament_form_id' => $this->filamentForm->id,
@@ -228,7 +228,7 @@ class Show extends Component implements HasActions, HasForms
                 ],
             );
         } else {
-            $entryModel = FilamentSurveyFormUser::create(
+            $entryModel = SurveyFormUser::create(
                 [
                     'filament_form_id' => $this->filamentForm->id,
                     'entry' => $entry,
@@ -238,7 +238,7 @@ class Show extends Component implements HasActions, HasForms
 
         // Handle file uploads
         foreach ($this->filamentForm->filamentFormFields as $field) {
-            /** @var FilamentSurveyFormField $field */
+            /** @var SurveyFormField $field */
             if ($field->type === FilamentFieldTypeEnum::FILE_UPLOAD) {
                 $fileKey = $field->id;
                 $fileData = $this->data[$fileKey] ?? null;
@@ -291,7 +291,7 @@ class Show extends Component implements HasActions, HasForms
         }
     }
 
-    public function parseValue(FilamentSurveyFormField $field, string|array|null $value): string|array
+    public function parseValue(SurveyFormField $field, string|array|null $value): string|array
     {
         if ($value === null && ! $field->type->isBool()) {
             return '';

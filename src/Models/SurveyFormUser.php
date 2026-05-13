@@ -15,9 +15,9 @@ use Luca\FilamentSatisfactionSurveyBuilder\Models\Traits\BelongsToTenant;
  * @property array|null $firstEntry
  * @property int|null $user_id
  * @property-read array $key_value_entry
- * @property-read FilamentSurveyForm $filamentForm
+ * @property-read SurveyForm $filamentForm
  */
-class FilamentSurveyFormUser extends Model implements HasMedia
+class SurveyFormUser extends Model implements HasMedia
 {
     use BelongsToTenant;
     use HasFactory;
@@ -38,7 +38,7 @@ class FilamentSurveyFormUser extends Model implements HasMedia
 
     public function filamentForm(): BelongsTo
     {
-        return $this->belongsTo(FilamentSurveyForm::class);
+        return $this->belongsTo(SurveyForm::class);
     }
 
     public function getKeyValueEntryAttribute()
