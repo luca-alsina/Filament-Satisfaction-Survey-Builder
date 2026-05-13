@@ -4,10 +4,11 @@ namespace Luca\FilamentSatisfactionSurveyBuilder;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
+use Illuminate\Support\Facades\Route;
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Pages\ShowEntry;
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Pages\ShowForm;
 
-class FilamentFormBuilderFrontendPlugin implements Plugin
+class FilamentSatisfactionSurveyBuilderGuestPlugin implements Plugin
 {
     public static function make(): static
     {
@@ -16,14 +17,14 @@ class FilamentFormBuilderFrontendPlugin implements Plugin
 
     public function getId(): string
     {
-        return 'filament-satisfaction-survey-builder-frontend';
+        return 'filament-satisfaction-survey-builder-guest';
     }
 
     public function register(Panel $panel): void
     {
-        // Register pages for viewing forms and entries in the app panel
-        $formPageClass = config('filament-satisfaction-survey-builder.app-panel-form-page-class');
-        $entryPageClass = config('filament-satisfaction-survey-builder.app-panel-entry-page-class');
+        // Register pages for viewing forms and entries in the guest panel
+        $formPageClass = config('filament-satisfaction-survey-builder.guest-panel-form-page-class');
+        $entryPageClass = config('filament-satisfaction-survey-builder.guest-panel-entry-page-class');
 
         // Use package defaults if not configured
         if (! $formPageClass) {

@@ -5,7 +5,7 @@ namespace Luca\FilamentSatisfactionSurveyBuilder;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 
-class FilamentFormBuilderPlugin implements Plugin
+class FilamentSatisfactionSurveyBuilderPlugin implements Plugin
 {
     protected array $styles = [
         'filament-satisfaction-survey-builder' => __DIR__.'/../dist/filament-satisfaction-survey-builder.css',
