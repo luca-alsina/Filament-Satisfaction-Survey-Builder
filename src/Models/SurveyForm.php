@@ -37,16 +37,17 @@ class SurveyForm extends Model
         return $this->belongsToMany(config('auth.providers.users.model', Authenticatable::class));
     }
 
-    public function filamentFormFields(): HasMany
-    {
-        return $this->hasMany(SurveyFormField::class)
-            ->orderBy('order', 'asc');
-    }
-
     public function filamentFormUsers(): HasMany
     {
         return $this->hasMany(SurveyFormUser::class);
     }
+
+    public function filamentFormGroups(): HasMany
+    {
+        return $this->hasMany(SurveyFormGroup::class)
+            ->orderBy('order', 'asc');
+    }
+
 
     public function getFormLinkAttribute(): string
     {

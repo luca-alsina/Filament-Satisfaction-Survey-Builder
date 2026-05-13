@@ -19,7 +19,7 @@ use Luca\FilamentSatisfactionSurveyBuilder\Models\Traits\BelongsToTenant;
  * @property int $order
  * @property-read SurveyForm $filamentForm
  */
-class SurveyFormField extends Model implements Sortable
+class SurveyFormGroupField extends Model implements Sortable
 {
     use BelongsToTenant;
     use HasFactory;
@@ -39,8 +39,8 @@ class SurveyFormField extends Model implements Sortable
         'schema' => 'array',
     ];
 
-    public function filamentForm(): BelongsTo
+    public function filamentFormGroup(): BelongsTo
     {
-        return $this->belongsTo(SurveyForm::class);
+        return $this->belongsTo(SurveyFormGroup::class);
     }
 }

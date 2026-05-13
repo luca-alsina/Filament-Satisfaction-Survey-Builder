@@ -17,7 +17,7 @@ use Livewire\Features\SupportFileUploads\WithFileUploads;
 use Luca\FilamentSatisfactionSurveyBuilder\Enums\FilamentFieldTypeEnum;
 use Luca\FilamentSatisfactionSurveyBuilder\Events\EntrySaved;
 use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyForm;
-use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyFormField;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyFormGroupField;
 use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyFormUser;
 
 /**
@@ -59,7 +59,7 @@ class Show extends Component implements HasActions, HasForms
     {
         $schema = [];
 
-        /** @var SurveyFormField $fieldData */
+        /** @var SurveyFormGroupField $fieldData */
         foreach ($this->filamentForm->filamentFormFields as $fieldData) {
             $filamentField = $fieldData->type->className()::make($fieldData->id);
 
@@ -165,7 +165,7 @@ class Show extends Component implements HasActions, HasForms
         $entry = [];
 
         foreach ($formState as $key => $value) {
-            /** @var SurveyFormField|null $field */
+            /** @var SurveyFormGroupField|null $field */
             $field = $this->filamentForm
                 ->filamentFormFields
                 ->find($key);
@@ -238,7 +238,7 @@ class Show extends Component implements HasActions, HasForms
 
         // Handle file uploads
         foreach ($this->filamentForm->filamentFormFields as $field) {
-            /** @var SurveyFormField $field */
+            /** @var SurveyFormGroupField $field */
             if ($field->type === FilamentFieldTypeEnum::FILE_UPLOAD) {
                 $fileKey = $field->id;
                 $fileData = $this->data[$fileKey] ?? null;
@@ -291,7 +291,7 @@ class Show extends Component implements HasActions, HasForms
         }
     }
 
-    public function parseValue(SurveyFormField $field, string|array|null $value): string|array
+    public function parseValue(SurveyFormGroupField $field, string|array|null $value): string|array
     {
         if ($value === null && ! $field->type->isBool()) {
             return '';

@@ -25,7 +25,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Luca\FilamentSatisfactionSurveyBuilder\Enums\FilamentFieldTypeEnum;
 
-class FilamentFormFieldsRelationManager extends RelationManager
+class FilamentSatisfactionSurveyFormGroupFieldsRelationManager extends RelationManager
 {
     protected static string $relationship = 'filamentFormFields';
 

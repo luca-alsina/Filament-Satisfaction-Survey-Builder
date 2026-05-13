@@ -26,10 +26,11 @@ use Illuminate\Support\Facades\Redirect;
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\Pages\CreateFilamentForm;
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\Pages\EditFilamentForm;
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\Pages\ListFilamentForms;
-use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\RelationManagers\FilamentFormFieldsRelationManager;
-use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\RelationManagers\FilamentFormUsersRelationManager;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\RelationManagers\FilamentSatisfactionSurveyFormGroupFieldsRelationManager;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\RelationManagers\FilamentSatisfactionSurveyFormGroupsRelationManager;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\RelationManagers\FilamentSatisfactionSurveyFormUsersRelationManager;
 use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyForm;
-use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyFormField;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyFormGroupField;
 
 class FilamentSatisfactionSurveyFormResource extends Resource
 {
@@ -167,7 +168,7 @@ class FilamentSatisfactionSurveyFormResource extends Resource
                             ]);
 
                             $record->filamentFormFields->each(function ($field) use ($formCopy) {
-                                SurveyFormField::create([
+                                SurveyFormGroupField::create([
                                     'filament_form_id' => $formCopy->id,
                                     'label' => $field->label,
                                     'type' => $field->type,
@@ -200,8 +201,9 @@ class FilamentSatisfactionSurveyFormResource extends Resource
     public static function getRelations(): array
     {
         return [
-            FilamentFormFieldsRelationManager::class,
-            FilamentFormUsersRelationManager::class,
+//            FilamentSatisfactionSurveyFormGroupFieldsRelationManager::class,
+            FilamentSatisfactionSurveyFormGroupsRelationManager::class,
+            FilamentSatisfactionSurveyFormUsersRelationManager::class,
         ];
     }
 

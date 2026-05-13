@@ -30,6 +30,10 @@ return [
 
     'admin-panel-filament-form-user-name-plural' => 'Entries',
 
+    'admin-panel-filament-form-group-name' => 'Group',
+
+    'admin-panel-filament-form-group-name-plural' => 'Groups',
+
     'admin-panel-filament-form-field-name' => 'Field',
 
     'admin-panel-filament-form-field-name-plural' => 'Fields',

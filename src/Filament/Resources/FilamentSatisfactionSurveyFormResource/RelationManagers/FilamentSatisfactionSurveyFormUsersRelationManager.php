@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use Luca\FilamentSatisfactionSurveyBuilder\Exports\FilamentFormUsersExport;
 
-class FilamentFormUsersRelationManager extends RelationManager
+class FilamentSatisfactionSurveyFormUsersRelationManager extends RelationManager
 {
     protected static string $relationship = 'filamentFormUsers';
 
