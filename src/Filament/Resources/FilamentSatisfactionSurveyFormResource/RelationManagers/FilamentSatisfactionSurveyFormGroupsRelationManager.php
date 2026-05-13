@@ -18,7 +18,6 @@ use Filament\Forms\Components\Toggle;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\RecordActionsPosition;
 use Filament\Tables\Table;
@@ -82,7 +81,7 @@ class FilamentSatisfactionSurveyFormGroupsRelationManager extends RelationManage
                 //     }),
                 TextInput::make('order')
                     ->default(function () {
-                        return $this->getOwnerRecord()->filamentFormFields()->count() + 1;
+                        return $this->getOwnerRecord()->filamentFormGroups()->count() + 1;
                     })
                     ->numeric(),
                 Toggle::make('required')
@@ -135,25 +134,17 @@ class FilamentSatisfactionSurveyFormGroupsRelationManager extends RelationManage
         $form = $this->getOwnerRecord();
 
         return $table
-            ->recordTitleAttribute('label')
+            ->recordTitleAttribute('name')
             ->heading(config('filament-satisfaction-survey-builder.admin-panel-filament-form-group-name-plural'))
             ->modelLabel(config('filament-satisfaction-survey-builder.admin-panel-filament-form-group-name'))
             ->reorderable('order')
             ->columns([
-                TextColumn::make('label'),
+                TextColumn::make('name'),
                 TextColumn::make('order')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('type')
-                    ->formatStateUsing(function ($record) {
-                        return $record->type->fieldName();
-                    }),
-                IconColumn::make('required')
-                    ->sortable()
-                    ->getStateUsing(function ($record) {
-                        return (bool)$record->required;
-                    })
-                    ->boolean(),
+                Textarea::make('description')
+                    ->columnSpanFull(),
             ])
             ->headerActions([
                 CreateAction::make()
