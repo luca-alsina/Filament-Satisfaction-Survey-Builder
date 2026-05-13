@@ -49,6 +49,7 @@ return new class extends Migration
 
             $table->foreignId('survey_form_id')->constrained()->cascadeOnDelete();
             $table->text('name');
+            $table->boolean('show_name')->default(true);
             $table->text('description')->nullable();
             $table->integer('order');
         });
