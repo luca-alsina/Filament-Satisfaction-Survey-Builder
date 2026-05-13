@@ -26,7 +26,6 @@ use Illuminate\Support\Facades\Redirect;
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\Pages\CreateFilamentForm;
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\Pages\EditFilamentForm;
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\Pages\ListFilamentForms;
-use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\RelationManagers\FilamentSatisfactionSurveyFormGroupFieldsRelationManager;
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\RelationManagers\FilamentSatisfactionSurveyFormGroupsRelationManager;
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\RelationManagers\FilamentSatisfactionSurveyFormUsersRelationManager;
 use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyForm;
@@ -51,7 +50,7 @@ class FilamentSatisfactionSurveyFormResource extends Resource
      */
     public static function getTenantOwnershipRelationshipName(): string
     {
-        if (! config('filament-satisfaction-survey-builder.tenancy.enabled')) {
+        if (!config('filament-satisfaction-survey-builder.tenancy.enabled')) {
             return 'tenant';
         }
 
@@ -96,10 +95,10 @@ class FilamentSatisfactionSurveyFormResource extends Resource
                     ->hint('Permit non registered users to submit this form'),
                 Toggle::make('private_entries')
                     ->hint('When enabled, entries for this form can be restricted to certain users (e.g. via a gate in your application).')
-                    ->disabled(fn (?SurveyForm $record): bool => static::userCannotChangePrivateEntries($record))
-                    ->dehydrateStateUsing(fn ($state, ?SurveyForm $record): bool => static::userCannotChangePrivateEntries($record) && $record
-                        ? (bool) $record->private_entries
-                        : (bool) $state),
+                    ->disabled(fn(?SurveyForm $record): bool => static::userCannotChangePrivateEntries($record))
+                    ->dehydrateStateUsing(fn($state, ?SurveyForm $record): bool => static::userCannotChangePrivateEntries($record) && $record
+                        ? (bool)$record->private_entries
+                        : (bool)$state),
                 RichEditor::make('description')
                     ->columnSpanFull(),
                 Section::make('Notifications')
@@ -134,7 +133,7 @@ class FilamentSatisfactionSurveyFormResource extends Resource
                 IconColumn::make('permit_guest_entries')
                     ->sortable()
                     ->getStateUsing(function ($record) {
-                        return (bool) $record->permit_guest_entries;
+                        return (bool)$record->permit_guest_entries;
                     })
                     ->boolean(),
                 IconColumn::make('private_entries')
@@ -151,15 +150,15 @@ class FilamentSatisfactionSurveyFormResource extends Resource
                 ActionGroup::make([
                     EditAction::make(),
                     Action::make('preview')
-                        ->visible(fn () => (bool) config('filament-satisfaction-survey-builder.preview-route'))
-                        ->url(fn ($record) => route(config('filament-satisfaction-survey-builder.preview-route'), ['form' => $record->id]))
+                        ->visible(fn() => (bool)config('filament-satisfaction-survey-builder.preview-route'))
+                        ->url(fn($record) => route(config('filament-satisfaction-survey-builder.preview-route'), ['form' => $record->id]))
                         ->openUrlInNewTab(),
                     Action::make('copy')
-                        ->visible(fn (): bool => static::canCreate())
-                        ->authorize(fn (): bool => static::canCreate())
+                        ->visible(fn(): bool => static::canCreate())
+                        ->authorize(fn(): bool => static::canCreate())
                         ->action(function ($record) {
                             $formCopy = SurveyForm::create([
-                                'name' => $record->name.' - (Copy)',
+                                'name' => $record->name . ' - (Copy)',
                                 'permit_guest_entries' => $record->permit_guest_entries,
                                 'private_entries' => $record->private_entries,
                                 'redirect_url' => $record->redirect_url,
@@ -186,7 +185,7 @@ class FilamentSatisfactionSurveyFormResource extends Resource
                                 ->success()
                                 ->send();
 
-                            return Redirect::to('/admin/filament-forms/'.$formCopy->id.'/edit');
+                            return Redirect::to('/admin/filament-forms/' . $formCopy->id . '/edit');
                         }),
                 ]),
             ], position: RecordActionsPosition::BeforeColumns)
@@ -195,13 +194,12 @@ class FilamentSatisfactionSurveyFormResource extends Resource
                     DeleteBulkAction::make(),
                 ]),
             ])
-            ->emptyStateHeading('No '.config('filament-satisfaction-survey-builder.admin-panel-resource-name-plural'));
+            ->emptyStateHeading('No ' . config('filament-satisfaction-survey-builder.admin-panel-resource-name-plural'));
     }
 
     public static function getRelations(): array
     {
         return [
-//            FilamentSatisfactionSurveyFormGroupFieldsRelationManager::class,
             FilamentSatisfactionSurveyFormGroupsRelationManager::class,
             FilamentSatisfactionSurveyFormUsersRelationManager::class,
         ];
@@ -222,18 +220,18 @@ class FilamentSatisfactionSurveyFormResource extends Resource
      */
     protected static function userCannotChangePrivateEntries(?SurveyForm $record): bool
     {
-        if (! $record || ! $record->exists || ! (bool) $record->private_entries) {
+        if (!$record || !$record->exists || !(bool)$record->private_entries) {
             return false;
         }
 
         $user = Auth::user();
-        if (! $user) {
+        if (!$user) {
             return true;
         }
 
         $policy = policy($record);
         if ($policy && method_exists($policy, 'viewEntries')) {
-            return ! $user->can('viewEntries', $record);
+            return !$user->can('viewEntries', $record);
         }
 
         return false;
@@ -258,12 +256,12 @@ class FilamentSatisfactionSurveyFormResource extends Resource
                         })
                         ->limit(50)
                         ->get()
-                        ->mapWithKeys(fn ($user) => [$user->email => $user->name.' ('.$user->email.')']);
+                        ->mapWithKeys(fn($user) => [$user->email => $user->name . ' (' . $user->email . ')']);
                 })
                 ->getOptionLabelsUsing(function (array $values) use ($userModel): array {
                     return $userModel::whereIn('email', $values)
                         ->get()
-                        ->mapWithKeys(fn ($user) => [$user->email => $user->name.' ('.$user->email.')'])
+                        ->mapWithKeys(fn($user) => [$user->email => $user->name . ' (' . $user->email . ')'])
                         ->toArray();
                 });
         }

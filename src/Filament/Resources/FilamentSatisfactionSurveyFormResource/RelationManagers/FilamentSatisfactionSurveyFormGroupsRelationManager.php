@@ -8,14 +8,15 @@ use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\RecordActionsPosition;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormGroups\FilamentSatisfactionSurveyFormGroupResource;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormGroups\Schemas\FilamentSatisfactionSurveyFormGroupForm;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyFormGroup;
 
 class FilamentSatisfactionSurveyFormGroupsRelationManager extends RelationManager
 {
@@ -28,18 +29,7 @@ class FilamentSatisfactionSurveyFormGroupsRelationManager extends RelationManage
 
     public function form(Schema $schema): Schema
     {
-        return $schema
-            ->components([
-                TextInput::make('name')
-                    ->required(),
-                TextInput::make('order')
-                    ->default(function () {
-                        return $this->getOwnerRecord()->filamentFormGroups()->count() + 1;
-                    })
-                    ->numeric(),
-                Textarea::make('description')
-                    ->columnSpanFull(),
-            ]);
+        return FilamentSatisfactionSurveyFormGroupForm::configure($schema);
     }
 
     public function table(Table $table): Table
@@ -91,6 +81,7 @@ class FilamentSatisfactionSurveyFormGroupsRelationManager extends RelationManage
             ->recordActions([
                 ActionGroup::make([
                     EditAction::make()
+                        ->url(fn(SurveyFormGroup $item) => FilamentSatisfactionSurveyFormGroupResource::getUrl('edit', [$item->id]))
                         ->visible(function () use ($form) {
                             return !$form->locked;
                         }),

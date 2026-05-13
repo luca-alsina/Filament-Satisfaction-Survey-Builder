@@ -1,6 +1,6 @@
 <?php
 
-namespace Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\RelationManagers;
+namespace Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormGroups\RelationManagers;
 
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
@@ -41,12 +41,12 @@ class FilamentSatisfactionSurveyFormGroupFieldsRelationManager extends RelationM
                 Select::make('type')
                     ->options(function () {
                         return collect(FilamentFieldTypeEnum::cases())
-                            ->mapWithKeys(fn ($type) => [$type->name => $type->fieldName()])
-                            ->sortBy(fn ($label, $key) => $label)
+                            ->mapWithKeys(fn($type) => [$type->name => $type->fieldName()])
+                            ->sortBy(fn($label, $key) => $label)
                             ->toArray();
                     })
                     ->columnSpan(function ($state) {
-                        if (! empty($state) && FilamentFieldTypeEnum::fromString($state)->hasOptions()) {
+                        if (!empty($state) && FilamentFieldTypeEnum::fromString($state)->hasOptions()) {
                             return 1;
                         }
 
@@ -98,8 +98,8 @@ class FilamentSatisfactionSurveyFormGroupFieldsRelationManager extends RelationM
                         Select::make('type')
                             ->options(function () {
                                 $options = collect(FilamentFieldTypeEnum::cases())
-                                    ->filter(fn ($type) => $type !== FilamentFieldTypeEnum::REPEATER)
-                                    ->mapWithKeys(fn ($type) => [$type->name => $type->fieldName()])
+                                    ->filter(fn($type) => $type !== FilamentFieldTypeEnum::REPEATER)
+                                    ->mapWithKeys(fn($type) => [$type->name => $type->fieldName()])
                                     ->toArray();
 
                                 return $options;
@@ -151,21 +151,21 @@ class FilamentSatisfactionSurveyFormGroupFieldsRelationManager extends RelationM
                 IconColumn::make('required')
                     ->sortable()
                     ->getStateUsing(function ($record) {
-                        return (bool) $record->required;
+                        return (bool)$record->required;
                     })
                     ->boolean(),
             ])
             ->headerActions([
                 CreateAction::make()
                     ->visible(function () use ($form) {
-                        return ! $form->locked;
+                        return !$form->locked;
                     })
                     ->label('Create Field'),
                 Action::make('lock_fields')
                     ->requiresConfirmation()
                     ->modalHeading('Lock Form Fields. Doing this will lock the forms fields and new fields will no longer be able to be changed or edited')
                     ->visible(function () use ($form) {
-                        return ! $form->locked;
+                        return !$form->locked;
                     })
                     ->action(function () use ($form) {
                         $form->update([
@@ -188,11 +188,11 @@ class FilamentSatisfactionSurveyFormGroupFieldsRelationManager extends RelationM
                 ActionGroup::make([
                     EditAction::make()
                         ->visible(function () use ($form) {
-                            return ! $form->locked;
+                            return !$form->locked;
                         }),
                     DeleteAction::make()
                         ->visible(function () use ($form) {
-                            return ! $form->locked;
+                            return !$form->locked;
                         }),
                 ]),
             ], position: RecordActionsPosition::BeforeColumns)
@@ -200,7 +200,7 @@ class FilamentSatisfactionSurveyFormGroupFieldsRelationManager extends RelationM
                 BulkActionGroup::make([
                     DeleteBulkAction::make()
                         ->visible(function () use ($form) {
-                            return ! $form->locked;
+                            return !$form->locked;
                         }),
                 ]),
             ]);
