@@ -9,6 +9,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class SurveyFormGroup extends Model
 {
 
+    protected $fillable = [
+        'name',
+        'order',
+        'description',
+    ];
+
+    public $timestamps = false;
+
     public function filamentFormGroupFields(): HasMany
     {
         return $this->hasMany(SurveyFormGroupField::class)

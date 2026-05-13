@@ -2,27 +2,20 @@
 
 namespace Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\RelationManagers;
 
-use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\RecordActionsPosition;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
-use Luca\FilamentSatisfactionSurveyBuilder\Enums\FilamentFieldTypeEnum;
 
 class FilamentSatisfactionSurveyFormGroupsRelationManager extends RelationManager
 {
@@ -37,95 +30,15 @@ class FilamentSatisfactionSurveyFormGroupsRelationManager extends RelationManage
     {
         return $schema
             ->components([
-                Select::make('type')
-                    ->options(function () {
-                        return collect(FilamentFieldTypeEnum::cases())
-                            ->mapWithKeys(fn($type) => [$type->name => $type->fieldName()])
-                            ->sortBy(fn($label, $key) => $label)
-                            ->toArray();
-                    })
-                    ->columnSpan(function ($state) {
-                        if (!empty($state) && FilamentFieldTypeEnum::fromString($state)->hasOptions()) {
-                            return 1;
-                        }
-
-                        return 2;
-                    })
-                    ->required()
-                    ->live(),
-                Textarea::make('label')
-                    ->required()
-                    ->label(function (Get $get) {
-                        return $get('type') === FilamentFieldTypeEnum::HEADING->name ? 'Heading' : 'Label';
-                    }),
-                TagsInput::make('options')
-                    ->placeholder('Add options')
-                    ->hint('Press enter after inputting each option')
-                    ->visible(function (Get $get) {
-                        if ($get('type')) {
-                            return FilamentFieldTypeEnum::fromString($get('type'))->hasOptions();
-                        }
-
-                        return false;
-                    }),
-                Textarea::make('hint')
-                    ->label(function (Get $get) {
-                        return $get('type') === FilamentFieldTypeEnum::HEADING->name ? 'Subheading' : 'Hint';
-                    }),
-                // TagsInput::make('rules')
-                //     ->placeholder('Add rules')
-                //     ->hint('view list of available rules here, https://laravel.com/docs/11.x/validation#available-validation-rules')
-                //     ->visible(function (Get $get) {
-                //         return $get('type') !== FilamentFieldTypeEnum::REPEATER->name
-                //             && $get('type') !== FilamentFieldTypeEnum::HEADING->name;
-                //     }),
+                TextInput::make('name')
+                    ->required(),
                 TextInput::make('order')
                     ->default(function () {
                         return $this->getOwnerRecord()->filamentFormGroups()->count() + 1;
                     })
                     ->numeric(),
-                Toggle::make('required')
-                    ->visible(function (Get $get) {
-                        return $get('type') !== FilamentFieldTypeEnum::REPEATER->name
-                            && $get('type') !== FilamentFieldTypeEnum::HEADING->name;
-                    }),
-                Repeater::make('schema')
-                    ->label('Fields')
-                    ->schema([
-                        Textarea::make('label')
-                            ->required(),
-                        Select::make('type')
-                            ->options(function () {
-                                $options = collect(FilamentFieldTypeEnum::cases())
-                                    ->filter(fn($type) => $type !== FilamentFieldTypeEnum::REPEATER)
-                                    ->mapWithKeys(fn($type) => [$type->name => $type->fieldName()])
-                                    ->toArray();
-
-                                return $options;
-                            })
-                            ->required()
-                            ->live(),
-                        TagsInput::make('options')
-                            ->placeholder('Add options')
-                            ->hint('Press enter after inputting each option')
-                            ->visible(function (Get $get) {
-                                if ($get('type')) {
-                                    return FilamentFieldTypeEnum::fromString($get('type'))->hasOptions();
-                                }
-
-                                return false;
-                            }),
-                        Textarea::make('hint'),
-                        // TagsInput::make('rules')
-                        //     ->placeholder('Add rules')
-                        //     ->hint('view list of available rules here, https://laravel.com/docs/11.x/validation#available-validation-rules'),
-                        Toggle::make('required'),
-                    ])
-                    ->columns(2)
-                    ->columnSpanFull()
-                    ->visible(function (Get $get) {
-                        return $get('type') === FilamentFieldTypeEnum::REPEATER->name;
-                    }),
+                Textarea::make('description')
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -143,8 +56,6 @@ class FilamentSatisfactionSurveyFormGroupsRelationManager extends RelationManage
                 TextColumn::make('order')
                     ->numeric()
                     ->sortable(),
-                Textarea::make('description')
-                    ->columnSpanFull(),
             ])
             ->headerActions([
                 CreateAction::make()
@@ -152,30 +63,30 @@ class FilamentSatisfactionSurveyFormGroupsRelationManager extends RelationManage
                         return !$form->locked;
                     })
                     ->label('Create ' . config('filament-satisfaction-survey-builder.admin-panel-filament-form-group-name')),
-                Action::make('lock_fields')
-                    ->label(__('Lock ' . config('filament-satisfaction-survey-builder.admin-panel-filament-form-group-name-plural')))
-                    ->requiresConfirmation()
-                    ->modalHeading('Lock Form Fields. Doing this will lock the forms fields and new fields will no longer be able to be changed or edited')
-                    ->visible(function () use ($form) {
-                        return !$form->locked;
-                    })
-                    ->action(function () use ($form) {
-                        $form->update([
-                            'locked' => true,
-                        ]);
-                    }),
-                Action::make('unlock_fields')
-                    ->label(__('Unlock ' . config('filament-satisfaction-survey-builder.admin-panel-filament-form-group-name-plural')))
-                    ->requiresConfirmation()
-                    ->modalHeading('Unlock Form Fields. Changing fields after entries has been made can cause inconsistencies for prexisting entries')
-                    ->visible(function () use ($form) {
-                        return $form->locked;
-                    })
-                    ->action(function () use ($form) {
-                        $form->update([
-                            'locked' => false,
-                        ]);
-                    }),
+                /*                Action::make('lock_fields')
+                                    ->label(__('Lock ' . config('filament-satisfaction-survey-builder.admin-panel-filament-form-group-name-plural')))
+                                    ->requiresConfirmation()
+                                    ->modalHeading('Lock Form Fields. Doing this will lock the forms fields and new fields will no longer be able to be changed or edited')
+                                    ->visible(function () use ($form) {
+                                        return !$form->locked;
+                                    })
+                                    ->action(function () use ($form) {
+                                        $form->update([
+                                            'locked' => true,
+                                        ]);
+                                    }),
+                                Action::make('unlock_fields')
+                                    ->label(__('Unlock ' . config('filament-satisfaction-survey-builder.admin-panel-filament-form-group-name-plural')))
+                                    ->requiresConfirmation()
+                                    ->modalHeading('Unlock Form Fields. Changing fields after entries has been made can cause inconsistencies for prexisting entries')
+                                    ->visible(function () use ($form) {
+                                        return $form->locked;
+                                    })
+                                    ->action(function () use ($form) {
+                                        $form->update([
+                                            'locked' => false,
+                                        ]);
+                                    }),*/
             ])
             ->recordActions([
                 ActionGroup::make([
