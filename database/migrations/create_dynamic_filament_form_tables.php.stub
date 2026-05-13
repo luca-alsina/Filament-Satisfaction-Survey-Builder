@@ -26,7 +26,7 @@ return new class extends Migration
             }
 
             $table->timestamps();
-            $table->string('name');
+            $table->text('name');
             $table->text('description')->nullable();
             $table->text('redirect_url')->nullable();
             $table->boolean('permit_guest_entries')->default(false);
@@ -48,7 +48,7 @@ return new class extends Migration
             }
 
             $table->foreignId('filament_satisfaction_survey_form_id')->constrained()->cascadeOnDelete();
-            $table->string('name');
+            $table->text('name');
             $table->text('description')->nullable();
             $table->integer('order');
         });
