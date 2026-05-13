@@ -14,7 +14,7 @@ use Filament\Infolists\Concerns\InteractsWithInfolists;
 use Filament\Infolists\Contracts\HasInfolists;
 use Filament\Schemas\Schema;
 use Livewire\Component;
-use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentFormUser;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentSurveyFormUser;
 
 class Show extends Component implements HasActions, HasForms, HasInfolists
 {
@@ -22,9 +22,9 @@ class Show extends Component implements HasActions, HasForms, HasInfolists
     use InteractsWithForms;
     use InteractsWithInfolists;
 
-    public FilamentFormUser $entry;
+    public FilamentSurveyFormUser $entry;
 
-    public function mount(FilamentFormUser $entry): void
+    public function mount(FilamentSurveyFormUser $entry): void
     {
         $this->entry = $entry->load('user', 'filamentForm');
     }

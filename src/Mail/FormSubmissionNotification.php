@@ -11,8 +11,8 @@ use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentForm;
-use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentFormUser;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentSurveyForm;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentSurveyFormUser;
 
 class FormSubmissionNotification extends Mailable implements ShouldQueue
 {
@@ -20,8 +20,8 @@ class FormSubmissionNotification extends Mailable implements ShouldQueue
     use SerializesModels;
 
     public function __construct(
-        public FilamentForm $form,
-        public FilamentFormUser $entry,
+        public FilamentSurveyForm     $form,
+        public FilamentSurveyFormUser $entry,
     ) {}
 
     public function envelope(): Envelope

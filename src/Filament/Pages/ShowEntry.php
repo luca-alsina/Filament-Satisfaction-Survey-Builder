@@ -7,11 +7,11 @@ namespace Luca\FilamentSatisfactionSurveyBuilder\Filament\Pages;
 use Filament\Facades\Filament;
 use Filament\Pages\Page;
 use Filament\Panel;
-use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentFormUser;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentSurveyFormUser;
 
 class ShowEntry extends Page
 {
-    public FilamentFormUser $entry;
+    public FilamentSurveyFormUser $entry;
 
     protected static ?string $navigationLabel = null;
 
@@ -54,7 +54,7 @@ class ShowEntry extends Page
         return Filament::getPanel($guestPanelId);
     }
 
-    public function mount(FilamentFormUser $entry): void
+    public function mount(FilamentSurveyFormUser $entry): void
     {
         $loginRoute = config('filament-satisfaction-survey-builder.login-route', 'filament.app.auth.login');
 

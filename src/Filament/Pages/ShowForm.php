@@ -7,11 +7,11 @@ namespace Luca\FilamentSatisfactionSurveyBuilder\Filament\Pages;
 use Filament\Facades\Filament;
 use Filament\Pages\Page;
 use Filament\Panel;
-use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentForm;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentSurveyForm;
 
 class ShowForm extends Page
 {
-    public FilamentForm $form;
+    public FilamentSurveyForm $form;
 
     protected static ?string $navigationLabel = null;
 
@@ -54,7 +54,7 @@ class ShowForm extends Page
         return Filament::getPanel($guestPanelId);
     }
 
-    public function mount(FilamentForm $form): void
+    public function mount(FilamentSurveyForm $form): void
     {
         // If form doesn't permit guest entries and user is not authenticated, redirect to login
         if (! auth()->check() && ! $form->permit_guest_entries) {

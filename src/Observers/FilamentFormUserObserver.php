@@ -6,17 +6,17 @@ namespace Luca\FilamentSatisfactionSurveyBuilder\Observers;
 
 use Illuminate\Support\Facades\Mail;
 use Luca\FilamentSatisfactionSurveyBuilder\Mail\FormSubmissionNotification;
-use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentForm;
-use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentFormUser;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentSurveyForm;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentSurveyFormUser;
 
 class FilamentFormUserObserver
 {
-    public function created(FilamentFormUser $filamentFormUser): void
+    public function created(FilamentSurveyFormUser $filamentFormUser): void
     {
         $this->sendNotifications($filamentFormUser);
     }
 
-    public function updated(FilamentFormUser $filamentFormUser): void
+    public function updated(FilamentSurveyFormUser $filamentFormUser): void
     {
         // Log that the updated event fired
         \Log::info('FilamentFormUserObserver::updated() fired for entry ID: '.$filamentFormUser->id);
@@ -24,9 +24,9 @@ class FilamentFormUserObserver
         $this->sendNotifications($filamentFormUser);
     }
 
-    protected function sendNotifications(FilamentFormUser $filamentFormUser): void
+    protected function sendNotifications(FilamentSurveyFormUser $filamentFormUser): void
     {
-        /** @var FilamentForm|null $form */
+        /** @var FilamentSurveyForm|null $form */
         $form = $filamentFormUser->filamentForm;
 
         // Check if notification emails are configured for this form

@@ -12,7 +12,7 @@ use Luca\FilamentSatisfactionSurveyBuilder\Http\Middleware\SetFormPanel;
 use Luca\FilamentSatisfactionSurveyBuilder\Livewire\FilamentForm\Form as FilamentForm;
 use Luca\FilamentSatisfactionSurveyBuilder\Livewire\FilamentForm\Show as FilamentFormShow;
 use Luca\FilamentSatisfactionSurveyBuilder\Livewire\FilamentFormUser\Show as FilamentFormUserShow;
-use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentFormUser;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentSurveyFormUser;
 use Luca\FilamentSatisfactionSurveyBuilder\Observers\FilamentFormUserObserver;
 
 class FilamentSatisfactionSurveyBuilderServiceProvider extends PackageServiceProvider
@@ -47,7 +47,7 @@ class FilamentSatisfactionSurveyBuilderServiceProvider extends PackageServicePro
         Livewire::component('luca.filament-satisfaction-survey-builder.livewire.filament-form.form', FilamentForm::class);
 
         // Register observer for form submission notifications
-        FilamentFormUser::observe(FilamentFormUserObserver::class);
+        FilamentSurveyFormUser::observe(FilamentFormUserObserver::class);
 
         // Register the form route globally so it's available when the model accesses it
         // The SetFormPanel middleware ensures the correct panel context is set based on authentication

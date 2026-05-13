@@ -6,19 +6,19 @@ use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
-use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentForm;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\FilamentSurveyForm;
 
 class FilamentFormUsersExport implements FromCollection, WithHeadings, WithMapping
 {
     public Collection $entries;
 
-    public FilamentForm $form;
+    public FilamentSurveyForm $form;
 
     public function __construct(Collection $entries)
     {
         $this->entries = $entries->load('user');
 
-        $this->form = FilamentForm::where('id', $entries->first()->filament_form_id)
+        $this->form = FilamentSurveyForm::where('id', $entries->first()->filament_form_id)
             ->with('filamentFormFields')
             ->firstOrFail();
     }
