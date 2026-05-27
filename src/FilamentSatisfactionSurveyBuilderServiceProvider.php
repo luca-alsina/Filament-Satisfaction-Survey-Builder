@@ -4,8 +4,6 @@ namespace Luca\FilamentSatisfactionSurveyBuilder;
 
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
-use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Pages\ShowEntry;
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Pages\ShowForm;
 use Luca\FilamentSatisfactionSurveyBuilder\Http\Middleware\SetFormPanel;
@@ -14,13 +12,15 @@ use Luca\FilamentSatisfactionSurveyBuilder\Livewire\FilamentForm\Show as Filamen
 use Luca\FilamentSatisfactionSurveyBuilder\Livewire\FilamentFormUser\Show as FilamentFormUserShow;
 use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyFormUser;
 use Luca\FilamentSatisfactionSurveyBuilder\Observers\FilamentFormUserObserver;
+use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class FilamentSatisfactionSurveyBuilderServiceProvider extends PackageServiceProvider
 {
     public static string $name = 'filament-satisfaction-survey-builder';
 
     protected array $styles = [
-        'filament-satisfaction-survey-builder' => __DIR__.'/../dist/filament-satisfaction-survey-builder.css',
+        'filament-satisfaction-survey-builder' => __DIR__ . '/../dist/filament-satisfaction-survey-builder.css',
     ];
 
     public function configurePackage(Package $package): void
@@ -31,6 +31,7 @@ class FilamentSatisfactionSurveyBuilderServiceProvider extends PackageServicePro
             ->hasMigration('add_notification_emails_to_filament_forms_table')
             ->hasMigration('change_label_to_text_in_filament_form_fields')
             ->hasMigration('add_private_entries_to_filament_forms_table')
+            ->hasMigration('set_survey_form_entry_nullable')
             ->hasConfigFile('filament-satisfaction-survey-builder')
             ->hasViews('filament-satisfaction-survey-builder');
     }
@@ -54,7 +55,7 @@ class FilamentSatisfactionSurveyBuilderServiceProvider extends PackageServicePro
         $middlewareClass = config('filament-satisfaction-survey-builder.set-form-panel-middleware-class');
 
         // Use package default middleware if not configured
-        if (! $middlewareClass) {
+        if (!$middlewareClass) {
             $middlewareClass = SetFormPanel::class;
         }
 
@@ -68,12 +69,12 @@ class FilamentSatisfactionSurveyBuilderServiceProvider extends PackageServicePro
 
         Route::middleware($middleware)->group(function () use ($formPageClass, $entryPageClass) {
             Route::get(
-                config('filament-satisfaction-survey-builder.filament-form-uri').'/{form}',
+                config('filament-satisfaction-survey-builder.filament-form-uri') . '/{form}',
                 $formPageClass
             )->name('filament-satisfaction-survey-builder.show');
 
             Route::get(
-                config('filament-satisfaction-survey-builder.filament-form-user-uri').'/{entry}',
+                config('filament-satisfaction-survey-builder.filament-form-user-uri') . '/{entry}',
                 $entryPageClass
             )->name('filament-form-users.show');
         });
