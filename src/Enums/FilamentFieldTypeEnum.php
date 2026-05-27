@@ -23,6 +23,7 @@ enum FilamentFieldTypeEnum implements HasLabel
     case FILE_UPLOAD;
     case REPEATER;
     case HEADING;
+    case STAR_RATING;
 
     public static function fromString(string $type): ?self
     {
@@ -60,6 +61,7 @@ enum FilamentFieldTypeEnum implements HasLabel
             self::FILE_UPLOAD => 'File Upload',
             self::REPEATER => 'Repeater',
             self::HEADING => 'Heading',
+            self::STAR_RATING => 'Star Rating',
         };
     }
 
@@ -83,6 +85,7 @@ enum FilamentFieldTypeEnum implements HasLabel
             self::FILE_UPLOAD => 'Filament\Forms\Components\SpatieMediaLibraryFileUpload',
             self::REPEATER => 'Filament\Forms\Components\Repeater',
             self::HEADING => 'Luca\FilamentSatisfactionSurveyBuilder\Filament\Forms\Components\Heading',
+            self::STAR_RATING => 'l3aro\FilamentRatingStar\FilamentRatingStarPlugin',
         };
     }
 
@@ -106,6 +109,7 @@ enum FilamentFieldTypeEnum implements HasLabel
             self::FILE_UPLOAD => false,
             self::REPEATER => false,
             self::HEADING => false,
+            self::STAR_RATING => false,
         };
     }
 
@@ -129,6 +133,7 @@ enum FilamentFieldTypeEnum implements HasLabel
             self::FILE_UPLOAD => false,
             self::REPEATER => false,
             self::HEADING => false,
+            self::STAR_RATING => false,
         };
     }
 }
