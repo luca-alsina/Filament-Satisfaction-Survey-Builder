@@ -12,6 +12,7 @@ use Filament\Forms\Components\Select;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Enums\RecordActionsPosition;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
@@ -96,6 +97,13 @@ class FilamentSatisfactionSurveyFormUsersRelationManager extends RelationManager
                 TextColumn::make('user.' . config('filament-satisfaction-survey-builder.user_title_attribute', 'name'))
                     ->sortable()
                     ->searchable(),
+
+                IconColumn::make('response_exists')
+                    ->label('Response Exists')
+                    ->sortable()
+                    ->boolean()
+                    ->getStateUsing(fn($record) => $record->entry !== null),
+
                 TextColumn::make('created_at')
                     ->sortable(),
                 TextColumn::make('updated_at')
