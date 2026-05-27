@@ -45,11 +45,13 @@ class SurveyFormUser extends Model implements HasMedia
     {
         $keyValueEntry = [];
 
-        foreach ($this->entry as $fieldEntry) {
-            if (is_array($fieldEntry['answer'])) {
-                $keyValueEntry[$fieldEntry['field']] = json_encode($fieldEntry['answer']);
-            } else {
-                $keyValueEntry[$fieldEntry['field']] = $fieldEntry['answer'];
+        if (is_array($this->entry)) {
+            foreach ($this->entry as $fieldEntry) {
+                if (is_array($fieldEntry['answer'])) {
+                    $keyValueEntry[$fieldEntry['field']] = json_encode($fieldEntry['answer']);
+                } else {
+                    $keyValueEntry[$fieldEntry['field']] = $fieldEntry['answer'];
+                }
             }
         }
 
