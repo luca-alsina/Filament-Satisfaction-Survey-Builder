@@ -21,6 +21,8 @@ class FilamentSatisfactionSurveyFormGroupResource extends Resource
 
     protected static ?string $slug = 'filament-satisfaction-survey-form-groups';
 
+    protected static bool $shouldRegisterNavigation = false;
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema

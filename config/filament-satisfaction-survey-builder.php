@@ -16,6 +16,7 @@ return [
 
     'resources' => [
         'FilamentFormResource' => FilamentSatisfactionSurveyFormResource::class,
+        'FilamentSatisfactionSurveyFormGroupResource' => \Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormGroups\FilamentSatisfactionSurveyFormGroupResource::class,
     ],
 
     'admin-panel-resource-name' => 'Form',
