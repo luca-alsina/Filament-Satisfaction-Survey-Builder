@@ -5,7 +5,7 @@ namespace Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSati
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
-use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\FilamentSatisfactionSurveyFormResource;
 
 class EditFilamentForm extends EditRecord
 {
@@ -13,7 +13,7 @@ class EditFilamentForm extends EditRecord
 
     public function getTitle(): string
     {
-        return 'Edit '.config('filament-satisfaction-survey-builder.admin-panel-resource-name');
+        return 'Edit ' . config('filament-satisfaction-survey-builder.admin-panel-resource-name');
     }
 
     protected function getHeaderActions(): array
@@ -21,8 +21,8 @@ class EditFilamentForm extends EditRecord
         return [
             DeleteAction::make(),
             Action::make('preview')
-                ->visible(fn () => (bool) config('filament-satisfaction-survey-builder.preview-route'))
-                ->url(fn ($record) => route(config('filament-satisfaction-survey-builder.preview-route'), ['form' => $record->id]))
+                ->visible(fn() => (bool)config('filament-satisfaction-survey-builder.preview-route'))
+                ->url(fn($record) => route(config('filament-satisfaction-survey-builder.preview-route'), ['form' => $record->id]))
                 ->openUrlInNewTab(),
         ];
     }

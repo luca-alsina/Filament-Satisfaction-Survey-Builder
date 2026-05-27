@@ -2,7 +2,7 @@
 
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Pages\ShowEntry;
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Pages\ShowForm;
-use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\FilamentSatisfactionSurveyFormResource;
 use Luca\FilamentSatisfactionSurveyBuilder\Http\Middleware\SetFormPanel;
 
 return [

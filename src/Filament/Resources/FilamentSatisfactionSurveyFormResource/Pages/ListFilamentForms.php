@@ -4,7 +4,7 @@ namespace Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSati
 
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
-use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\FilamentSatisfactionSurveyFormResource;
 
 class ListFilamentForms extends ListRecords
 {
@@ -19,7 +19,7 @@ class ListFilamentForms extends ListRecords
     {
         return [
             CreateAction::make()
-                ->label('Create '.config('filament-satisfaction-survey-builder.admin-panel-resource-name')),
+                ->label('Create ' . config('filament-satisfaction-survey-builder.admin-panel-resource-name')),
         ];
     }
 }

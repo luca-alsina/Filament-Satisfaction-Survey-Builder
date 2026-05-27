@@ -3,7 +3,7 @@
 namespace Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\Pages;
 
 use Filament\Resources\Pages\CreateRecord;
-use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\FilamentSatisfactionSurveyFormResource;
 
 class CreateFilamentForm extends CreateRecord
 {
@@ -11,6 +11,6 @@ class CreateFilamentForm extends CreateRecord
 
     public function getTitle(): string
     {
-        return 'Create '.config('filament-satisfaction-survey-builder.admin-panel-resource-name');
+        return 'Create ' . config('filament-satisfaction-survey-builder.admin-panel-resource-name');
     }
 }
