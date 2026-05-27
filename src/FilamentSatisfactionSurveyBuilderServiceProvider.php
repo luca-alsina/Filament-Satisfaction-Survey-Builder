@@ -72,12 +72,12 @@ class FilamentSatisfactionSurveyBuilderServiceProvider extends PackageServicePro
             Route::get(
                 config('filament-satisfaction-survey-builder.filament-form-uri') . '/{form}',
                 $formPageClass
-            )->name('filament-satisfaction-survey-builder.show');
+            )->name(config('filament-satisfaction-survey-builder.filament-form-show-route', 'filament-satisfaction-survey-builder.show'));
 
             Route::get(
                 config('filament-satisfaction-survey-builder.filament-form-user-uri') . '/{entry}',
                 $entryPageClass
-            )->name('filament-form-users.show');
+            )->name(config('filament-satisfaction-survey-builder.filament-form-user-show-route', 'filament-satisfaction-survey-builder-users.show'));
         });
     }
 
