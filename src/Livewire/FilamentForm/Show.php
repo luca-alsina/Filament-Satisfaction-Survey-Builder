@@ -41,7 +41,7 @@ class Show extends Component implements HasActions, HasForms
     {
         $this->preview = $preview;
 
-        $this->filamentForm = $form->load('filamentFormFields');
+        $this->filamentForm = $form->load('filamentFormGroups', 'filamentFormGroups.filamentFormGroupFields');
 
         $this->form->fill($this->data);
 
@@ -82,7 +82,7 @@ class Show extends Component implements HasActions, HasForms
                     ->schema(function () use ($fieldData) {
                         $schema = [];
                         foreach ($fieldData->schema ?? [] as $index => $subField) {
-                            $subFieldId = $subField['id'] ?? $fieldData->id.'_'.$subField['type'].'_'.$index;
+                            $subFieldId = $subField['id'] ?? $fieldData->id . '_' . $subField['type'] . '_' . $index;
                             $subFieldComponent = FilamentFieldTypeEnum::fromString($subField['type'])->className()::make($subFieldId);
 
                             if (isset($subField['label'])) {
@@ -170,14 +170,14 @@ class Show extends Component implements HasActions, HasForms
                 ->filamentFormFields
                 ->find($key);
 
-            if (! $field) {
+            if (!$field) {
                 continue;
             }
 
             if ($field->type === FilamentFieldTypeEnum::REPEATER) {
                 if (is_array($value)) {
                     foreach ($value as $index => $repeaterEntry) {
-                        if (! is_array($repeaterEntry)) {
+                        if (!is_array($repeaterEntry)) {
                             continue;
                         }
 
@@ -189,7 +189,7 @@ class Show extends Component implements HasActions, HasForms
                             // Get the field from the schema using the index
                             $subField = $field->schema[$fieldIndex] ?? null;
 
-                            if (! $subField) {
+                            if (!$subField) {
                                 continue;
                             }
 
@@ -198,9 +198,9 @@ class Show extends Component implements HasActions, HasForms
 
                             array_push($entry, [
                                 'type' => FilamentFieldTypeEnum::fromString($subField['type'])->fieldName(),
-                                'field' => $subField['label'].' ('.($index + 1).')',
+                                'field' => $subField['label'] . ' (' . ($index + 1) . ')',
                                 'answer' => $subValue,
-                                'field_id' => "{$repeaterLabel}_{$fieldLabel}_".($index + 1),
+                                'field_id' => "{$repeaterLabel}_{$fieldLabel}_" . ($index + 1),
                             ]);
                         }
                     }
@@ -248,8 +248,8 @@ class Show extends Component implements HasActions, HasForms
                     if ($temporaryFile instanceof TemporaryUploadedFile) {
                         // Remove existing media with the same field_id
                         $entryModel->getMedia()
-                            ->filter(fn ($media) => $media->getCustomProperty('field_id') === $field->id)
-                            ->each(fn ($media) => $media->delete());
+                            ->filter(fn($media) => $media->getCustomProperty('field_id') === $field->id)
+                            ->each(fn($media) => $media->delete());
 
                         $media = $entryModel->addMedia($temporaryFile->getRealPath())
                             ->withCustomProperties([
@@ -293,7 +293,7 @@ class Show extends Component implements HasActions, HasForms
 
     public function parseValue(SurveyFormGroupField $field, string|array|null $value): string|array
     {
-        if ($value === null && ! $field->type->isBool()) {
+        if ($value === null && !$field->type->isBool()) {
             return '';
         }
 
@@ -305,10 +305,10 @@ class Show extends Component implements HasActions, HasForms
 
         if ($field->type->hasOptions() && is_array($value)) {
             $valueData = $this->extractMultiSelectValue($value, $field->options);
-        } elseif ($field->type->hasOptions() && ! is_array($value)) {
+        } elseif ($field->type->hasOptions() && !is_array($value)) {
             $valueData = $field->options[$value];
         } elseif ($field->type->isBool()) {
-            $valueData = (bool) $value ? 'true' : 'false';
+            $valueData = (bool)$value ? 'true' : 'false';
         } else {
             $valueData = $value;
         }

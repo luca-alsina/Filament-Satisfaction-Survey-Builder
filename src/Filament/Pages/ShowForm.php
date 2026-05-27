@@ -57,7 +57,7 @@ class ShowForm extends Page
     public function mount(SurveyForm $form): void
     {
         // If form doesn't permit guest entries and user is not authenticated, redirect to login
-        if (! auth()->check() && ! $form->permit_guest_entries) {
+        if (!auth()->check() && !$form->permit_guest_entries) {
             $loginRoute = config('filament-satisfaction-survey-builder.login-route', 'filament.app.auth.login');
 
             $this->redirect(route($loginRoute, [
@@ -68,7 +68,7 @@ class ShowForm extends Page
         }
 
         // Show form (middleware sets the appropriate panel based on authentication)
-        $this->form = $form->load('filamentFormFields');
+        $this->form = $form->load('filamentFormGroups', 'filamentFormGroups.filamentFormGroupFields');
     }
 
     public function getTitle(): string
