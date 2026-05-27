@@ -51,7 +51,21 @@ class ShowEntry extends Page
         }
 
         // Fallback to guest panel if no current panel
-        return Filament::getPanel($guestPanelId);
+        $guestPanel = Filament::getPanel($guestPanelId);
+        
+        if ($guestPanel) {
+            return $guestPanel;
+        }
+
+        // Fallback to app panel if guest panel doesn't exist
+        $appPanel = Filament::getPanel($appPanelId);
+        
+        if ($appPanel) {
+            return $appPanel;
+        }
+
+        // If no panels are configured, throw a meaningful exception
+        throw new \RuntimeException('No Filament panels are configured for satisfaction survey builder.');
     }
 
     public function mount(SurveyFormUser $entry): void
