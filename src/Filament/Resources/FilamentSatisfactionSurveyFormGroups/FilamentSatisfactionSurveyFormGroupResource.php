@@ -13,6 +13,7 @@ use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfacti
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormGroups\Schemas\FilamentSatisfactionSurveyFormGroupForm;
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormGroups\Schemas\FilamentSatisfactionSurveyFormGroupInfolist;
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormGroups\Tables\FilamentSatisfactionSurveyFormGroupsTable;
+use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\FilamentSatisfactionSurveyFormResource;
 use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyFormGroup;
 
 class FilamentSatisfactionSurveyFormGroupResource extends Resource
@@ -24,6 +25,28 @@ class FilamentSatisfactionSurveyFormGroupResource extends Resource
     protected static bool $shouldRegisterNavigation = false;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    public static function getIndexUrl(array $parameters = [], bool $isAbsolute = true, ?string $panel = null, ?Model $tenant = null, bool $shouldGuessMissingParameters = false): string
+    {
+        // On récupère le record (le groupe de questions) depuis les paramètres de la route actuelle
+        $record = request()->route()->parameter('record');
+
+        // Si on a un ID ou un modèle, on charge la relation
+        if ($record) {
+            if (!$record instanceof Model) {
+                $record = SurveyFormGroup::find($record);
+            }
+
+            if ($record && $record->survey_form_id) {
+                return FilamentSatisfactionSurveyFormResource::getUrl('edit', [
+                    'record' => $record->survey_form_id
+                ]);
+            }
+        }
+
+        // Solution de repli si aucun record n'est trouvé (Ex: retour à la liste globale des formulaires)
+        return FilamentSatisfactionSurveyFormResource::getUrl('index');
+    }
 
     public static function form(Schema $schema): Schema
     {

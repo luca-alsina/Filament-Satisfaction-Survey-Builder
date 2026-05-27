@@ -27,7 +27,7 @@ use Luca\FilamentSatisfactionSurveyBuilder\Enums\FilamentFieldTypeEnum;
 
 class FilamentSatisfactionSurveyFormGroupFieldsRelationManager extends RelationManager
 {
-    protected static string $relationship = 'filamentFormFields';
+    protected static string $relationship = 'filamentFormGroupFields';
 
     public static function getTitle(Model $ownerRecord, string $pageClass): string
     {
@@ -82,7 +82,7 @@ class FilamentSatisfactionSurveyFormGroupFieldsRelationManager extends RelationM
                 //     }),
                 TextInput::make('order')
                     ->default(function () {
-                        return $this->getOwnerRecord()->filamentFormFields()->count() + 1;
+                        return $this->getOwnerRecord()->filamentFormGroupFields()->count() + 1;
                     })
                     ->numeric(),
                 Toggle::make('required')
