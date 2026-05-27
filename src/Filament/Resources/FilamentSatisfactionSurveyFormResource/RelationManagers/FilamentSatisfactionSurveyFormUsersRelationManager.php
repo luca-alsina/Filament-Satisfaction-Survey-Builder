@@ -90,10 +90,10 @@ class FilamentSatisfactionSurveyFormUsersRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('user.name')
+            ->recordTitleAttribute('user.' . config('filament-satisfaction-survey-builder.user_title_attribute', 'name'))
             ->heading(config('filament-satisfaction-survey-builder.admin-panel-filament-form-user-name-plural'))
             ->columns([
-                TextColumn::make('user.name')
+                TextColumn::make('user.' . config('filament-satisfaction-survey-builder.user_title_attribute', 'name'))
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('created_at')
