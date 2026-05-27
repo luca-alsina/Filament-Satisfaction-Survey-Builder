@@ -5,9 +5,10 @@ namespace Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSati
 use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
@@ -20,8 +21,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
-use Maatwebsite\Excel\Facades\Excel;
 use Luca\FilamentSatisfactionSurveyBuilder\Exports\FilamentFormUsersExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class FilamentSatisfactionSurveyFormUsersRelationManager extends RelationManager
 {
@@ -34,12 +35,12 @@ class FilamentSatisfactionSurveyFormUsersRelationManager extends RelationManager
      */
     public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool
     {
-        if (! parent::canViewForRecord($ownerRecord, $pageClass)) {
+        if (!parent::canViewForRecord($ownerRecord, $pageClass)) {
             return false;
         }
 
         $user = Auth::user();
-        if (! $user) {
+        if (!$user) {
             return false;
         }
 
@@ -74,9 +75,15 @@ class FilamentSatisfactionSurveyFormUsersRelationManager extends RelationManager
     {
         return $schema
             ->components([
-                TextInput::make('filamentFormUser.user.name')
+                Select::make('user_id')
+                    ->label(__('User'))
+                    ->columnSpanFull()
+                    ->options(function () {
+                        return config('auth.providers.users.model', \Illuminate\Foundation\Auth\User::class)::all()->pluck(config('filament-satisfaction-survey-builder.user_title_attribute', 'name'), 'id')->toArray();
+                    })
+                    ->searchable()
                     ->required()
-                    ->maxLength(255),
+                    ->disabledOn('edit'),
             ]);
     }
 
@@ -94,14 +101,16 @@ class FilamentSatisfactionSurveyFormUsersRelationManager extends RelationManager
                 TextColumn::make('updated_at')
                     ->sortable(),
             ])
-            ->recordUrl(fn ($record) => route(config('filament-satisfaction-survey-builder.filament-form-user-show-route'), $record))
+            ->recordUrl(fn($record) => route(config('filament-satisfaction-survey-builder.filament-form-user-show-route'), $record))
             ->filters([
                 Filter::make('guest_entries')
-                    ->query(fn (Builder $query): Builder => $query->whereNull('user_id')),
+                    ->query(fn(Builder $query): Builder => $query->whereNull('user_id')),
                 Filter::make('user_entries')
-                    ->query(fn (Builder $query): Builder => $query->whereNotNull('user_id')),
+                    ->query(fn(Builder $query): Builder => $query->whereNotNull('user_id')),
             ])
             ->headerActions([
+                CreateAction::make('create')
+                    ->label(__('Add user'))
             ])
             ->recordActions([
                 ActionGroup::make([
@@ -112,13 +121,13 @@ class FilamentSatisfactionSurveyFormUsersRelationManager extends RelationManager
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                     BulkAction::make('Export Selected')
-                        ->action(fn (Collection $records) => Excel::download(
+                        ->action(fn(Collection $records) => Excel::download(
                             new FilamentFormUsersExport($records),
-                            urlencode($this->getOwnerRecord()->name).'_form_entry_export'.now()->format('Y-m-dhis').'.csv')
+                            urlencode($this->getOwnerRecord()->name) . '_form_entry_export' . now()->format('Y-m-dhis') . '.csv')
                         )
                         ->icon('heroicon-o-document-chart-bar')
                         ->deselectRecordsAfterCompletion()
-                        ->visible(fn (): bool => $this->canViewEntriesForOwner()),
+                        ->visible(fn(): bool => $this->canViewEntriesForOwner()),
                 ]),
             ]);
     }
@@ -130,7 +139,7 @@ class FilamentSatisfactionSurveyFormUsersRelationManager extends RelationManager
     protected function canViewEntriesForOwner(): bool
     {
         $user = Auth::user();
-        if (! $user) {
+        if (!$user) {
             return false;
         }
 

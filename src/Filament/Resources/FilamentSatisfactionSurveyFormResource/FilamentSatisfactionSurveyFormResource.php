@@ -16,6 +16,8 @@ use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Component;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -90,24 +92,41 @@ class FilamentSatisfactionSurveyFormResource extends Resource
                     ->required()
                     ->maxLength(255),
                 TextInput::make('redirect_url')
-                    ->hint('(optional) complete this field to provide a custom redirect url on form completion. Use a fully qualified URL including "https://" to redirect to an external link, otherwise url will be relative to this sites domain'),
-                Toggle::make('permit_guest_entries')
-                    ->hint('Permit non registered users to submit this form'),
-                Toggle::make('private_entries')
-                    ->hint('When enabled, entries for this form can be restricted to certain users (e.g. via a gate in your application).')
-                    ->disabled(fn(?SurveyForm $record): bool => static::userCannotChangePrivateEntries($record))
-                    ->dehydrateStateUsing(fn($state, ?SurveyForm $record): bool => static::userCannotChangePrivateEntries($record) && $record
-                        ? (bool)$record->private_entries
-                        : (bool)$state),
+                    ->hint(__('(optional) complete this field to provide a custom redirect url on form completion. Use a fully qualified URL including "https://" to redirect to an external link, otherwise url will be relative to this sites domain')),
                 RichEditor::make('description')
                     ->columnSpanFull(),
                 Section::make('Notifications')
-                    ->description('Configure email notifications for form submissions')
+                    ->description(__('Configure email notifications for form submissions'))
                     ->schema([
                         static::getNotificationEmailsField(),
                     ])
                     ->collapsible()
                     ->collapsed(),
+                Section::make('Limitations')
+                    ->description(__('Configure limitations for submissions to this form'))
+                    ->collapsible()
+                    ->collapsed()
+                    ->schema([
+                        Toggle::make('restricted_to_users')
+                            ->hint(__('Restrict entries to users added in "allowed users" list linked to this form.'))
+                            ->live()
+                            ->afterStateUpdated(function ($state, Set $set) {
+                                if ($state) {
+                                    $set('private_entries', false);
+                                    $set('permit_guest_entries', false);
+                                }
+                            }),
+                        Toggle::make('private_entries')
+                            ->hint(__('Restrict entries for this form programmatically (e.g. via a gate in your application).'))
+                            ->disabled(fn(?SurveyForm $record): bool => static::userCannotChangePrivateEntries($record))
+                            ->dehydrateStateUsing(fn($state, ?SurveyForm $record): bool => static::userCannotChangePrivateEntries($record) && $record
+                                ? (bool)$record->private_entries
+                                : (bool)$state)
+                            ->hidden(fn(Get $get): bool => (bool)$get('restricted_to_users')),
+                        Toggle::make('permit_guest_entries')
+                            ->hint(__('Permit non registered users to submit this form'))
+                            ->hidden(fn(Get $get): bool => (bool)$get('restricted_to_users')),
+                    ])
             ]);
     }
 

@@ -32,6 +32,7 @@ class FilamentSatisfactionSurveyBuilderServiceProvider extends PackageServicePro
             ->hasMigration('change_label_to_text_in_filament_form_fields')
             ->hasMigration('add_private_entries_to_filament_forms_table')
             ->hasMigration('set_survey_form_entry_nullable')
+            ->hasMigration('add_restricted_to_users_field')
             ->hasConfigFile('filament-satisfaction-survey-builder')
             ->hasViews('filament-satisfaction-survey-builder');
     }

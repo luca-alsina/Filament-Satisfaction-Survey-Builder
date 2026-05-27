@@ -29,7 +29,7 @@ return [
 
     'admin-panel-filament-form-user-name' => 'Entry',
 
-    'admin-panel-filament-form-user-name-plural' => 'Entries',
+    'admin-panel-filament-form-user-name-plural' => 'Entries & Allowed Users',
 
     'admin-panel-filament-form-group-name' => 'Field Group',
 
@@ -135,4 +135,6 @@ return [
     |
     */
     'user_model' => 'App\Models\User',
+    'user_title_attribute' => 'name',
+    'user_email_attribute' => 'email',
 ];
