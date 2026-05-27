@@ -36,13 +36,18 @@ class Show extends Component implements HasActions, HasForms, HasInfolists
             ->schema([
                 TextEntry::make('user.name')
                     ->label('Name')
-                    ->visible(fn () => $this->entry->user_id !== null),
+                    ->visible(fn() => $this->entry->user_id !== null),
                 TextEntry::make('filamentForm.name')
                     ->label('Form Name'),
                 TextEntry::make('created_at')
+                    ->label(fn() => $this->entry->entry ? 'Form Completed At' : 'User added At')
+                    ->dateTime(),
+                TextEntry::make('updated_at')
+                    ->visible(fn() => $this->entry->entry && ($this->entry->updated_at !== $this->entry->created_at))
                     ->label('Form Completed At')
                     ->dateTime(),
                 KeyValueEntry::make('key_value_entry')
+                    ->visible(fn() => $this->entry->entry)
                     ->label('Form Entry')
                     ->keyLabel('Question')
                     ->valueLabel('Answer'),
@@ -67,7 +72,7 @@ class Show extends Component implements HasActions, HasForms, HasInfolists
                     ->state(function () {
                         return $this->entry->getMedia();
                     })
-                    ->visible(fn () => $this->entry->getMedia()->isNotEmpty()),
+                    ->visible(fn() => $this->entry->getMedia()->isNotEmpty()),
             ]);
     }
 
