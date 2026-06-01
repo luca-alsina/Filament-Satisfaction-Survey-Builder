@@ -34,11 +34,7 @@ return [
     'admin-panel-filament-form-group-name' => 'Field Group',
 
     'admin-panel-filament-form-group-name-plural' => 'Fields Groups',
-
-    'admin-panel-filament-form-field-name' => 'Field',
-
-    'admin-panel-filament-form-field-name-plural' => 'Fields',
-
+    
     'preview-route' => 'filament-satisfaction-survey-builder.show',
 
     /*

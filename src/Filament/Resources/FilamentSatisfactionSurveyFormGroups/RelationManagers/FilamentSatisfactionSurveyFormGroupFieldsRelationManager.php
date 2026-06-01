@@ -31,7 +31,7 @@ class FilamentSatisfactionSurveyFormGroupFieldsRelationManager extends RelationM
 
     public static function getTitle(Model $ownerRecord, string $pageClass): string
     {
-        return __(config('filament-satisfaction-survey-builder.admin-panel-filament-form-field-name-plural'));
+        return __('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.name.plural');
     }
 
     public function form(Schema $schema): Schema
@@ -39,6 +39,7 @@ class FilamentSatisfactionSurveyFormGroupFieldsRelationManager extends RelationM
         return $schema
             ->components([
                 Select::make('type')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.type'))
                     ->options(function () {
                         return collect(FilamentFieldTypeEnum::cases())
                             ->mapWithKeys(fn($type) => [$type->name => $type->fieldName()])
@@ -55,11 +56,13 @@ class FilamentSatisfactionSurveyFormGroupFieldsRelationManager extends RelationM
                     ->required()
                     ->live(),
                 Textarea::make('label')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.label'))
                     ->required()
                     ->label(function (Get $get) {
                         return $get('type') === FilamentFieldTypeEnum::HEADING->name ? 'Heading' : 'Label';
                     }),
                 TagsInput::make('options')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.options'))
                     ->placeholder('Add options')
                     ->hint('Press enter after inputting each option')
                     ->visible(function (Get $get) {
@@ -71,7 +74,7 @@ class FilamentSatisfactionSurveyFormGroupFieldsRelationManager extends RelationM
                     }),
                 Textarea::make('hint')
                     ->label(function (Get $get) {
-                        return $get('type') === FilamentFieldTypeEnum::HEADING->name ? 'Subheading' : 'Hint';
+                        return $get('type') === FilamentFieldTypeEnum::HEADING->name ? __('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.subheading') : __('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.hint');
                     }),
                 // TagsInput::make('rules')
                 //     ->placeholder('Add rules')
@@ -81,21 +84,25 @@ class FilamentSatisfactionSurveyFormGroupFieldsRelationManager extends RelationM
                 //             && $get('type') !== FilamentFieldTypeEnum::HEADING->name;
                 //     }),
                 TextInput::make('order')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.order'))
                     ->default(function () {
                         return $this->getOwnerRecord()->filamentFormGroupFields()->count() + 1;
                     })
                     ->numeric(),
                 Toggle::make('required')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.required'))
                     ->visible(function (Get $get) {
                         return $get('type') !== FilamentFieldTypeEnum::REPEATER->name
                             && $get('type') !== FilamentFieldTypeEnum::HEADING->name;
                     }),
                 Repeater::make('schema')
-                    ->label('Fields')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.schema'))
                     ->schema([
                         Textarea::make('label')
+                            ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.label'))
                             ->required(),
                         Select::make('type')
+                            ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.type'))
                             ->options(function () {
                                 $options = collect(FilamentFieldTypeEnum::cases())
                                     ->filter(fn($type) => $type !== FilamentFieldTypeEnum::REPEATER)
@@ -107,6 +114,7 @@ class FilamentSatisfactionSurveyFormGroupFieldsRelationManager extends RelationM
                             ->required()
                             ->live(),
                         TagsInput::make('options')
+                            ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.options'))
                             ->placeholder('Add options')
                             ->hint('Press enter after inputting each option')
                             ->visible(function (Get $get) {
@@ -116,11 +124,13 @@ class FilamentSatisfactionSurveyFormGroupFieldsRelationManager extends RelationM
 
                                 return false;
                             }),
-                        Textarea::make('hint'),
+                        Textarea::make('hint')
+                            ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.hint')),
                         // TagsInput::make('rules')
                         //     ->placeholder('Add rules')
                         //     ->hint('view list of available rules here, https://laravel.com/docs/11.x/validation#available-validation-rules'),
-                        Toggle::make('required'),
+                        Toggle::make('required')
+                            ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.required')),
                     ])
                     ->columns(2)
                     ->columnSpanFull()
@@ -136,19 +146,23 @@ class FilamentSatisfactionSurveyFormGroupFieldsRelationManager extends RelationM
 
         return $table
             ->recordTitleAttribute('label')
-            ->heading(config('filament-satisfaction-survey-builder.admin-panel-filament-form-field-name-plural'))
-            ->modelLabel(config('filament-satisfaction-survey-builder.admin-panel-filament-form-field-name'))
+            ->heading(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.name.plural'))
+            ->modelLabel(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.name.singular'))
             ->reorderable('order')
             ->columns([
-                TextColumn::make('label'),
+                TextColumn::make('label')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.label')),
                 TextColumn::make('order')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.order'))
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('type')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.type'))
                     ->formatStateUsing(function ($record) {
                         return $record->type->fieldName();
                     }),
                 IconColumn::make('required')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.required'))
                     ->sortable()
                     ->getStateUsing(function ($record) {
                         return (bool)$record->required;
@@ -157,11 +171,12 @@ class FilamentSatisfactionSurveyFormGroupFieldsRelationManager extends RelationM
             ])
             ->headerActions([
                 CreateAction::make()
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.create'))
                     ->visible(function () use ($form) {
                         return !$form->locked;
-                    })
-                    ->label('Create Field'),
+                    }),
                 Action::make('lock_fields')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.lock'))
                     ->requiresConfirmation()
                     ->modalHeading('Lock Form Fields. Doing this will lock the forms fields and new fields will no longer be able to be changed or edited')
                     ->visible(function () use ($form) {
@@ -173,6 +188,7 @@ class FilamentSatisfactionSurveyFormGroupFieldsRelationManager extends RelationM
                         ]);
                     }),
                 Action::make('unlock_fields')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.unlock'))
                     ->requiresConfirmation()
                     ->modalHeading('Unlock Form Fields. Changing fields after entries has been made can cause inconsistencies for prexisting entries')
                     ->visible(function () use ($form) {

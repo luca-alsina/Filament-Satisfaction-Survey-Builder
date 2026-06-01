@@ -34,6 +34,7 @@ class FilamentSatisfactionSurveyBuilderServiceProvider extends PackageServicePro
             ->hasMigration('set_survey_form_entry_nullable')
             ->hasMigration('add_restricted_to_users_field')
             ->hasConfigFile('filament-satisfaction-survey-builder')
+            ->hasTranslations()
             ->hasViews('filament-satisfaction-survey-builder');
     }
 
