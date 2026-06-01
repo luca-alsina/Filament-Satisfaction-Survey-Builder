@@ -64,12 +64,12 @@ class FilamentSatisfactionSurveyFormUsersRelationManager extends RelationManager
 
     public static function getTitle(Model $ownerRecord, string $pageClass): string
     {
-        return __(config('filament-satisfaction-survey-builder.admin-panel-filament-form-user-name-plural'));
+        return __('filament-satisfaction-survey-builder::filament-resources.survey-form-users.name.plural');
     }
 
     public static function getLabel(): string
     {
-        return 'Custom Posts Title';
+        return __('filament-satisfaction-survey-builder::filament-resources.survey-form-users.label');
     }
 
     public function form(Schema $schema): Schema
@@ -77,7 +77,7 @@ class FilamentSatisfactionSurveyFormUsersRelationManager extends RelationManager
         return $schema
             ->components([
                 Select::make('user_id')
-                    ->label(__('User'))
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-users.fields.user_id'))
                     ->columnSpanFull()
                     ->options(function () {
                         return config('auth.providers.users.model', \Illuminate\Foundation\Auth\User::class)::all()->pluck(config('filament-satisfaction-survey-builder.user_title_attribute', 'name'), 'id')->toArray();
@@ -92,33 +92,39 @@ class FilamentSatisfactionSurveyFormUsersRelationManager extends RelationManager
     {
         return $table
             ->recordTitleAttribute('user.' . config('filament-satisfaction-survey-builder.user_title_attribute', 'name'))
-            ->heading(config('filament-satisfaction-survey-builder.admin-panel-filament-form-user-name-plural'))
+            ->heading(__('filament-satisfaction-survey-builder::filament-resources.survey-form-users.table.heading'))
+            ->modelLabel(__('filament-satisfaction-survey-builder::filament-resources.survey-form-users.name.singular'))
             ->columns([
                 TextColumn::make('user.' . config('filament-satisfaction-survey-builder.user_title_attribute', 'name'))
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-users.table.columns.user_name'))
                     ->sortable()
                     ->searchable(),
 
                 IconColumn::make('response_exists')
-                    ->label('Response Exists')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-users.table.columns.response_exists'))
                     ->sortable()
                     ->boolean()
                     ->getStateUsing(fn($record) => $record->entry !== null),
 
                 TextColumn::make('created_at')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-users.table.columns.created_at'))
                     ->sortable(),
                 TextColumn::make('updated_at')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-users.table.columns.updated_at'))
                     ->sortable(),
             ])
             ->recordUrl(fn($record) => route(config('filament-satisfaction-survey-builder.filament-form-user-show-route'), $record))
             ->filters([
                 Filter::make('guest_entries')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-users.filters.guest_entries'))
                     ->query(fn(Builder $query): Builder => $query->whereNull('user_id')),
                 Filter::make('user_entries')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-users.filters.user_entries'))
                     ->query(fn(Builder $query): Builder => $query->whereNotNull('user_id')),
             ])
             ->headerActions([
                 CreateAction::make('create')
-                    ->label(__('Add user'))
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-users.actions.add_user'))
             ])
             ->recordActions([
                 ActionGroup::make([
@@ -129,6 +135,7 @@ class FilamentSatisfactionSurveyFormUsersRelationManager extends RelationManager
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                     BulkAction::make('Export Selected')
+                        ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-users.actions.export_selected'))
                         ->action(fn(Collection $records) => Excel::download(
                             new FilamentFormUsersExport($records),
                             urlencode($this->getOwnerRecord()->name) . '_form_entry_export' . now()->format('Y-m-dhis') . '.csv')

@@ -18,23 +18,9 @@ return [
         'FilamentFormResource' => FilamentSatisfactionSurveyFormResource::class,
         'FilamentSatisfactionSurveyFormGroupResource' => \Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormGroups\FilamentSatisfactionSurveyFormGroupResource::class,
     ],
-
-    'admin-panel-resource-name' => 'Form',
-
-    'admin-panel-resource-name-plural' => 'Forms',
-
-    'admin-panel-group-name' => 'Forms',
-
+    
     'admin-panel-icon' => 'heroicon-o-clipboard-document-list',
 
-    'admin-panel-filament-form-user-name' => 'Entry',
-
-    'admin-panel-filament-form-user-name-plural' => 'Entries & Allowed Users',
-
-    'admin-panel-filament-form-group-name' => 'Field Group',
-
-    'admin-panel-filament-form-group-name-plural' => 'Fields Groups',
-    
     'preview-route' => 'filament-satisfaction-survey-builder.show',
 
     /*

@@ -61,12 +61,12 @@ class FilamentSatisfactionSurveyFormResource extends Resource
 
     public static function getBreadcrumb(): string
     {
-        return config('filament-satisfaction-survey-builder.admin-panel-resource-name-plural');
+        return __('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.name.plural');
     }
 
     public static function getNavigationGroup(): ?string
     {
-        return config('filament-satisfaction-survey-builder.admin-panel-group-name');
+        return __('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.name.singular');
     }
 
     public static function getNavigationIcon(): ?string
@@ -76,7 +76,7 @@ class FilamentSatisfactionSurveyFormResource extends Resource
 
     public static function getNavigationLabel(): string
     {
-        return config('filament-satisfaction-survey-builder.admin-panel-resource-name-plural');
+        return __('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.name.plural');
     }
 
     public static function getNavigationSort(): ?int
@@ -89,26 +89,30 @@ class FilamentSatisfactionSurveyFormResource extends Resource
         return $schema
             ->components([
                 TextInput::make('name')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.fields.name'))
                     ->required()
                     ->maxLength(255),
                 TextInput::make('redirect_url')
-                    ->hint(__('(optional) complete this field to provide a custom redirect url on form completion. Use a fully qualified URL including "https://" to redirect to an external link, otherwise url will be relative to this sites domain')),
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.fields.redirect_url'))
+                    ->hint(__('filament-satisfaction-survey-builder::filament-resources.survey-form.fields.redirect_url_hint')),
                 RichEditor::make('description')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.fields.description'))
                     ->columnSpanFull(),
-                Section::make('Notifications')
-                    ->description(__('Configure email notifications for form submissions'))
+                Section::make(__('filament-satisfaction-survey-builder::filament-resources.survey-form.sections.notifications'))
+                    ->description(__('filament-satisfaction-survey-builder::filament-resources.survey-form.sections.notifications_description'))
                     ->schema([
                         static::getNotificationEmailsField(),
                     ])
                     ->collapsible()
                     ->collapsed(),
-                Section::make('Limitations')
-                    ->description(__('Configure limitations for submissions to this form'))
+                Section::make(__('filament-satisfaction-survey-builder::filament-resources.survey-form.sections.limitations'))
+                    ->description(__('filament-satisfaction-survey-builder::filament-resources.survey-form.sections.limitations_description'))
                     ->collapsible()
                     ->collapsed()
                     ->schema([
                         Toggle::make('restricted_to_users')
-                            ->hint(__('Restrict entries to users added in "allowed users" list linked to this form.'))
+                            ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.fields.restricted_to_users'))
+                            ->hint(__('filament-satisfaction-survey-builder::filament-resources.survey-form.fields.restricted_to_users_hint'))
                             ->live()
                             ->afterStateUpdated(function ($state, Set $set) {
                                 if ($state) {
@@ -117,14 +121,16 @@ class FilamentSatisfactionSurveyFormResource extends Resource
                                 }
                             }),
                         Toggle::make('private_entries')
-                            ->hint(__('Restrict entries for this form programmatically (e.g. via a gate in your application).'))
+                            ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.fields.private_entries'))
+                            ->hint(__('filament-satisfaction-survey-builder::filament-resources.survey-form.fields.private_entries_hint'))
                             ->disabled(fn(?SurveyForm $record): bool => static::userCannotChangePrivateEntries($record))
                             ->dehydrateStateUsing(fn($state, ?SurveyForm $record): bool => static::userCannotChangePrivateEntries($record) && $record
                                 ? (bool)$record->private_entries
                                 : (bool)$state)
                             ->hidden(fn(Get $get): bool => (bool)$get('restricted_to_users')),
                         Toggle::make('permit_guest_entries')
-                            ->hint(__('Permit non registered users to submit this form'))
+                            ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.fields.permit_guest_entries'))
+                            ->hint(__('filament-satisfaction-survey-builder::filament-resources.survey-form.fields.permit_guest_entries_hint'))
                             ->hidden(fn(Get $get): bool => (bool)$get('restricted_to_users')),
                     ])
             ]);
@@ -135,30 +141,37 @@ class FilamentSatisfactionSurveyFormResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('created_at')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.table.columns.created_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.table.columns.updated_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('name')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.table.columns.name'))
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('form_link')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.table.columns.form_link'))
                     ->copyable()
-                    ->copyMessage('Form link copied to clipboard')
+                    ->copyMessage(__('filament-satisfaction-survey-builder::filament-resources.survey-form.table.copy_message'))
                     ->copyMessageDuration(1500),
                 IconColumn::make('permit_guest_entries')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.table.columns.permit_guest_entries'))
                     ->sortable()
                     ->getStateUsing(function ($record) {
                         return (bool)$record->permit_guest_entries;
                     })
                     ->boolean(),
                 IconColumn::make('private_entries')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.table.columns.private_entries'))
                     ->sortable()
                     ->boolean(),
                 IconColumn::make('locked')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.table.columns.locked'))
                     ->sortable()
                     ->boolean(),
             ])
@@ -169,10 +182,12 @@ class FilamentSatisfactionSurveyFormResource extends Resource
                 ActionGroup::make([
                     EditAction::make(),
                     Action::make('preview')
+                        ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.actions.preview'))
                         ->visible(fn() => (bool)config('filament-satisfaction-survey-builder.preview-route'))
                         ->url(fn($record) => route(config('filament-satisfaction-survey-builder.preview-route'), ['form' => $record->id]))
                         ->openUrlInNewTab(),
                     Action::make('copy')
+                        ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.actions.copy'))
                         ->visible(fn(): bool => static::canCreate())
                         ->authorize(fn(): bool => static::canCreate())
                         ->action(function ($record) {
@@ -199,8 +214,8 @@ class FilamentSatisfactionSurveyFormResource extends Resource
                             });
 
                             Notification::make()
-                                ->title('Form copied successfully')
-                                ->body('Please change the name of the form to something unique and remove the "(Copy)" suffix')
+                                ->title(__('filament-satisfaction-survey-builder::filament-resources.survey-form.actions.copy_success_title'))
+                                ->body(__('filament-satisfaction-survey-builder::filament-resources.survey-form.actions.copy_success_body'))
                                 ->success()
                                 ->send();
 
@@ -213,7 +228,7 @@ class FilamentSatisfactionSurveyFormResource extends Resource
                     DeleteBulkAction::make(),
                 ]),
             ])
-            ->emptyStateHeading('No ' . config('filament-satisfaction-survey-builder.admin-panel-resource-name-plural'));
+            ->emptyStateHeading(__('filament-satisfaction-survey-builder::filament-resources.survey-form.empty_state_heading'));
     }
 
     public static function getRelations(): array
@@ -263,8 +278,8 @@ class FilamentSatisfactionSurveyFormResource extends Resource
         // If user model is configured, use Select with user search
         if ($userModel && class_exists($userModel)) {
             return Select::make('notification_emails')
-                ->label('Notification Recipients')
-                ->helperText('Select users who should receive notifications when this form is submitted.')
+                ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.fields.notification_emails'))
+                ->helperText(__('Select users who should receive notifications when this form is submitted.'))
                 ->multiple()
                 ->searchable()
                 ->getSearchResultsUsing(function ($search) use ($userModel) {
@@ -287,8 +302,8 @@ class FilamentSatisfactionSurveyFormResource extends Resource
 
         // Default: TagsInput for manual email entry
         return TagsInput::make('notification_emails')
-            ->label('Notification Email Addresses')
-            ->helperText('Enter email addresses that should receive notifications when this form is submitted. Press Enter after each email.')
+            ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.fields.notification_emails'))
+            ->helperText(__('filament-satisfaction-survey-builder::filament-resources.survey-form.fields.notification_emails_helper'))
             ->placeholder('email@example.com');
     }
 }

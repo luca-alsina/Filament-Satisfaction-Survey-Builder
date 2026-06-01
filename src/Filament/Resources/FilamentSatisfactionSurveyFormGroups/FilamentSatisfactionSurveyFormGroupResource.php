@@ -26,6 +26,16 @@ class FilamentSatisfactionSurveyFormGroupResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    public static function getModelLabel(): string
+    {
+        return __('filament-satisfaction-survey-builder::filament-resources.survey-form-group.name.singular');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('filament-satisfaction-survey-builder::filament-resources.survey-form-group.name.plural');
+    }
+
     public static function getIndexUrl(array $parameters = [], bool $isAbsolute = true, ?string $panel = null, ?Model $tenant = null, bool $shouldGuessMissingParameters = false): string
     {
         // On récupère le record (le groupe de questions) depuis les paramètres de la route actuelle

@@ -24,7 +24,7 @@ class FilamentSatisfactionSurveyFormGroupsRelationManager extends RelationManage
 
     public static function getTitle(Model $ownerRecord, string $pageClass): string
     {
-        return __(config('filament-satisfaction-survey-builder.admin-panel-filament-form-group-name-plural'));
+        return __('filament-satisfaction-survey-builder::filament-resources.survey-form-groups.name.plural');
     }
 
     public function form(Schema $schema): Schema
@@ -38,12 +38,14 @@ class FilamentSatisfactionSurveyFormGroupsRelationManager extends RelationManage
 
         return $table
             ->recordTitleAttribute('name')
-            ->heading(config('filament-satisfaction-survey-builder.admin-panel-filament-form-group-name-plural'))
-            ->modelLabel(config('filament-satisfaction-survey-builder.admin-panel-filament-form-group-name'))
+            ->heading(__('filament-satisfaction-survey-builder::filament-resources.survey-form-groups.table.heading'))
+            ->modelLabel(__('filament-satisfaction-survey-builder::filament-resources.survey-form-groups.name.singular'))
             ->reorderable('order')
             ->columns([
-                TextColumn::make('name'),
+                TextColumn::make('name')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-groups.table.columns.name')),
                 TextColumn::make('order')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-groups.table.columns.order'))
                     ->numeric()
                     ->sortable(),
             ])
@@ -52,7 +54,7 @@ class FilamentSatisfactionSurveyFormGroupsRelationManager extends RelationManage
                     ->visible(function () use ($form) {
                         return !$form->locked;
                     })
-                    ->label('Create ' . config('filament-satisfaction-survey-builder.admin-panel-filament-form-group-name')),
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-groups.actions.create')),
                 /*                Action::make('lock_fields')
                                     ->label(__('Lock ' . config('filament-satisfaction-survey-builder.admin-panel-filament-form-group-name-plural')))
                                     ->requiresConfirmation()
