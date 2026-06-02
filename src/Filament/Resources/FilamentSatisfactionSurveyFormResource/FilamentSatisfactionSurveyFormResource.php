@@ -66,7 +66,7 @@ class FilamentSatisfactionSurveyFormResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return __('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.name.singular');
+        return __('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.name.plural');
     }
 
     public static function getNavigationIcon(): ?string
@@ -76,7 +76,7 @@ class FilamentSatisfactionSurveyFormResource extends Resource
 
     public static function getNavigationLabel(): string
     {
-        return __('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.name.plural');
+        return __('filament-satisfaction-survey-builder::filament-resources.survey-form.name.plural');
     }
 
     public static function getNavigationSort(): ?int

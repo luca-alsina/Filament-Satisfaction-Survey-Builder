@@ -12,14 +12,15 @@ class ListFilamentForms extends ListRecords
 
     public function getTitle(): string
     {
-        return config('filament-satisfaction-survey-builder.admin-panel-resource-name-plural');
+//        return config('filament-satisfaction-survey-builder.admin-panel-resource-name-plural');
+        return __('filament-satisfaction-survey-builder::filament-resources.survey-form.name.plural');
     }
 
     protected function getHeaderActions(): array
     {
         return [
             CreateAction::make()
-                ->label('Create ' . config('filament-satisfaction-survey-builder.admin-panel-resource-name')),
+                ->label(__('Create') . ' ' . __('filament-satisfaction-survey-builder::filament-resources.survey-form.name.singular')),
         ];
     }
 }
