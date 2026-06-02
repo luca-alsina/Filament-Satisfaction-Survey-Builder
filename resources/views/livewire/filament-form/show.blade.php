@@ -1,8 +1,5 @@
 <div class="fb-form-component filament-form-builder">
     <div class="w-full fb-form-container">
-        <h1 class="mb-2 text-xl font-bold">
-            {{ $this->filamentForm->name }}
-        </h1>
         @if ($this->filamentForm->description)
             <div class="mb-4 prose prose-sm max-w-none dark:prose-invert">
                 {{-- Description is admin-controlled rich text (HTML) --}}
@@ -18,6 +15,6 @@
             </x-filament::button>
         </form>
 
-        <x-filament-actions::modals />
+        <x-filament-actions::modals/>
     </div>
 </div>
