@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Luca\FilamentSatisfactionSurveyBuilder\Models\Traits\BelongsToTenant;
 
@@ -40,6 +41,11 @@ class SurveyForm extends Model
     public function filamentFormUsers(): HasMany
     {
         return $this->hasMany(SurveyFormUser::class);
+    }
+
+    public function filamentFormFields(): HasManyThrough
+    {
+        return $this->hasManyThrough(SurveyFormGroupField::class, SurveyFormGroup::class);
     }
 
     public function filamentFormGroups(): HasMany

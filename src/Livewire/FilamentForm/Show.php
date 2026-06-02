@@ -230,7 +230,7 @@ class Show extends Component implements HasActions, HasForms
             $entryModel = SurveyFormUser::updateOrCreate(
                 [
                     'user_id' => Auth::user()->id ?? null,
-                    'filament_form_id' => $this->filamentForm->id,
+                    'survey_form_id' => $this->filamentForm->id,
                 ],
                 [
                     'entry' => $entry,
@@ -239,7 +239,7 @@ class Show extends Component implements HasActions, HasForms
         } else {
             $entryModel = SurveyFormUser::create(
                 [
-                    'filament_form_id' => $this->filamentForm->id,
+                    'survey_form_id' => $this->filamentForm->id,
                     'entry' => $entry,
                 ],
             );

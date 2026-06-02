@@ -23,6 +23,12 @@ class SurveyFormUser extends Model implements HasMedia
     use HasFactory;
     use InteractsWithMedia;
 
+    protected $fillable = [
+        'survey_form_id',
+        'user_id',
+        'entry',
+    ];
+
     protected $table = 'survey_form_users';
 
     protected $guarded = [];
