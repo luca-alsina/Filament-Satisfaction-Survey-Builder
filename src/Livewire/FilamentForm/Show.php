@@ -59,66 +59,68 @@ class Show extends Component implements HasActions, HasForms
     {
         $schema = [];
 
-        /** @var SurveyFormGroupField $fieldData */
-        foreach ($this->filamentForm->filamentFormFields as $fieldData) {
-            $filamentField = $fieldData->type->className()::make($fieldData->id);
+        foreach ($this->filamentForm->filamentFormGroups as $group) {
+            /** @var SurveyFormGroupField $fieldData */
+            foreach ($group->filamentFormGroupFields as $fieldData) {
+                $filamentField = $fieldData->type->className()::make($fieldData->id);
 
-            $filamentField = $this->parseField($filamentField, $fieldData->toArray());
+                $filamentField = $this->parseField($filamentField, $fieldData->toArray());
 
-            if ($fieldData->type === FilamentFieldTypeEnum::SELECT_MULTIPLE) {
-                $filamentField = $filamentField
-                    ->multiple()
-                    ->live()
-                    ->required()
-                    ->default([]);
-            } elseif ($fieldData->type === FilamentFieldTypeEnum::CHECKBOX) {
-                $filamentField = $filamentField
-                    ->default(false);
-            } elseif ($fieldData->type === FilamentFieldTypeEnum::CHECKBOX_LIST) {
-                $filamentField = $filamentField
-                    ->default([]);
-            } elseif ($fieldData->type === FilamentFieldTypeEnum::REPEATER) {
-                $filamentField = $filamentField
-                    ->schema(function () use ($fieldData) {
-                        $schema = [];
-                        foreach ($fieldData->schema ?? [] as $index => $subField) {
-                            $subFieldId = $subField['id'] ?? $fieldData->id . '_' . $subField['type'] . '_' . $index;
-                            $subFieldComponent = FilamentFieldTypeEnum::fromString($subField['type'])->className()::make($subFieldId);
+                if ($fieldData->type === FilamentFieldTypeEnum::SELECT_MULTIPLE) {
+                    $filamentField = $filamentField
+                        ->multiple()
+                        ->live()
+                        ->required()
+                        ->default([]);
+                } elseif ($fieldData->type === FilamentFieldTypeEnum::CHECKBOX) {
+                    $filamentField = $filamentField
+                        ->default(false);
+                } elseif ($fieldData->type === FilamentFieldTypeEnum::CHECKBOX_LIST) {
+                    $filamentField = $filamentField
+                        ->default([]);
+                } elseif ($fieldData->type === FilamentFieldTypeEnum::REPEATER) {
+                    $filamentField = $filamentField
+                        ->schema(function () use ($fieldData) {
+                            $schema = [];
+                            foreach ($fieldData->schema ?? [] as $index => $subField) {
+                                $subFieldId = $subField['id'] ?? $fieldData->id . '_' . $subField['type'] . '_' . $index;
+                                $subFieldComponent = FilamentFieldTypeEnum::fromString($subField['type'])->className()::make($subFieldId);
 
-                            if (isset($subField['label'])) {
-                                $subFieldComponent = $subFieldComponent->label(new HtmlString($subField['label']));
+                                if (isset($subField['label'])) {
+                                    $subFieldComponent = $subFieldComponent->label(new HtmlString($subField['label']));
+                                }
+
+                                if (isset($subField['required']) && $subField['required']) {
+                                    $subFieldComponent = $subFieldComponent->required();
+                                }
+
+                                if (isset($subField['options'])) {
+                                    $subFieldComponent = $subFieldComponent->options(array_combine($subField['options'], $subField['options']));
+                                }
+
+                                if (isset($subField['hint'])) {
+                                    $subFieldComponent = $subFieldComponent->hint($subField['hint']);
+                                }
+
+                                if (isset($subField['rules'])) {
+                                    $subFieldComponent = $subFieldComponent->rules($subField['rules']);
+                                }
+
+                                $schema[] = $subFieldComponent;
                             }
 
-                            if (isset($subField['required']) && $subField['required']) {
-                                $subFieldComponent = $subFieldComponent->required();
-                            }
+                            return $schema;
+                        })
+                        ->default([])
+                        ->live();
+                }
 
-                            if (isset($subField['options'])) {
-                                $subFieldComponent = $subFieldComponent->options(array_combine($subField['options'], $subField['options']));
-                            }
+                if ($fieldData->type === FilamentFieldTypeEnum::RICH_EDITOR) {
+                    $filamentField = $filamentField->disableToolbarButtons(['attachFiles']);
+                }
 
-                            if (isset($subField['hint'])) {
-                                $subFieldComponent = $subFieldComponent->hint($subField['hint']);
-                            }
-
-                            if (isset($subField['rules'])) {
-                                $subFieldComponent = $subFieldComponent->rules($subField['rules']);
-                            }
-
-                            $schema[] = $subFieldComponent;
-                        }
-
-                        return $schema;
-                    })
-                    ->default([])
-                    ->live();
+                array_push($schema, $filamentField);
             }
-
-            if ($fieldData->type === FilamentFieldTypeEnum::RICH_EDITOR) {
-                $filamentField = $filamentField->disableToolbarButtons(['attachFiles']);
-            }
-
-            array_push($schema, $filamentField);
         }
 
         return $schema;
