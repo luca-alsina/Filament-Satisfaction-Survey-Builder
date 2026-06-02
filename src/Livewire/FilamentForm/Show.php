@@ -7,12 +7,12 @@ use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Components\Field;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\HtmlString;
 use Livewire\Component;
-use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 use Luca\FilamentSatisfactionSurveyBuilder\Enums\FilamentFieldTypeEnum;
 use Luca\FilamentSatisfactionSurveyBuilder\Events\EntrySaved;
@@ -60,6 +60,8 @@ class Show extends Component implements HasActions, HasForms
         $schema = [];
 
         foreach ($this->filamentForm->filamentFormGroups as $group) {
+            $groupFields = [];
+
             /** @var SurveyFormGroupField $fieldData */
             foreach ($group->filamentFormGroupFields as $fieldData) {
                 $filamentField = $fieldData->type->className()::make($fieldData->id);
@@ -113,14 +115,19 @@ class Show extends Component implements HasActions, HasForms
                         })
                         ->default([])
                         ->live();
+                } elseif (FilamentFieldTypeEnum::STAR_RATING) {
+                    //
                 }
 
                 if ($fieldData->type === FilamentFieldTypeEnum::RICH_EDITOR) {
                     $filamentField = $filamentField->disableToolbarButtons(['attachFiles']);
                 }
 
-                array_push($schema, $filamentField);
+                $groupFields[] = $filamentField;
             }
+
+            $schema[] = Section::make($group->name)
+                ->schema($groupFields);
         }
 
         return $schema;
@@ -239,31 +246,32 @@ class Show extends Component implements HasActions, HasForms
         }
 
         // Handle file uploads
-        foreach ($this->filamentForm->filamentFormFields as $field) {
-            /** @var SurveyFormGroupField $field */
-            if ($field->type === FilamentFieldTypeEnum::FILE_UPLOAD) {
-                $fileKey = $field->id;
-                $fileData = $this->data[$fileKey] ?? null;
 
-                if ($fileData && is_array($fileData)) {
-                    $temporaryFile = collect($fileData)->first();
-                    if ($temporaryFile instanceof TemporaryUploadedFile) {
-                        // Remove existing media with the same field_id
-                        $entryModel->getMedia()
-                            ->filter(fn($media) => $media->getCustomProperty('field_id') === $field->id)
-                            ->each(fn($media) => $media->delete());
+        // TODO : Integrate file upload
+        /*        foreach ($this->filamentForm->filamentFormFields as $field) {
+                    if ($field->type === FilamentFieldTypeEnum::FILE_UPLOAD) {
+                        $fileKey = $field->id;
+                        $fileData = $this->data[$fileKey] ?? null;
 
-                        $media = $entryModel->addMedia($temporaryFile->getRealPath())
-                            ->withCustomProperties([
-                                'field_label' => $field->label,
-                                'field_id' => $field->id,
-                                'original_name' => $temporaryFile->getClientOriginalName(),
-                            ])
-                            ->toMediaCollection();
+                        if ($fileData && is_array($fileData)) {
+                            $temporaryFile = collect($fileData)->first();
+                            if ($temporaryFile instanceof TemporaryUploadedFile) {
+                                // Remove existing media with the same field_id
+                                $entryModel->getMedia()
+                                    ->filter(fn($media) => $media->getCustomProperty('field_id') === $field->id)
+                                    ->each(fn($media) => $media->delete());
+
+                                $media = $entryModel->addMedia($temporaryFile->getRealPath())
+                                    ->withCustomProperties([
+                                        'field_label' => $field->label,
+                                        'field_id' => $field->id,
+                                        'original_name' => $temporaryFile->getClientOriginalName(),
+                                    ])
+                                    ->toMediaCollection();
+                            }
+                        }
                     }
-                }
-            }
-        }
+                }*/
 
         // dispatch laravel event and livewire event
         event(new EntrySaved($entryModel));
