@@ -85,7 +85,7 @@ enum FilamentFieldTypeEnum implements HasLabel
             self::FILE_UPLOAD => 'Filament\Forms\Components\SpatieMediaLibraryFileUpload',
             self::REPEATER => 'Filament\Forms\Components\Repeater',
             self::HEADING => 'Luca\FilamentSatisfactionSurveyBuilder\Filament\Forms\Components\Heading',
-            self::STAR_RATING => 'l3aro\FilamentRatingStar\FilamentRatingStarPlugin',
+            self::STAR_RATING => 'l3aro\FilamentRatingStar\Components\StarInput',
         };
     }
 
