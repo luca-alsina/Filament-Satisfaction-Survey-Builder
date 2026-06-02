@@ -5,6 +5,7 @@ namespace Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSati
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
+use Livewire\Component;
 
 class FilamentSatisfactionSurveyFormGroupForm
 {
@@ -15,8 +16,8 @@ class FilamentSatisfactionSurveyFormGroupForm
                 TextInput::make('name')
                     ->required(),
                 TextInput::make('order')
-                    ->default(function () {
-                        return $this->getOwnerRecord()->filamentFormGroups()->count() + 1;
+                    ->default(function (Component $livewire) {
+                        return $livewire->getOwnerRecord()->filamentFormGroups()->count() + 1;
                     })
                     ->numeric(),
                 Textarea::make('description')
