@@ -136,4 +136,34 @@ enum FilamentFieldTypeEnum implements HasLabel
             self::STAR_RATING => false,
         };
     }
+
+    /*
+     * 0 = Cannot average
+     * 1 = Average fill rate
+     * 2 = Content average
+     * 3 = Average selection rate by option
+     **/
+    public function canAverage(): int
+    {
+        return match ($this) {
+            self::TEXT => false,
+            self::TEXTAREA => false,
+            self::SELECT => 3,
+            self::SELECT_MULTIPLE => 3,
+            self::RICH_EDITOR => false,
+            self::TOGGLE => 1,
+            self::CHECKBOX => 1,
+            self::CHECKBOX_LIST => 3,
+            self::RADIO => 3,
+            self::DATE_TIME_PICKER => false,
+            self::DATE_PICKER => false,
+            self::TIME_PICKER => false,
+            self::MARKDOWN_EDITOR => false,
+            self::COLOR_PICKER => false,
+            self::FILE_UPLOAD => false,
+            self::REPEATER => false,
+            self::HEADING => false,
+            self::STAR_RATING => 2,
+        };
+    }
 }
