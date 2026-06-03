@@ -18,6 +18,7 @@ return [
             'subheading' => __('Sous-titre'),
             'order' => __('Ordre'),
             'required' => __('Obligatoire'),
+            'average' => __('Moyenne'),
             'schema' => __('Champs'),
         ]
     ],

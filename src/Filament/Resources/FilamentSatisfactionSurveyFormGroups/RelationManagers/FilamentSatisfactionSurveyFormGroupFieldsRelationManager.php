@@ -95,6 +95,11 @@ class FilamentSatisfactionSurveyFormGroupFieldsRelationManager extends RelationM
                         return $get('type') !== FilamentFieldTypeEnum::REPEATER->name
                             && $get('type') !== FilamentFieldTypeEnum::HEADING->name;
                     }),
+                Toggle::make('average')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.average'))
+                    ->visible(function (Get $get) {
+                        return FilamentFieldTypeEnum::fromString($get('type') ?? '')?->canAverage() ?? false;
+                    }),
                 Repeater::make('schema')
                     ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.schema'))
                     ->schema([

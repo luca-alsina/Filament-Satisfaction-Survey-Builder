@@ -18,6 +18,7 @@ return [
             'subheading' => __('Subheading'),
             'order' => __('Order'),
             'required' => __('Required'),
+            'average' => __('Average'),
             'schema' => __('Fields'),
         ]
     ],
