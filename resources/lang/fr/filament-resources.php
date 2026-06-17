@@ -99,6 +99,11 @@ return [
                 'created_at' => __('Créé le'),
                 'updated_at' => __('Modifié le'),
             ],
+            'actions' => [
+                'clear_response' => __('Effacer la réponse'),
+                'clear_response_success' => __('Réponse effacée avec succès'),
+                'delete' => __('Supprimer'),
+            ],
         ],
 
         'actions' => [

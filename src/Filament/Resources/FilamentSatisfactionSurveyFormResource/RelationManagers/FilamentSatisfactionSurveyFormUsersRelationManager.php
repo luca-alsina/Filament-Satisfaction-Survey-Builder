@@ -2,6 +2,7 @@
 
 namespace Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\RelationManagers;
 
+use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
@@ -9,10 +10,12 @@ use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Forms\Components\Select;
+use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
-use Filament\Tables\Columns\TextColumn;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\RecordActionsPosition;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
@@ -23,6 +26,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Luca\FilamentSatisfactionSurveyBuilder\Exports\FilamentFormUsersExport;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyFormUser;
 use Maatwebsite\Excel\Facades\Excel;
 
 class FilamentSatisfactionSurveyFormUsersRelationManager extends RelationManager
@@ -129,6 +133,20 @@ class FilamentSatisfactionSurveyFormUsersRelationManager extends RelationManager
             ->recordActions([
                 ActionGroup::make([
                     DeleteAction::make(),
+                    Action::make('clear_response')
+                        ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-users.table.actions.clear_response'))
+                        ->visible(fn(SurveyFormUser $record) => $record->entry !== null)
+                        ->color('warning')
+                        ->icon(Heroicon::OutlinedXCircle)
+                        ->action(function (SurveyFormUser $record) {
+                            $record->entry = null;
+                            $record->save();
+//                            CalculateAverageDataJob::dispatch($record->filamentForm);
+                            Notification::make()
+                                ->title(__('filament-satisfaction-survey-builder::filament-resources.survey-form-users.table.actions.clear_response_success'))
+                                ->success()
+                                ->send();
+                        })
                 ]),
             ], position: RecordActionsPosition::BeforeColumns)
             ->toolbarActions([

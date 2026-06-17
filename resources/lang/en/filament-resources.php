@@ -99,6 +99,11 @@ return [
                 'created_at' => __('Created At'),
                 'updated_at' => __('Updated At'),
             ],
+            'actions' => [
+                'clear_response' => __('Clear Response'),
+                'clear_response_success' => __('Response cleared successfully !'),
+                'delete' => __('Delete'),
+            ],
         ],
 
         'actions' => [
