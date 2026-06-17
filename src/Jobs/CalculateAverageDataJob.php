@@ -57,20 +57,24 @@ class CalculateAverageDataJob implements ShouldQueue
         ]);
     }
 
-    protected function calculateFillRateAverage($entries, $fieldId): float
+    protected function calculateFillRateAverage($entries, $fieldId): array
     {
         $entries = collect($entries);
         $totalEntries = $entries->count();
 
         if ($totalEntries === 0) {
-            return 0.0;
+            return [
+                'result' => 0.0,
+                'total_entries' => $totalEntries,
+                'filled_count' => 0
+            ];
         }
 
         $filledCount = 0;
 
         foreach ($entries as $entry) {
             $fieldEntry = collect($entry->entry)
-                ->first(fn($item) => ($item['field_id'] ?? $item['field']) == $fieldId);
+                ->first(fn($item) => $item['field_id'] == $fieldId);
 
             if ($fieldEntry) {
                 $answer = $fieldEntry['answer'] ?? null;
@@ -81,16 +85,24 @@ class CalculateAverageDataJob implements ShouldQueue
             }
         }
 
-        return round(($filledCount / $totalEntries) * 100, 2);
+        return [
+            'result' => round(($filledCount / $totalEntries) * 100, 2),
+            'total_entries' => $totalEntries,
+            'filled_count' => $filledCount
+        ];
     }
 
-    protected function calculateContentAverage($entries, $fieldId): float
+    protected function calculateContentAverage($entries, $fieldId): array
     {
         $entries = collect($entries);
         $totalEntries = $entries->count();
 
         if ($totalEntries === 0) {
-            return 0.0;
+            return [
+                'result' => 0.0,
+                'total_entries' => $totalEntries,
+                'filled_count' => 0
+            ];
         }
 
         $sum = 0;
@@ -115,10 +127,20 @@ class CalculateAverageDataJob implements ShouldQueue
         }
 
         if ($validCount === 0) {
-            return 0.0;
+            return [
+                'result' => 0.0,
+                'total_entries' => $totalEntries,
+                'valid_count' => $validCount,
+                'sum' => $sum
+            ];
         }
 
-        return round($sum / $validCount, 2);
+        return [
+            'result' => round($sum / $validCount, 2),
+            'total_entries' => $totalEntries,
+            'valid_count' => $validCount,
+            'sum' => $sum
+        ];
     }
 
     protected function calculateSelectionRateByOption($entries, $fieldId, $field): array
@@ -128,7 +150,10 @@ class CalculateAverageDataJob implements ShouldQueue
         $options = $field->options ?? [];
 
         if ($totalEntries === 0 || empty($options)) {
-            return [];
+            return [
+                'result' => [],
+                'total_entries' => $totalEntries
+            ];
         }
 
         $optionCounts = array_fill_keys(array_keys($options), 0);
@@ -163,9 +188,11 @@ class CalculateAverageDataJob implements ShouldQueue
         }
 
         // Calculate percentages for each option
-        $result = [];
+        $result = [
+            'total_entries' => $totalEntries
+        ];
         foreach ($optionCounts as $optionKey => $count) {
-            $result[$optionKey] = round(($count / $totalEntries) * 100, 2);
+            $result['result'][$optionKey] = round(($count / $totalEntries) * 100, 2);
         }
 
         return $result;
