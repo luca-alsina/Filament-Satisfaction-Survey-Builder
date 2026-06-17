@@ -69,6 +69,8 @@ return [
 
         'actions' => [
             'preview' => __('Aperçu'),
+            'regenerate_average' => __('Regénérer les moyennes'),
+            'regenerate_average_in_progress' => __('Les moyennes sont en cours de régénération ! Cela peut prendre quelques minutes...'),
             'copy' => __('Copier'),
             'copy_success_title' => __('Formulaire copié avec succès'),
             'copy_success_body' => __('Veuillez changer le nom du formulaire en quelque chose d\'unique et supprimez le suffixe "(Copy)"'),

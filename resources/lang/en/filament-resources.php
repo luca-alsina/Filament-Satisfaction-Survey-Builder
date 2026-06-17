@@ -69,6 +69,8 @@ return [
 
         'actions' => [
             'preview' => __('Preview'),
+            'regenerate_average' => __('Regenerate Averages'),
+            'regenerate_average_in_progress' => __('Averages are being regenerated! This may take a few minutes...'),
             'copy' => __('Copy'),
             'copy_success_title' => __('Form copied successfully'),
             'copy_success_body' => __('Please change the name of the form to something unique and remove the "(Copy)" suffix'),
