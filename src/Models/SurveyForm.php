@@ -35,6 +35,7 @@ class SurveyForm extends Model
         'permit_guest_entries' => 'boolean',
         'private_entries' => 'boolean',
         'notification_emails' => 'array',
+        'average_data' => 'array'
     ];
 
     public function users(): BelongsToMany

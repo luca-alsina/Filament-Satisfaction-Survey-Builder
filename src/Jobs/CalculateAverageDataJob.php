@@ -25,7 +25,7 @@ class CalculateAverageDataJob implements ShouldQueue
 
         // Get all fields that can be averaged
         $fields = $this->surveyForm->filamentFormFields
-            ->filter(fn($field) => $field->type->canAverage() !== false);
+            ->filter(fn($field) => $field->type->canAverage() !== false && $field->type->canAverage() !== null && $field->type->canAverage() !== 0);
 
         // Get all entries for this form
         $entries = $this->surveyForm->filamentFormUsers
@@ -35,22 +35,21 @@ class CalculateAverageDataJob implements ShouldQueue
         foreach ($fields as $field) {
             $canAverage = $field->type->canAverage();
             $fieldId = $field->id;
-            $fieldLabel = $field->label;
-
-            switch ($canAverage) {
-                case 1: // Average fill rate (TOGGLE, CHECKBOX)
-                    $averageData[$fieldId] = $this->calculateFillRateAverage($entries, $fieldId);
-                    break;
-
-                case 2: // Content average (STAR_RATING)
-                    $averageData[$fieldId] = $this->calculateContentAverage($entries, $fieldId);
-                    break;
-
-                case 3: // Average selection rate by option (SELECT, SELECT_MULTIPLE, CHECKBOX_LIST, RADIO)
-                    $averageData[$fieldId] = $this->calculateSelectionRateByOption($entries, $fieldId, $field);
-                    break;
-            }
+            $averageData[$fieldId]['label'] = $field->label;
+            $averageData[$fieldId]['field_type'] = $field->type->name;
+            $averageData[$fieldId]['average_type'] = $canAverage;
+            $averageData[$fieldId]['average'] = match ($canAverage) {
+                // Average fill rate (TOGGLE, CHECKBOX)
+                1 => $this->calculateFillRateAverage($entries, $fieldId),
+                // Content average (STAR_RATING)
+                2 => $this->calculateContentAverage($entries, $fieldId),
+                // Average selection rate by option (SELECT, SELECT_MULTIPLE, CHECKBOX_LIST, RADIO)
+                3 => $this->calculateSelectionRateByOption($entries, $fieldId, $field),
+                default => null
+            };
         }
+
+//        \Log::info('Average Data: ', $averageData);
 
         // Update the survey form with the new average data
         $this->surveyForm->update([
