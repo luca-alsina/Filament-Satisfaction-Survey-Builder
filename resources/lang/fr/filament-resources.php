@@ -37,6 +37,9 @@ return [
             'notifications_description' => __('Configurer les notifications par email pour les soumissions de formulaire'),
             'limitations' => __('Limitations'),
             'limitations_description' => __('Configurer les limitations pour les soumissions à ce formulaire'),
+            'average_data' => __('Moyennes'),
+            'average_data_description' => __('Valeurs calculées à partir des réponses soumises'),
+            'average_data_empty' => __('Aucune moyenne disponible pour le moment. Utilisez "Regénérer les moyennes" après des soumissions.'),
         ],
 
         'fields' => [
@@ -74,6 +77,16 @@ return [
             'copy' => __('Copier'),
             'copy_success_title' => __('Formulaire copié avec succès'),
             'copy_success_body' => __('Veuillez changer le nom du formulaire en quelque chose d\'unique et supprimez le suffixe "(Copy)"'),
+        ],
+
+        'average_data' => [
+            'fill_rate' => __('Taux de remplissage'),
+            'average_value' => __('Moyenne'),
+            'entries' => __('entrées'),
+            'valid_entries' => __('entrées valides'),
+            'total_entries' => __('entrées totales'),
+            'no_option_data' => __('Aucune donnée d\'option disponible.'),
+            'unsupported' => __('Format de moyenne non pris en charge.'),
         ],
     ],
 

@@ -18,6 +18,7 @@ use Filament\Schemas\Components\Component;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Components\View;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -132,7 +133,20 @@ class FilamentSatisfactionSurveyFormResource extends Resource
                             ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.fields.permit_guest_entries'))
                             ->hint(__('filament-satisfaction-survey-builder::filament-resources.survey-form.fields.permit_guest_entries_hint'))
                             ->hidden(fn(Get $get): bool => (bool)$get('restricted_to_users')),
-                    ])
+                    ]),
+                Section::make(__('filament-satisfaction-survey-builder::filament-resources.survey-form.sections.average_data'))
+                    ->description(__('filament-satisfaction-survey-builder::filament-resources.survey-form.sections.average_data_description'))
+                    ->visible(fn(?SurveyForm $record, string $operation): bool => $operation === 'edit' && (bool)$record && $record->average_data)
+                    ->columnSpanFull()
+                    ->collapsible()
+                    ->collapsed(false)
+                    ->schema([
+                        View::make('filament-satisfaction-survey-builder::filament.resources.survey-form.average-data')
+                            ->columnSpanFull()
+                            ->viewData(fn(?SurveyForm $record): array => [
+                                'averageDataRows' => static::getAverageDataRows($record),
+                            ]),
+                    ]),
             ]);
     }
 
@@ -305,5 +319,36 @@ class FilamentSatisfactionSurveyFormResource extends Resource
             ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.fields.notification_emails'))
             ->helperText(__('filament-satisfaction-survey-builder::filament-resources.survey-form.fields.notification_emails_helper'))
             ->placeholder('email@example.com');
+    }
+
+    /**
+     * @return array<int, array{
+     *     field_id: int|string,
+     *     label: string,
+     *     field_type: string|null,
+     *     average_type: int|null,
+     *     average: mixed
+     * }>
+     */
+    protected static function getAverageDataRows(?SurveyForm $record): array
+    {
+        if (!$record || !is_array($record->average_data) || empty($record->average_data)) {
+            return [];
+        }
+
+        return collect($record->average_data)
+            ->map(function ($fieldData, $fieldId): array {
+                $fieldData = is_array($fieldData) ? $fieldData : [];
+
+                return [
+                    'field_id' => $fieldId,
+                    'label' => (string)($fieldData['label'] ?? ('#' . $fieldId)),
+                    'field_type' => $fieldData['field_type'] ?? null,
+                    'average_type' => isset($fieldData['average_type']) ? (int)$fieldData['average_type'] : null,
+                    'average' => $fieldData['average'] ?? null,
+                ];
+            })
+            ->values()
+            ->all();
     }
 }

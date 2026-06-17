@@ -37,6 +37,9 @@ return [
             'notifications_description' => __('Configure email notifications for form submissions'),
             'limitations' => __('Limitations'),
             'limitations_description' => __('Configure limitations for submissions to this form'),
+            'average_data' => __('Averages'),
+            'average_data_description' => __('Calculated values generated from submitted entries'),
+            'average_data_empty' => __('No averages available yet. Use "Regenerate Averages" after receiving submissions.'),
         ],
 
         'fields' => [
@@ -74,6 +77,16 @@ return [
             'copy' => __('Copy'),
             'copy_success_title' => __('Form copied successfully'),
             'copy_success_body' => __('Please change the name of the form to something unique and remove the "(Copy)" suffix'),
+        ],
+
+        'average_data' => [
+            'fill_rate' => __('Fill rate'),
+            'average_value' => __('Average'),
+            'entries' => __('entries'),
+            'valid_entries' => __('valid entries'),
+            'total_entries' => __('total entries'),
+            'no_option_data' => __('No option data available.'),
+            'unsupported' => __('Unsupported average format.'),
         ],
     ],
 
