@@ -7,7 +7,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Collection;
 use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyForm;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyFormGroupField;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyFormUser;
 
 class CalculateAverageDataJob implements ShouldQueue
 {
@@ -49,8 +52,7 @@ class CalculateAverageDataJob implements ShouldQueue
             };
         }
 
-//        \Log::info('Average Data: ', $averageData);
-
+//
         // Update the survey form with the new average data
         $this->surveyForm->update([
             'average_data' => $averageData,
@@ -143,8 +145,9 @@ class CalculateAverageDataJob implements ShouldQueue
         ];
     }
 
-    protected function calculateSelectionRateByOption($entries, $fieldId, $field): array
+    protected function calculateSelectionRateByOption(\Illuminate\Database\Eloquent\Collection $entries, $fieldId, SurveyFormGroupField $field): array
     {
+        /** @var Collection<SurveyFormUser> $entries */
         $entries = collect($entries);
         $totalEntries = $entries->count();
         $options = $field->options ?? [];
@@ -156,14 +159,18 @@ class CalculateAverageDataJob implements ShouldQueue
             ];
         }
 
-        $optionCounts = array_fill_keys(array_keys($options), 0);
+
+        $optionCounts = array_fill_keys(array_values($options), 0);
+
 
         foreach ($entries as $entry) {
+
             $fieldEntry = collect($entry->entry)
-                ->first(fn($item) => ($item['field_id'] ?? $item['field']) == $fieldId);
+                ->first(fn($item) => $item['field_id'] == $fieldId);
 
             if ($fieldEntry) {
                 $answer = $fieldEntry['answer'] ?? null;
+
 
                 if ($answer === null) {
                     continue;
