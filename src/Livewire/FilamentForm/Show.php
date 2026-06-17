@@ -16,6 +16,7 @@ use Livewire\Component;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 use Luca\FilamentSatisfactionSurveyBuilder\Enums\FilamentFieldTypeEnum;
 use Luca\FilamentSatisfactionSurveyBuilder\Events\EntrySaved;
+use Luca\FilamentSatisfactionSurveyBuilder\Jobs\CalculateAverageDataJob;
 use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyForm;
 use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyFormGroupField;
 use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyFormUser;
@@ -276,6 +277,9 @@ class Show extends Component implements HasActions, HasForms
         // dispatch laravel event and livewire event
         event(new EntrySaved($entryModel));
         $this->dispatch('entrySaved', $entryModel->id);
+
+        // Dispatch job to calculate average data asynchronously
+        CalculateAverageDataJob::dispatch($this->filamentForm);
 
         if ($this->blockRedirect) {
             return;

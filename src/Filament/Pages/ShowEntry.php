@@ -52,14 +52,14 @@ class ShowEntry extends Page
 
         // Fallback to guest panel if no current panel
         $guestPanel = Filament::getPanel($guestPanelId);
-        
+
         if ($guestPanel) {
             return $guestPanel;
         }
 
         // Fallback to app panel if guest panel doesn't exist
         $appPanel = Filament::getPanel($appPanelId);
-        
+
         if ($appPanel) {
             return $appPanel;
         }
@@ -74,7 +74,7 @@ class ShowEntry extends Page
 
         // For guest entries, require a valid signed URL
         if ($entry->user_id === null) {
-            if (! request()->hasValidSignature()) {
+            if (!request()->hasValidSignature()) {
                 abort(403, 'This link has expired or is invalid.');
             }
         } else {
@@ -83,7 +83,7 @@ class ShowEntry extends Page
                 $user = auth()->user();
                 $policy = policy($entry);
                 if ($policy && method_exists($policy, 'view')) {
-                    if (! $user->can('view', $entry)) {
+                    if (!$user->can('view', $entry)) {
                         abort(403, 'You do not have permission to view this form submission.');
                     }
                 } elseif ($entry->user_id !== $user->id) {
