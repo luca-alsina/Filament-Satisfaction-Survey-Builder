@@ -32,3 +32,32 @@ Route::get('/survey-forms/{form}/average-pdf', function (SurveyForm $form) {
         ->name($filename)
         ->inline();
 })->middleware('web')->name('filament-satisfaction-survey-builder.pdf.average');
+
+Route::get('/survey-forms/{form}/responses-pdf', function (SurveyForm $form) {
+    $entries = $form->filamentFormUsers()->with('user')->get();
+
+    if ($entries->isEmpty()) {
+        abort(404, 'Aucune réponse disponible.');
+    }
+
+    // Build a flat map of field id => label from average_data (fallback to raw id)
+    $fields = [];
+    if (is_array($form->average_data)) {
+        foreach ($form->average_data as $fieldId => $fieldData) {
+            $fields[$fieldId] = (string) ($fieldData['label'] ?? ('#' . $fieldId));
+        }
+    }
+
+    $filename = Str::slug($form->name) . '-responses-' . now()->format('Y-m-d-His') . '.pdf';
+
+    return Pdf::view('filament-satisfaction-survey-builder::pdf.responses-data', [
+        'form'        => $form,
+        'entries'     => $entries,
+        'fields'      => $fields,
+        'generatedAt' => now(),
+    ])
+        ->format('a4')
+        ->withBrowsershot(fn(Browsershot $browsershot) => $browsershot->noSandbox())
+        ->name($filename)
+        ->inline();
+})->middleware('web')->name('filament-satisfaction-survey-builder.pdf.responses');

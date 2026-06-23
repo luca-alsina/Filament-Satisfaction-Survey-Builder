@@ -76,6 +76,7 @@ return [
             'regenerate_average_in_progress' => __('Averages are being regenerated! This may take a few minutes...'),
             'download_average_pdf' => __('Download Averages PDF'),
             'download_average_pdf_empty' => __('No average data available to export.'),
+            'download_responses_pdf' => __('Download Responses PDF'),
             'copy' => __('Copy'),
             'copy_success_title' => __('Form copied successfully'),
             'copy_success_body' => __('Please change the name of the form to something unique and remove the "(Copy)" suffix'),
@@ -89,6 +90,16 @@ return [
             'total_entries' => __('total entries'),
             'no_option_data' => __('No option data available.'),
             'unsupported' => __('Unsupported average format.'),
+        ],
+
+        'pdf' => [
+            'responses' => [
+                'total_respondents' => __('Total respondents'),
+                'guest' => __('Guest'),
+                'submitted_at' => __('Submitted at'),
+                'no_answers' => __('No answers recorded.'),
+                'no_entries' => __('No entries available for this form.'),
+            ],
         ],
     ],
 

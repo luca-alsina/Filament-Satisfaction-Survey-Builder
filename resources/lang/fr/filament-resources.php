@@ -76,6 +76,7 @@ return [
             'regenerate_average_in_progress' => __('Les moyennes sont en cours de régénération ! Cela peut prendre quelques minutes...'),
             'download_average_pdf' => __('Télécharger le PDF des moyennes'),
             'download_average_pdf_empty' => __('Aucune donnée de moyenne disponible à exporter.'),
+            'download_responses_pdf' => __('Télécharger le PDF des réponses'),
             'copy' => __('Copier'),
             'copy_success_title' => __('Formulaire copié avec succès'),
             'copy_success_body' => __('Veuillez changer le nom du formulaire en quelque chose d\'unique et supprimez le suffixe "(Copy)"'),
@@ -89,6 +90,16 @@ return [
             'total_entries' => __('entrées totales'),
             'no_option_data' => __('Aucune donnée d\'option disponible.'),
             'unsupported' => __('Format de moyenne non pris en charge.'),
+        ],
+
+        'pdf' => [
+            'responses' => [
+                'total_respondents' => __('Nombre de répondants'),
+                'guest' => __('Invité'),
+                'submitted_at' => __('Soumis le'),
+                'no_answers' => __('Aucune réponse enregistrée.'),
+                'no_entries' => __('Aucune entrée disponible pour ce formulaire.'),
+            ],
         ],
     ],
 
