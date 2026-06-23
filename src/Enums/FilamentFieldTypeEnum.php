@@ -38,7 +38,7 @@ enum FilamentFieldTypeEnum implements HasLabel
 
     public function getLabel(): string
     {
-        return $this->fieldName();
+        return __('filament-satisfaction-survey-builder::filament-resources.field-types.' . $this->name);
     }
 
     public function fieldName(): string
