@@ -3,6 +3,7 @@
 namespace Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\Pages;
 
 use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
@@ -28,18 +29,23 @@ class EditFilamentForm extends EditRecord
                 ->visible(fn() => (bool)config('filament-satisfaction-survey-builder.preview-route'))
                 ->url(fn($record) => route(config('filament-satisfaction-survey-builder.preview-route'), ['form' => $record->id]))
                 ->openUrlInNewTab(),
-            Action::make('download_average_pdf')
-                ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.actions.download_average_pdf'))
+            ActionGroup::make([
+                Action::make('download_average_pdf')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.actions.download_average_pdf'))
+                    ->icon('heroicon-o-chart-bar')
+                    ->visible(fn(SurveyForm $record): bool => !empty($this->getAverageDataRows($record)))
+                    ->openUrlInNewTab()
+                    ->url(fn(SurveyForm $record) => route('filament-satisfaction-survey-builder.pdf.average', ['form' => $record])),
+                Action::make('download_responses_pdf')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.actions.download_responses_pdf'))
+                    ->icon('heroicon-o-users')
+                    ->visible(fn(SurveyForm $record): bool => $record->filamentFormUsers()->exists())
+                    ->openUrlInNewTab()
+                    ->url(fn(SurveyForm $record) => route('filament-satisfaction-survey-builder.pdf.responses', ['form' => $record])),
+            ])
+                ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.actions.documents_group'))
                 ->icon('heroicon-o-document-arrow-down')
-                ->visible(fn(SurveyForm $record): bool => !empty($this->getAverageDataRows($record)))
-                ->openUrlInNewTab()
-                ->url(fn(SurveyForm $record) => route('filament-satisfaction-survey-builder.pdf.average', ['form' => $record])),
-            Action::make('download_responses_pdf')
-                ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.actions.download_responses_pdf'))
-                ->icon('heroicon-o-users')
-                ->visible(fn(SurveyForm $record): bool => $record->filamentFormUsers()->exists())
-                ->openUrlInNewTab()
-                ->url(fn(SurveyForm $record) => route('filament-satisfaction-survey-builder.pdf.responses', ['form' => $record])),
+                ->button(),
             Action::make('regenerate_average')
                 ->color(Color::Amber)
                 ->action(function (SurveyForm $record) {

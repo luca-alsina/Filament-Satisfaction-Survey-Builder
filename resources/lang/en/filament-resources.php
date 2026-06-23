@@ -72,11 +72,12 @@ return [
 
         'actions' => [
             'preview' => __('Preview'),
+            'documents_group' => __('Documents'),
             'regenerate_average' => __('Regenerate Averages'),
             'regenerate_average_in_progress' => __('Averages are being regenerated! This may take a few minutes...'),
-            'download_average_pdf' => __('Download Averages PDF'),
+            'download_average_pdf' => __('Averages PDF'),
             'download_average_pdf_empty' => __('No average data available to export.'),
-            'download_responses_pdf' => __('Download Responses PDF'),
+            'download_responses_pdf' => __('Responses PDF'),
             'copy' => __('Copy'),
             'copy_success_title' => __('Form copied successfully'),
             'copy_success_body' => __('Please change the name of the form to something unique and remove the "(Copy)" suffix'),
