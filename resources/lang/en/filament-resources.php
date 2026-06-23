@@ -2,24 +2,24 @@
 
 return [
     'field-types' => [
-        'TEXT'              => 'Text Input',
-        'TEXTAREA'          => 'Textarea',
-        'SELECT'            => 'Select',
-        'SELECT_MULTIPLE'   => 'Select Multiple',
-        'RICH_EDITOR'       => 'Rich Editor',
-        'TOGGLE'            => 'Toggle',
-        'CHECKBOX'          => 'Checkbox',
-        'CHECKBOX_LIST'     => 'Checkbox List',
-        'RADIO'             => 'Radio',
-        'DATE_TIME_PICKER'  => 'DateTime Picker',
-        'DATE_PICKER'       => 'Date Picker',
-        'TIME_PICKER'       => 'Time Picker',
-        'MARKDOWN_EDITOR'   => 'Markdown Editor',
-        'COLOR_PICKER'      => 'Color Picker',
-        'FILE_UPLOAD'       => 'File Upload',
-        'REPEATER'          => 'Repeater',
-        'HEADING'           => 'Heading',
-        'STAR_RATING'       => 'Star Rating',
+        'TEXT' => 'Text Input',
+        'TEXTAREA' => 'Textarea',
+        'SELECT' => 'Select',
+        'SELECT_MULTIPLE' => 'Select Multiple',
+        'RICH_EDITOR' => 'Rich Editor',
+        'TOGGLE' => 'Toggle',
+        'CHECKBOX' => 'Checkbox',
+        'CHECKBOX_LIST' => 'Checkbox List',
+        'RADIO' => 'Radio',
+        'DATE_TIME_PICKER' => 'DateTime Picker',
+        'DATE_PICKER' => 'Date Picker',
+        'TIME_PICKER' => 'Time Picker',
+        'MARKDOWN_EDITOR' => 'Markdown Editor',
+        'COLOR_PICKER' => 'Color Picker',
+        'FILE_UPLOAD' => 'File Upload',
+        'REPEATER' => 'Repeater',
+        'HEADING' => 'Heading',
+        'STAR_RATING' => 'Star Rating',
     ],
 
     'survey-form-group-fields' => [
@@ -167,8 +167,8 @@ return [
 
     'survey-form-groups' => [
         'name' => [
-            'singular' => __('Group'),
-            'plural' => __('Groups')
+            'singular' => __('Fields Group'),
+            'plural' => __('Fields Groups')
         ],
 
         'create' => __('Create Group'),

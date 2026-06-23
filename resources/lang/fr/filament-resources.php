@@ -2,24 +2,24 @@
 
 return [
     'field-types' => [
-        'TEXT'              => 'Champ texte',
-        'TEXTAREA'          => 'Zone de texte',
-        'SELECT'            => 'Sélection',
-        'SELECT_MULTIPLE'   => 'Sélection multiple',
-        'RICH_EDITOR'       => 'Éditeur riche',
-        'TOGGLE'            => 'Interrupteur',
-        'CHECKBOX'          => 'Case à cocher',
-        'CHECKBOX_LIST'     => 'Liste de cases à cocher',
-        'RADIO'             => 'Bouton radio',
-        'DATE_TIME_PICKER'  => 'Sélecteur date & heure',
-        'DATE_PICKER'       => 'Sélecteur de date',
-        'TIME_PICKER'       => 'Sélecteur d\'heure',
-        'MARKDOWN_EDITOR'   => 'Éditeur Markdown',
-        'COLOR_PICKER'      => 'Sélecteur de couleur',
-        'FILE_UPLOAD'       => 'Téléversement de fichier',
-        'REPEATER'          => 'Répéteur',
-        'HEADING'           => 'Titre',
-        'STAR_RATING'       => 'Note en étoiles',
+        'TEXT' => 'Champ texte',
+        'TEXTAREA' => 'Zone de texte',
+        'SELECT' => 'Sélection',
+        'SELECT_MULTIPLE' => 'Sélection multiple',
+        'RICH_EDITOR' => 'Éditeur riche',
+        'TOGGLE' => 'Interrupteur',
+        'CHECKBOX' => 'Case à cocher',
+        'CHECKBOX_LIST' => 'Liste de cases à cocher',
+        'RADIO' => 'Bouton radio',
+        'DATE_TIME_PICKER' => 'Sélecteur date & heure',
+        'DATE_PICKER' => 'Sélecteur de date',
+        'TIME_PICKER' => 'Sélecteur d\'heure',
+        'MARKDOWN_EDITOR' => 'Éditeur Markdown',
+        'COLOR_PICKER' => 'Sélecteur de couleur',
+        'FILE_UPLOAD' => 'Téléversement de fichier',
+        'REPEATER' => 'Répéteur',
+        'HEADING' => 'Titre',
+        'STAR_RATING' => 'Note en étoiles',
     ],
 
     'survey-form-group-fields' => [
@@ -167,8 +167,8 @@ return [
 
     'survey-form-groups' => [
         'name' => [
-            'singular' => __('Groupe'),
-            'plural' => __('Groupes')
+            'singular' => __('Groupe de questions'),
+            'plural' => __('Groupes de questions')
         ],
 
         'create' => __('Créer un groupe'),
