@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Str;
+use Luca\FilamentSatisfactionSurveyBuilder\Enums\FilamentFieldTypeEnum;
 use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyForm;
 use Spatie\Browsershot\Browsershot;
 use Spatie\LaravelPdf\Facades\Pdf;
@@ -18,11 +19,13 @@ Route::get('/survey-forms/{form}/average-pdf', function (SurveyForm $form) {
         'form' => $form,
         'averageDataRows' => collect($averageDataRows)->map(function ($fieldData, $fieldId) {
             return [
-                'field_id' => $fieldId,
-                'label' => (string)($fieldData['label'] ?? ('#' . $fieldId)),
-                'field_type' => $fieldData['field_type'] ?? null,
+                'field_id'     => $fieldId,
+                'label'        => (string)($fieldData['label'] ?? ('#' . $fieldId)),
+                'field_type'   => isset($fieldData['field_type'])
+                    ? (FilamentFieldTypeEnum::fromString($fieldData['field_type'])?->getLabel() ?? $fieldData['field_type'])
+                    : null,
                 'average_type' => isset($fieldData['average_type']) ? (int)$fieldData['average_type'] : null,
-                'average' => $fieldData['average'] ?? null,
+                'average'      => $fieldData['average'] ?? null,
             ];
         })->values()->all(),
         'generatedAt' => now(),
