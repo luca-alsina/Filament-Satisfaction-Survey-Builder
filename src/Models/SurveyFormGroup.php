@@ -10,6 +10,7 @@ class SurveyFormGroup extends Model
 {
 
     protected $fillable = [
+        'filament_form_id',
         'name',
         'order',
         'description',

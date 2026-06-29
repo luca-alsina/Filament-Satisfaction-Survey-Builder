@@ -58,6 +58,8 @@ return [
             'notifications_description' => __('Configurer les notifications par email pour les soumissions de formulaire'),
             'limitations' => __('Limitations'),
             'limitations_description' => __('Configurer les limitations pour les soumissions à ce formulaire'),
+            'template' => __('Modèle'),
+            'template_description' => __('Configurer ce formulaire comme modèle ou utiliser un modèle existant'),
             'average_data' => __('Moyennes'),
             'average_data_description' => __('Valeurs calculées à partir des réponses soumises'),
             'average_data_empty' => __('Aucune moyenne disponible pour le moment. Utilisez "Regénérer les moyennes" après des soumissions.'),
@@ -76,6 +78,10 @@ return [
             'private_entries_hint' => __('Restrez les entrées pour ce formulaire de manière programmatique (par exemple via une politique dans votre application).'),
             'permit_guest_entries' => __('Autoriser les invités'),
             'permit_guest_entries_hint' => __('Permettre aux utilisateurs non enregistrés de soumettre ce formulaire'),
+            'is_template' => __('Est un modèle'),
+            'is_template_hint' => __('Marquer ce formulaire comme modèle réutilisable'),
+            'template_id' => __('Modèle'),
+            'template_id_helper' => __('Sélectionnez un modèle pour copier ses champs dans ce formulaire'),
         ],
 
         'table' => [
@@ -87,6 +93,8 @@ return [
                 'permit_guest_entries' => __('Invités autorisés'),
                 'private_entries' => __('Entrées privées'),
                 'locked' => __('Verrouillé'),
+                'is_template' => __('Modèle'),
+                'template' => __('Modèle source'),
             ],
             'copy_message' => __('Lien du formulaire copié dans le presse-papier'),
         ],
@@ -102,6 +110,8 @@ return [
             'copy' => __('Copier'),
             'copy_success_title' => __('Formulaire copié avec succès'),
             'copy_success_body' => __('Veuillez changer le nom du formulaire en quelque chose d\'unique et supprimez le suffixe "(Copy)"'),
+            'duplicate_from_template' => __('Dupliquer depuis le modèle'),
+            'duplicate_from_template_success' => __('Formulaire créé à partir du modèle avec succès'),
         ],
 
         'average_data' => [
@@ -122,6 +132,12 @@ return [
                 'no_answers' => __('Aucune réponse enregistrée.'),
                 'no_entries' => __('Aucune entrée disponible pour ce formulaire.'),
             ],
+        ],
+
+        'filters' => [
+            'is_template' => __('Type'),
+            'templates' => __('Modèles'),
+            'forms' => __('Formulaires'),
         ],
     ],
 

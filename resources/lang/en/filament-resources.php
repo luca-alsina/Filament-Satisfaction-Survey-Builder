@@ -58,6 +58,8 @@ return [
             'notifications_description' => __('Configure email notifications for form submissions'),
             'limitations' => __('Limitations'),
             'limitations_description' => __('Configure limitations for submissions to this form'),
+            'template' => __('Template'),
+            'template_description' => __('Configure this form as a template or use an existing template'),
             'average_data' => __('Averages'),
             'average_data_description' => __('Calculated values generated from submitted entries'),
             'average_data_empty' => __('No averages available yet. Use "Regenerate Averages" after receiving submissions.'),
@@ -76,6 +78,10 @@ return [
             'private_entries_hint' => __('Restrict entries for this form programmatically (e.g. via a gate in your application).'),
             'permit_guest_entries' => __('Permit Guest Entries'),
             'permit_guest_entries_hint' => __('Permit non registered users to submit this form'),
+            'is_template' => __('Is Template'),
+            'is_template_hint' => __('Mark this form as a reusable template'),
+            'template_id' => __('Template'),
+            'template_id_helper' => __('Select a template to copy its fields to this form'),
         ],
 
         'table' => [
@@ -87,6 +93,8 @@ return [
                 'permit_guest_entries' => __('Guest Entries Allowed'),
                 'private_entries' => __('Private Entries'),
                 'locked' => __('Locked'),
+                'is_template' => __('Template'),
+                'template' => __('Template Source'),
             ],
             'copy_message' => __('Form link copied to clipboard'),
         ],
@@ -102,6 +110,8 @@ return [
             'copy' => __('Copy'),
             'copy_success_title' => __('Form copied successfully'),
             'copy_success_body' => __('Please change the name of the form to something unique and remove the "(Copy)" suffix'),
+            'duplicate_from_template' => __('Duplicate from Template'),
+            'duplicate_from_template_success' => __('Form created from template successfully'),
         ],
 
         'average_data' => [
@@ -122,6 +132,12 @@ return [
                 'no_answers' => __('No answers recorded.'),
                 'no_entries' => __('No entries available for this form.'),
             ],
+        ],
+
+        'filters' => [
+            'is_template' => __('Type'),
+            'templates' => __('Templates'),
+            'forms' => __('Forms'),
         ],
     ],
 

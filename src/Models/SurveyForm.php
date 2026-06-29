@@ -4,6 +4,7 @@ namespace Luca\FilamentSatisfactionSurveyBuilder\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -18,6 +19,8 @@ use Luca\FilamentSatisfactionSurveyBuilder\Models\Traits\BelongsToTenant;
  * @property bool $permit_guest_entries
  * @property bool $private_entries
  * @property array<int, string>|null $notification_emails
+ * @property bool $is_template
+ * @property int|null $template_id
  * @property-read string $form_link
  */
 class SurveyForm extends Model
@@ -34,6 +37,7 @@ class SurveyForm extends Model
     protected $casts = [
         'permit_guest_entries' => 'boolean',
         'private_entries' => 'boolean',
+        'is_template' => 'boolean',
         'notification_emails' => 'array',
         'average_data' => 'array'
     ];
@@ -59,6 +63,15 @@ class SurveyForm extends Model
             ->orderBy('order', 'asc');
     }
 
+    public function template(): BelongsTo
+    {
+        return $this->belongsTo(SurveyForm::class, 'template_id');
+    }
+
+    public function templates(): HasMany
+    {
+        return $this->hasMany(SurveyForm::class, 'template_id');
+    }
 
     public function getFormLinkAttribute(): string
     {

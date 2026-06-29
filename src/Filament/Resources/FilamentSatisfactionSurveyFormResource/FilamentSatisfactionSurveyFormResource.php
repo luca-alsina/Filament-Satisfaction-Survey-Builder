@@ -23,6 +23,7 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\RecordActionsPosition;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -99,6 +100,35 @@ class FilamentSatisfactionSurveyFormResource extends Resource
                 RichEditor::make('description')
                     ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.fields.description'))
                     ->columnSpanFull(),
+                Section::make(__('filament-satisfaction-survey-builder::filament-resources.survey-form.sections.template'))
+                    ->description(__('filament-satisfaction-survey-builder::filament-resources.survey-form.sections.template_description'))
+                    ->schema([
+                        Toggle::make('is_template')
+                            ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.fields.is_template'))
+                            ->hint(__('filament-satisfaction-survey-builder::filament-resources.survey-form.fields.is_template_hint'))
+                            ->live()
+                            ->afterStateUpdated(function ($state, Set $set) {
+                                if ($state) {
+                                    $set('template_id', null);
+                                }
+                            }),
+                        Select::make('template_id')
+                            ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.fields.template_id'))
+                            ->helperText(__('filament-satisfaction-survey-builder::filament-resources.survey-form.fields.template_id_helper'))
+                            ->relationship('template', 'name')
+                            ->searchable()
+                            ->preload()
+                            ->visible(fn(Get $get): bool => !(bool)$get('is_template'))
+                            ->hidden(fn(Get $get): bool => (bool)$get('is_template'))
+                            ->afterStateUpdated(function ($state, Set $set) {
+                                if ($state) {
+                                    $set('is_template', false);
+                                }
+                            }),
+                    ])
+                    ->collapsible()
+                    ->columnSpanFull()
+                    ->collapsed(),
                 Section::make(__('filament-satisfaction-survey-builder::filament-resources.survey-form.sections.notifications'))
                     ->description(__('filament-satisfaction-survey-builder::filament-resources.survey-form.sections.notifications_description'))
                     ->schema([
@@ -188,9 +218,22 @@ class FilamentSatisfactionSurveyFormResource extends Resource
                     ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.table.columns.locked'))
                     ->sortable()
                     ->boolean(),
+                IconColumn::make('is_template')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.table.columns.is_template'))
+                    ->sortable()
+                    ->boolean(),
+                TextColumn::make('template.name')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.table.columns.template'))
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('is_template')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.filters.is_template'))
+                    ->options([
+                        '1' => __('filament-satisfaction-survey-builder::filament-resources.survey-form.filters.templates'),
+                        '0' => __('filament-satisfaction-survey-builder::filament-resources.survey-form.filters.forms'),
+                    ]),
             ])
             ->recordActions([
                 ActionGroup::make([
