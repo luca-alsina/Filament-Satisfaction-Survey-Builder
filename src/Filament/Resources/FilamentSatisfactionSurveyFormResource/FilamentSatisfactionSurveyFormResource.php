@@ -107,7 +107,7 @@ class FilamentSatisfactionSurveyFormResource extends Resource
                             ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.fields.is_template'))
                             ->hint(__('filament-satisfaction-survey-builder::filament-resources.survey-form.fields.is_template_hint'))
                             ->live()
-                            ->disabled(fn(?SurveyForm $record): bool => $record && $record->users()->exists())
+                            ->disabled(fn(?SurveyForm $record): bool => $record && $record->filamentFormUsers()->exists())
                             ->dehydrateStateUsing(function ($state, ?SurveyForm $record): bool {
                                 if ($state && $record && $record->users()->exists()) {
                                     return false;
