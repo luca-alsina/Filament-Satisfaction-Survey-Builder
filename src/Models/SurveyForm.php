@@ -77,4 +77,10 @@ class SurveyForm extends Model
     {
         return route(config('filament-satisfaction-survey-builder.filament-form-show-route'), $this->id);
     }
+
+    public function addUser(Authenticatable|int $user): void
+    {
+        $userId = $user instanceof Authenticatable ? $user->id : $user;
+        $this->filamentFormUsers()->create(['user_id' => $userId]);
+    }
 }
