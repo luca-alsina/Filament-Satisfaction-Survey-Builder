@@ -166,6 +166,10 @@ class Show extends Component implements HasActions, HasForms
 
     public function create()
     {
+        if ($this->filamentForm->is_template) {
+            return;
+        }
+
         $formState = $this->form->getState();
 
         if ($this->preview) {
