@@ -25,6 +25,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\RecordActionsPosition;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\Pages\CreateFilamentForm;
@@ -122,7 +123,7 @@ class FilamentSatisfactionSurveyFormResource extends Resource
                         Select::make('template_id')
                             ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.fields.template_id'))
                             ->helperText(__('filament-satisfaction-survey-builder::filament-resources.survey-form.fields.template_id_helper'))
-                            ->relationship('template', 'name')
+                            ->relationship('template', 'name', fn(EloquentBuilder $query) => $query->where('is_template', true))
                             ->searchable()
                             ->preload()
                             ->visible(fn(Get $get): bool => !(bool)$get('is_template'))
