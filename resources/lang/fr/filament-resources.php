@@ -2,15 +2,15 @@
 
 return [
     'field-types' => [
-        'TEXT' => 'Champ texte',
-        'TEXTAREA' => 'Zone de texte',
-        'SELECT' => 'Sélection',
-        'SELECT_MULTIPLE' => 'Sélection multiple',
+        'TEXT' => 'Réponse textuelle courte',
+        'TEXTAREA' => 'Réponse textuelle longue',
+        'SELECT' => 'Menu déroulant à choix unique',
+        'SELECT_MULTIPLE' => 'Menu déroulant à choix multiple',
         'RICH_EDITOR' => 'Éditeur riche',
         'TOGGLE' => 'Interrupteur',
         'CHECKBOX' => 'Case à cocher',
-        'CHECKBOX_LIST' => 'Liste de cases à cocher',
-        'RADIO' => 'Bouton radio',
+        'CHECKBOX_LIST' => 'Case à cocher à choix multiple',
+        'RADIO' => 'Choix multiple réponse unique',
         'DATE_TIME_PICKER' => 'Sélecteur date & heure',
         'DATE_PICKER' => 'Sélecteur de date',
         'TIME_PICKER' => 'Sélecteur d\'heure',

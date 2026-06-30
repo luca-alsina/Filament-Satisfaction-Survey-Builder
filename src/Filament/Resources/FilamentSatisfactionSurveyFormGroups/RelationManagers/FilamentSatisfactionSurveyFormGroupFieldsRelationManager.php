@@ -42,7 +42,7 @@ class FilamentSatisfactionSurveyFormGroupFieldsRelationManager extends RelationM
                     ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.type'))
                     ->options(function () {
                         return collect(FilamentFieldTypeEnum::cases())
-                            ->mapWithKeys(fn($type) => [$type->name => $type->fieldName()])
+                            ->mapWithKeys(fn($type) => [$type->name => $type->getLabel()])
                             ->sortBy(fn($label, $key) => $label)
                             ->toArray();
                     })
