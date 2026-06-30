@@ -29,6 +29,21 @@ class FilamentSatisfactionSurveyFormGroupFieldsRelationManager extends RelationM
 {
     protected static string $relationship = 'filamentFormGroupFields';
 
+    protected function getEnabledFieldTypes(bool $excludeRepeater = false): \Illuminate\Support\Collection
+    {
+        $types = collect(FilamentFieldTypeEnum::cases())
+            ->filter(fn(FilamentFieldTypeEnum $type) => (bool) config(
+                'filament-satisfaction-survey-builder.field_type_selection.' . $type->name,
+                true
+            ));
+
+        if ($excludeRepeater) {
+            $types = $types->reject(fn(FilamentFieldTypeEnum $type) => $type === FilamentFieldTypeEnum::REPEATER);
+        }
+
+        return $types->values();
+    }
+
     public static function getTitle(Model $ownerRecord, string $pageClass): string
     {
         return __('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.name.plural');
@@ -41,7 +56,7 @@ class FilamentSatisfactionSurveyFormGroupFieldsRelationManager extends RelationM
                 Select::make('type')
                     ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.type'))
                     ->options(function () {
-                        return collect(FilamentFieldTypeEnum::cases())
+                        return $this->getEnabledFieldTypes()
                             ->mapWithKeys(fn($type) => [$type->name => $type->getLabel()])
                             ->sortBy(fn($label, $key) => $label)
                             ->toArray();
@@ -109,8 +124,7 @@ class FilamentSatisfactionSurveyFormGroupFieldsRelationManager extends RelationM
                         Select::make('type')
                             ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.type'))
                             ->options(function () {
-                                $options = collect(FilamentFieldTypeEnum::cases())
-                                    ->filter(fn($type) => $type !== FilamentFieldTypeEnum::REPEATER)
+                                $options = $this->getEnabledFieldTypes(excludeRepeater: true)
                                     ->mapWithKeys(fn($type) => [$type->name => $type->fieldName()])
                                     ->toArray();
 

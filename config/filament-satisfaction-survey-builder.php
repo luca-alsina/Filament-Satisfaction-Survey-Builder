@@ -2,6 +2,7 @@
 
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Pages\ShowEntry;
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Pages\ShowForm;
+use Luca\FilamentSatisfactionSurveyBuilder\Enums\FilamentFieldTypeEnum;
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\FilamentSatisfactionSurveyFormResource;
 use Luca\FilamentSatisfactionSurveyBuilder\Http\Middleware\SetFormPanel;
 
@@ -75,6 +76,36 @@ return [
      * Example: \App\Filament\App\Pages\ShowEntry::class
      */
     'app-panel-entry-page-class' => ShowEntry::class,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Field Type Selection Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Toggle field types availability in the admin builder.
+    | true = selectable, false = hidden from type selectors.
+    |
+    */
+    'field_type_selection' => [
+        FilamentFieldTypeEnum::TEXT->name => true,
+        FilamentFieldTypeEnum::TEXTAREA->name => true,
+        FilamentFieldTypeEnum::SELECT->name => true,
+        FilamentFieldTypeEnum::SELECT_MULTIPLE->name => true,
+        FilamentFieldTypeEnum::RICH_EDITOR->name => true,
+        FilamentFieldTypeEnum::TOGGLE->name => true,
+        FilamentFieldTypeEnum::CHECKBOX->name => true,
+        FilamentFieldTypeEnum::CHECKBOX_LIST->name => true,
+        FilamentFieldTypeEnum::RADIO->name => true,
+        FilamentFieldTypeEnum::DATE_TIME_PICKER->name => true,
+        FilamentFieldTypeEnum::DATE_PICKER->name => true,
+        FilamentFieldTypeEnum::TIME_PICKER->name => true,
+        FilamentFieldTypeEnum::MARKDOWN_EDITOR->name => true,
+        FilamentFieldTypeEnum::COLOR_PICKER->name => true,
+        FilamentFieldTypeEnum::FILE_UPLOAD->name => true,
+        FilamentFieldTypeEnum::REPEATER->name => true,
+        FilamentFieldTypeEnum::HEADING->name => true,
+        FilamentFieldTypeEnum::STAR_RATING->name => true,
+    ],
 
     /*
      |--------------------------------------------------------------------------
