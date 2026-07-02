@@ -137,17 +137,18 @@ class FilamentSatisfactionSurveyFormResource extends Resource
                     ->collapsible()
                     ->columnSpanFull()
                     ->collapsed(),
-                Section::make(__('filament-satisfaction-survey-builder::filament-resources.survey-form.sections.notifications'))
-                    ->description(__('filament-satisfaction-survey-builder::filament-resources.survey-form.sections.notifications_description'))
-                    ->schema([
-                        static::getNotificationEmailsField(),
-                    ])
-                    ->collapsible()
-                    ->collapsed(),
+                /*                Section::make(__('filament-satisfaction-survey-builder::filament-resources.survey-form.sections.notifications'))
+                                    ->description(__('filament-satisfaction-survey-builder::filament-resources.survey-form.sections.notifications_description'))
+                                    ->schema([
+                                        static::getNotificationEmailsField(),
+                                    ])
+                                    ->collapsible()
+                                    ->collapsed(),*/
                 Section::make(__('filament-satisfaction-survey-builder::filament-resources.survey-form.sections.limitations'))
                     ->description(__('filament-satisfaction-survey-builder::filament-resources.survey-form.sections.limitations_description'))
                     ->collapsible()
                     ->collapsed()
+                    ->columnSpanFull()
                     ->schema([
                         Toggle::make('restricted_to_users')
                             ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.fields.restricted_to_users'))
