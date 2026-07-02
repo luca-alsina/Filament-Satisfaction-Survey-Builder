@@ -209,4 +209,14 @@ return [
             'plural' => __('Groupes de questions')
         ],
     ],
+
+    'views' => [
+        'livewire' => [
+            'filament-form' => [
+                'show' => [
+                    'submit' => __('Envoyer'),
+                ],
+            ],
+        ],
+    ],
 ];

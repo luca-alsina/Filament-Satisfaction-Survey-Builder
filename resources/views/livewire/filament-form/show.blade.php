@@ -10,8 +10,9 @@
             @csrf
             {{ $this->form }}
 
-            <x-filament::button type="submit" class="mt-6">
-                Submit
+            <x-filament::button type="submit" style="margin-top: 1rem" :size="\Filament\Support\Enums\Size::Large"
+                                color="success" class="w-full">
+                {{ __('filament-satisfaction-survey-builder::views.livewire.filament-form.show.submit') }}
             </x-filament::button>
         </form>
 
