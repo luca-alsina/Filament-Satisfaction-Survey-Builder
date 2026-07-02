@@ -28,11 +28,9 @@ class SurveyForm extends Model
     use BelongsToTenant;
     use HasFactory;
 
-    protected $fillable = [
-        'average_data',
+    protected $guarded = [
+        'id'
     ];
-
-    protected $guarded = [];
 
     protected $casts = [
         'permit_guest_entries' => 'boolean',
