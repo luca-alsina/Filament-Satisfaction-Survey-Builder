@@ -5,7 +5,6 @@ namespace Luca\FilamentSatisfactionSurveyBuilder\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -40,9 +39,21 @@ class SurveyForm extends Model
         'average_data' => 'array'
     ];
 
-    public function users(): BelongsToMany
+    public function users(): HasManyThrough
     {
-        return $this->belongsToMany(config('auth.providers.users.model', Authenticatable::class));
+        $userModel = config(
+            'filament-satisfaction-survey-builder.user_model',
+            config('auth.providers.users.model', Authenticatable::class)
+        );
+
+        return $this->hasManyThrough(
+            $userModel,
+            SurveyFormUser::class,
+            'survey_form_id',
+            'id',
+            'id',
+            'user_id'
+        )->distinct();
     }
 
     public function filamentFormUsers(): HasMany
