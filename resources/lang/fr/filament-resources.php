@@ -24,13 +24,13 @@ return [
 
     'survey-form-group-fields' => [
         'name' => [
-            'singular' => __('Champ'),
-            'plural' => __('Champs')
+            'singular' => __('Question'),
+            'plural' => __('Questions')
         ],
 
-        'create' => __('Créer un champ'),
-        'lock' => __('Verrouiller les champs'),
-        'unlock' => __('Dévrouiller les champs'),
+        'create' => __('Créer une question'),
+        'lock' => __('Verrouiller les questions'),
+        'unlock' => __('Dévrouiller les questions'),
         'fields' => [
             'type' => __('Type'),
             'label' => __('Libellé'),
@@ -40,7 +40,7 @@ return [
             'order' => __('Ordre'),
             'required' => __('Obligatoire'),
             'average' => __('Moyenne'),
-            'schema' => __('Champs'),
+            'schema' => __('Questions'),
         ]
     ],
 
@@ -68,7 +68,7 @@ return [
         'fields' => [
             'name' => __('Nom'),
             'redirect_url' => __('URL de redirection'),
-            'redirect_url_hint' => __('(optionnel) Remplissez ce champ pour fournir une URL de redirection personnalisée après la soumission du formulaire. Utilisez une URL complète incluant "https://" pour rediriger vers un lien externe, sinon l\'URL sera relative au domaine de ce site'),
+            'redirect_url_hint' => __('(optionnel) Remplissez cette question pour fournir une URL de redirection personnalisée après la soumission du formulaire. Utilisez une URL complète incluant "https://" pour rediriger vers un lien externe, sinon l\'URL sera relative au domaine de ce site'),
             'description' => __('Description'),
             'notification_emails' => __('Adresses email de notification'),
             'notification_emails_helper' => __('Entrez les adresses email qui doivent recevoir des notifications lorsque ce formulaire est soumis. Appuyez sur Entrée après chaque email.'),
@@ -81,7 +81,7 @@ return [
             'is_template' => __('Est un modèle'),
             'is_template_hint' => __('Marquer ce formulaire comme modèle réutilisable'),
             'template_id' => __('Modèle'),
-            'template_id_helper' => __('Sélectionnez un modèle pour copier ses champs dans ce formulaire'),
+            'template_id_helper' => __('Sélectionnez un modèle pour copier ses questions dans ce formulaire'),
         ],
 
         'table' => [
