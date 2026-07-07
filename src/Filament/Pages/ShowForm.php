@@ -56,8 +56,17 @@ class ShowForm extends Page
 
     public function mount(SurveyForm $form): void
     {
+        // Check if token is provided and valid (from query string)
+        $isValidToken = false;
+        $token = request()->query('token');
+        if ($token) {
+            $surveyFormUser = $form->getFormUserByToken($token);
+            $isValidToken = $surveyFormUser !== null;
+        }
+        
         // If form doesn't permit guest entries and user is not authenticated, redirect to login
-        if (!auth()->check() && !$form->permit_guest_entries) {
+        // Unless a valid token is provided
+        if (!auth()->check() && !$form->permit_guest_entries && !$isValidToken) {
             $loginRoute = config('filament-satisfaction-survey-builder.login-route', 'filament.app.auth.login');
 
             $this->redirect(route($loginRoute, [
