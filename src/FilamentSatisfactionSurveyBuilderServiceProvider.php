@@ -2,11 +2,14 @@
 
 namespace Luca\FilamentSatisfactionSurveyBuilder;
 
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
+use Luca\FilamentSatisfactionSurveyBuilder\Events\SurveyFormUserCreating;
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Pages\ShowEntry;
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Pages\ShowForm;
 use Luca\FilamentSatisfactionSurveyBuilder\Http\Middleware\SetFormPanel;
+use Luca\FilamentSatisfactionSurveyBuilder\Listeners\GenerateSurveyFormUserToken;
 use Luca\FilamentSatisfactionSurveyBuilder\Livewire\FilamentForm\Form as FilamentForm;
 use Luca\FilamentSatisfactionSurveyBuilder\Livewire\FilamentForm\Show as FilamentFormShow;
 use Luca\FilamentSatisfactionSurveyBuilder\Livewire\FilamentFormUser\Show as FilamentFormUserShow;
@@ -35,6 +38,7 @@ class FilamentSatisfactionSurveyBuilderServiceProvider extends PackageServicePro
             ->hasMigration('add_restricted_to_users_field')
             ->hasMigration('add_average_fields')
             ->hasMigration('add_forms_templates_fields')
+            ->hasMigration('add_token_to_survey_form_users_table')
             ->hasConfigFile('filament-satisfaction-survey-builder')
             ->hasRoute('filament-satisfaction-survey-builder')
             ->hasTranslations()
@@ -44,6 +48,12 @@ class FilamentSatisfactionSurveyBuilderServiceProvider extends PackageServicePro
     public function boot()
     {
         parent::boot();
+
+        // Register event listeners
+        Event::listen(
+            SurveyFormUserCreating::class,
+            GenerateSurveyFormUserToken::class
+        );
 
         // Register the original components
         Livewire::component('luca.filament-satisfaction-survey-builder.livewire.filament-form.show', FilamentFormShow::class);
@@ -77,6 +87,11 @@ class FilamentSatisfactionSurveyBuilderServiceProvider extends PackageServicePro
                 config('filament-satisfaction-survey-builder.filament-form-uri') . '/{form}',
                 $formPageClass
             )->name(config('filament-satisfaction-survey-builder.filament-form-show-route', 'filament-satisfaction-survey-builder.show'));
+
+            Route::get(
+                config('filament-satisfaction-survey-builder.filament-form-uri') . '/{form}/token/{token}',
+                $formPageClass
+            )->name('filament-satisfaction-survey-builder.show.token');
 
             Route::get(
                 config('filament-satisfaction-survey-builder.filament-form-user-uri') . '/{entry}',
