@@ -18,6 +18,7 @@ use Luca\FilamentSatisfactionSurveyBuilder\Enums\FilamentFieldTypeEnum;
 use Luca\FilamentSatisfactionSurveyBuilder\Events\EntrySaved;
 use Luca\FilamentSatisfactionSurveyBuilder\Jobs\CalculateAverageDataJob;
 use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyForm;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyFormGroup;
 use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyFormGroupField;
 use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyFormUser;
 
@@ -60,6 +61,7 @@ class Show extends Component implements HasActions, HasForms
     {
         $schema = [];
 
+        /** @var SurveyFormGroup $group */
         foreach ($this->filamentForm->filamentFormGroups as $group) {
             $groupFields = [];
 
@@ -128,6 +130,7 @@ class Show extends Component implements HasActions, HasForms
             }
 
             $schema[] = Section::make($group->name)
+                ->description($group->description)
                 ->schema($groupFields);
         }
 
