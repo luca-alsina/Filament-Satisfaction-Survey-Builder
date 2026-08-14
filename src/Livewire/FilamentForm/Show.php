@@ -154,6 +154,11 @@ class Show extends Component implements HasActions, HasForms
                 ->options($fieldData['options']);
         }
 
+        if (isset($fieldData['description'])) {
+            $filamentField = $filamentField
+                ->description($fieldData['description']);
+        }
+
         if (isset($fieldData['hint'])) {
             $filamentField = $filamentField
                 ->hint($fieldData['hint']);
