@@ -27,6 +27,7 @@ class SurveyFormUser extends Model implements HasMedia
     protected $fillable = [
         'survey_form_id',
         'user_id',
+        'registration_id',
         'entry',
         'token',
     ];

@@ -91,7 +91,10 @@ class SurveyForm extends Model
     public function addUser(Authenticatable|int $user, ?Registration $registration = null): void
     {
         $userId = $user instanceof Authenticatable ? $user->id : $user;
-        $this->filamentFormUsers()->create(['user_id' => $userId, 'registration_id' => $registration?->id]);
+        $this->filamentFormUsers()->firstOrCreate(
+            ['user_id' => $userId],
+            ['registration_id' => $registration?->id]
+        );
     }
 
     public function getFormUserByToken(string $token): ?SurveyFormUser
