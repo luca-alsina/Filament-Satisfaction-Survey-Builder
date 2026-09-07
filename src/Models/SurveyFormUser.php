@@ -41,6 +41,7 @@ class SurveyFormUser extends Model implements HasMedia
 
     protected $dispatchesEvents = [
         'creating' => \Luca\FilamentSatisfactionSurveyBuilder\Events\SurveyFormUserCreating::class,
+        'updated' => \App\Domain\Mail\Models\Events\SurveyFormUserUpdated::class,
     ];
 
     public function user(): BelongsTo
