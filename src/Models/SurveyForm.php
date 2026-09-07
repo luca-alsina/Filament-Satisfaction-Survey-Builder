@@ -2,6 +2,7 @@
 
 namespace Luca\FilamentSatisfactionSurveyBuilder\Models;
 
+use App\Domain\Billing\Models\Registration;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -87,10 +88,10 @@ class SurveyForm extends Model
         return route(config('filament-satisfaction-survey-builder.filament-form-show-route'), $this->id);
     }
 
-    public function addUser(Authenticatable|int $user): void
+    public function addUser(Authenticatable|int $user, ?Registration $registration = null): void
     {
         $userId = $user instanceof Authenticatable ? $user->id : $user;
-        $this->filamentFormUsers()->create(['user_id' => $userId]);
+        $this->filamentFormUsers()->create(['user_id' => $userId, 'registration_id' => $registration?->id]);
     }
 
     public function getFormUserByToken(string $token): ?SurveyFormUser
