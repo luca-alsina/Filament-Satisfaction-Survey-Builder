@@ -8,5 +8,10 @@ return [
                 'template_message' => __('This form is a template and cannot be filled out.'),
             ],
         ],
+        'filament-form-user' => [
+            'show' => [
+                'title' => __('Form Submission'),
+            ],
+        ],
     ],
 ];

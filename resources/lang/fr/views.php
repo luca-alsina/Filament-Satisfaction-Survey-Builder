@@ -8,5 +8,10 @@ return [
                 'template_message' => __('Ce formulaire est un modèle et ne peut pas être rempli.'),
             ],
         ],
+        'filament-form-user' => [
+            'show' => [
+                'title' => __('Réponse au formulaire'),
+            ],
+        ],
     ],
 ];

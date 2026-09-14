@@ -74,7 +74,7 @@ class ShowEntry extends Page
 
         // For guest entries, require a valid signed URL
         if ($entry->user_id === null) {
-            if (!request()->hasValidSignature()) {
+            if (! request()->hasValidSignature()) {
                 abort(403, 'This link has expired or is invalid.');
             }
         } else {
@@ -83,7 +83,7 @@ class ShowEntry extends Page
                 $user = auth()->user();
                 $policy = policy($entry);
                 if ($policy && method_exists($policy, 'view')) {
-                    if (!$user->can('view', $entry)) {
+                    if (! $user->can('view', $entry)) {
                         abort(403, 'You do not have permission to view this form submission.');
                     }
                 } elseif ($entry->user_id !== $user->id) {
@@ -99,7 +99,10 @@ class ShowEntry extends Page
             }
         }
 
-        $this->entry = $entry->load('user', 'filamentForm');
+        $this->entry = $entry->load(
+            'user',
+            'filamentForm.filamentFormGroups.filamentFormGroupFields',
+        );
     }
 
     public function getTitle(): string
