@@ -107,6 +107,6 @@ class ShowEntry extends Page
 
     public function getTitle(): string
     {
-        return 'Form Submission';
+        return __('filament-satisfaction-survey-builder::views.livewire.filament-form-user.show.title');
     }
 }

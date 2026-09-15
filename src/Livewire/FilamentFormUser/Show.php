@@ -39,16 +39,18 @@ class Show extends Component implements HasActions, HasForms, HasInfolists
     {
         $components = [
             TextEntry::make('user.name')
-                ->label('Name')
-                ->visible(fn () => $this->entry->user_id !== null),
+                ->label(__('filament-satisfaction-survey-builder::views.livewire.filament-form-user.show.fields.name'))
+                ->visible(fn() => $this->entry->user_id !== null),
             TextEntry::make('filamentForm.name')
-                ->label('Form Name'),
+                ->label(__('filament-satisfaction-survey-builder::views.livewire.filament-form-user.show.fields.form_name')),
             TextEntry::make('created_at')
-                ->label(fn () => $this->entry->entry ? 'Form Completed At' : 'User added At')
+                ->label(fn() => $this->entry->entry
+                    ? __('filament-satisfaction-survey-builder::views.livewire.filament-form-user.show.fields.form_completed_at')
+                    : __('filament-satisfaction-survey-builder::views.livewire.filament-form-user.show.fields.user_added_at'))
                 ->dateTime(),
             TextEntry::make('updated_at')
-                ->visible(fn () => $this->entry->entry && ($this->entry->updated_at !== $this->entry->created_at))
-                ->label('Form Completed At')
+                ->visible(fn() => $this->entry->entry && ($this->entry->updated_at !== $this->entry->created_at))
+                ->label(__('filament-satisfaction-survey-builder::views.livewire.filament-form-user.show.fields.form_completed_at'))
                 ->dateTime(),
         ];
 
@@ -57,12 +59,12 @@ class Show extends Component implements HasActions, HasForms, HasInfolists
         }
 
         $components[] = RepeatableEntry::make('media')
-            ->label('Uploaded Files')
+            ->label(__('filament-satisfaction-survey-builder::views.livewire.filament-form-user.show.fields.uploaded_files'))
             ->schema([
                 TextEntry::make('custom_properties.field_label')
-                    ->label('Question'),
+                    ->label(__('filament-satisfaction-survey-builder::views.livewire.filament-form-user.show.fields.question')),
                 TextEntry::make('custom_properties.original_name')
-                    ->label('File Name')
+                    ->label(__('filament-satisfaction-survey-builder::views.livewire.filament-form-user.show.fields.file_name'))
                     ->suffixAction(
                         Action::make('download')
                             ->icon('heroicon-o-arrow-down-tray')
@@ -77,7 +79,7 @@ class Show extends Component implements HasActions, HasForms, HasInfolists
             ->state(function () {
                 return $this->entry->getMedia();
             })
-            ->visible(fn () => $this->entry->getMedia()->isNotEmpty());
+            ->visible(fn() => $this->entry->getMedia()->isNotEmpty());
 
         return $schema
             ->record($this->entry)
@@ -107,10 +109,10 @@ class Show extends Component implements HasActions, HasForms, HasInfolists
             $sections[] = Section::make($group->name)
                 ->description($group->description)
                 ->schema([
-                    KeyValueEntry::make('answers_'.$group->id)
+                    KeyValueEntry::make('answers_' . $group->id)
                         ->label(null)
-                        ->keyLabel('Question')
-                        ->valueLabel('Answer')
+                        ->keyLabel(__('filament-satisfaction-survey-builder::views.livewire.filament-form-user.show.fields.question'))
+                        ->valueLabel(__('filament-satisfaction-survey-builder::views.livewire.filament-form-user.show.fields.answer'))
                         ->state($groupAnswers),
                 ]);
         }
@@ -119,7 +121,7 @@ class Show extends Component implements HasActions, HasForms, HasInfolists
     }
 
     /**
-     * @param  array<int, mixed>  $answers
+     * @param array<int, mixed> $answers
      * @return array<string, mixed>
      */
     private function getAnswersForGroup(SurveyFormGroup $group, array $answers): array
@@ -129,26 +131,26 @@ class Show extends Component implements HasActions, HasForms, HasInfolists
         $repeaterPrefixes = [];
 
         foreach ($group->filamentFormGroupFields as $field) {
-            $fieldIds[] = (string) $field->id;
-            $fieldLabels[] = (string) $field->label;
+            $fieldIds[] = (string)$field->id;
+            $fieldLabels[] = (string)$field->label;
 
             if ($field->type === FilamentFieldTypeEnum::REPEATER) {
-                $repeaterPrefixes[] = str_replace(' ', '_', strtolower($field->label)).'_';
+                $repeaterPrefixes[] = str_replace(' ', '_', strtolower($field->label)) . '_';
             }
         }
 
         $groupAnswers = [];
 
         foreach ($answers as $answer) {
-            if (! is_array($answer) || ! array_key_exists('field', $answer)) {
+            if (!is_array($answer) || !array_key_exists('field', $answer)) {
                 continue;
             }
 
-            $fieldId = (string) ($answer['field_id'] ?? '');
+            $fieldId = (string)($answer['field_id'] ?? '');
             $isGroupAnswer = in_array($fieldId, $fieldIds, true)
-                || in_array((string) $answer['field'], $fieldLabels, true);
+                || in_array((string)$answer['field'], $fieldLabels, true);
 
-            if (! $isGroupAnswer) {
+            if (!$isGroupAnswer) {
                 foreach ($repeaterPrefixes as $repeaterPrefix) {
                     if (str_starts_with($fieldId, $repeaterPrefix)) {
                         $isGroupAnswer = true;
@@ -159,7 +161,7 @@ class Show extends Component implements HasActions, HasForms, HasInfolists
             }
 
             if ($isGroupAnswer) {
-                $groupAnswers[(string) $answer['field']] = $answer['answer'] ?? null;
+                $groupAnswers[(string)$answer['field']] = $answer['answer'] ?? null;
             }
         }
 

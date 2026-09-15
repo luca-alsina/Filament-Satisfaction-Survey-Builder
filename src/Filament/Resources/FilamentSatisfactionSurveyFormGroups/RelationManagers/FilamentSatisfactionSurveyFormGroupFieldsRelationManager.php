@@ -74,12 +74,14 @@ class FilamentSatisfactionSurveyFormGroupFieldsRelationManager extends RelationM
                     ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.label'))
                     ->required()
                     ->label(function (Get $get) {
-                        return $get('type') === FilamentFieldTypeEnum::HEADING->name ? 'Heading' : 'Label';
+                        return $get('type') === FilamentFieldTypeEnum::HEADING->name
+                            ? __('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.heading')
+                            : __('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.label');
                     }),
                 TagsInput::make('options')
                     ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.options'))
-                    ->placeholder('Add options')
-                    ->hint('Press enter after inputting each option')
+                    ->placeholder(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.options_placeholder'))
+                    ->hint(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.options_hint'))
                     ->visible(function (Get $get) {
                         if ($get('type')) {
                             return FilamentFieldTypeEnum::fromString($get('type'))->hasOptions();
@@ -134,8 +136,8 @@ class FilamentSatisfactionSurveyFormGroupFieldsRelationManager extends RelationM
                             ->live(),
                         TagsInput::make('options')
                             ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.options'))
-                            ->placeholder('Add options')
-                            ->hint('Press enter after inputting each option')
+                            ->placeholder(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.options_placeholder'))
+                            ->hint(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.fields.options_hint'))
                             ->visible(function (Get $get) {
                                 if ($get('type')) {
                                     return FilamentFieldTypeEnum::fromString($get('type'))->hasOptions();
@@ -197,7 +199,8 @@ class FilamentSatisfactionSurveyFormGroupFieldsRelationManager extends RelationM
                 Action::make('lock_fields')
                     ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.lock'))
                     ->requiresConfirmation()
-                    ->modalHeading('Lock Form Fields. Doing this will lock the forms fields and new fields will no longer be able to be changed or edited')
+                    ->modalHeading(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.lock_heading'))
+                    ->modalDescription(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.lock_description'))
                     ->visible(function () use ($form) {
                         return !$form->locked;
                     })
@@ -209,7 +212,8 @@ class FilamentSatisfactionSurveyFormGroupFieldsRelationManager extends RelationM
                 Action::make('unlock_fields')
                     ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.unlock'))
                     ->requiresConfirmation()
-                    ->modalHeading('Unlock Form Fields. Changing fields after entries has been made can cause inconsistencies for prexisting entries')
+                    ->modalHeading(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.unlock_heading'))
+                    ->modalDescription(__('filament-satisfaction-survey-builder::filament-resources.survey-form-group-fields.unlock_description'))
                     ->visible(function () use ($form) {
                         return $form->locked;
                     })
