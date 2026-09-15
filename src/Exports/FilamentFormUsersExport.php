@@ -18,7 +18,7 @@ class FilamentFormUsersExport implements FromCollection, WithHeadings, WithMappi
     {
         $this->entries = $entries->load('user');
 
-        $this->form = SurveyForm::where('id', $entries->first()->filament_form_id)
+        $this->form = SurveyForm::where('id', $entries->first()->survey_form_id)
             ->with('filamentFormFields')
             ->firstOrFail();
     }

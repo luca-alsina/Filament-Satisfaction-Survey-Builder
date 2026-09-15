@@ -10,7 +10,7 @@ class SurveyFormGroup extends Model
 {
 
     protected $fillable = [
-        'filament_form_id',
+        'survey_form_id',
         'name',
         'order',
         'description',
@@ -26,6 +26,6 @@ class SurveyFormGroup extends Model
 
     public function filamentForm(): BelongsTo
     {
-        return $this->belongsTo(SurveyForm::class);
+        return $this->belongsTo(SurveyForm::class, 'survey_form_id');
     }
 }

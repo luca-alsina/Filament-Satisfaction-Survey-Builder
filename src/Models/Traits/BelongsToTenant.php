@@ -47,8 +47,8 @@ trait BelongsToTenant
                 }
             }
 
-            if (method_exists($model, 'filamentForm') && isset($model->filament_form_id)) {
-                $parentFormId = $model->filament_form_id;
+            if (method_exists($model, 'filamentForm') && isset($model->survey_form_id)) {
+                $parentFormId = $model->survey_form_id;
                 $parentFormRelated = $model->filamentForm()->getRelated();
 
                 $parentFormClass = $parentFormRelated::class;

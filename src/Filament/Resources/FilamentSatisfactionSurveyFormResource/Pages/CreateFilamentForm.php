@@ -37,15 +37,15 @@ class CreateFilamentForm extends CreateRecord
     {
         $template->filamentFormGroups->each(function ($templateGroup) use ($form) {
             $group = SurveyFormGroup::create([
-                'filament_form_id' => $form->id,
+                'survey_form_id' => $form->id,
                 'name' => $templateGroup->name,
                 'order' => $templateGroup->order,
+                'description' => $templateGroup->description,
             ]);
 
-            $templateGroup->filamentFormGroupFields->each(function ($templateField) use ($form, $group) {
+            $templateGroup->filamentFormGroupFields->each(function ($templateField) use ($group) {
                 SurveyFormGroupField::create([
-                    'filament_form_id' => $form->id,
-                    'filament_form_group_id' => $group->id,
+                    'survey_form_group_id' => $group->id,
                     'label' => $templateField->label,
                     'type' => $templateField->type,
                     'required' => $templateField->required,
@@ -53,6 +53,8 @@ class CreateFilamentForm extends CreateRecord
                     'hint' => $templateField->hint,
                     'options' => $templateField->options,
                     'rules' => $templateField->rules,
+                    'schema' => $templateField->schema,
+                    'average' => $templateField->average,
                 ]);
             });
         });

@@ -91,8 +91,13 @@ class Show extends Component implements HasActions, HasForms, HasInfolists
     {
         $answers = is_array($this->entry->entry) ? $this->entry->entry : [];
         $sections = [];
+        $form = $this->entry->filamentForm;
 
-        foreach ($this->entry->filamentForm->filamentFormGroups as $group) {
+        if ($form === null) {
+            return $sections;
+        }
+
+        foreach ($form->filamentFormGroups as $group) {
             $groupAnswers = $this->getAnswersForGroup($group, $answers);
 
             if ($groupAnswers === []) {

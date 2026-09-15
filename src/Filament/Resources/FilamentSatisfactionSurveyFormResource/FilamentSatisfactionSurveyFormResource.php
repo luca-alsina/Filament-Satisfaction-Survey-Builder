@@ -34,6 +34,7 @@ use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfacti
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\RelationManagers\FilamentSatisfactionSurveyFormGroupsRelationManager;
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\RelationManagers\FilamentSatisfactionSurveyFormUsersRelationManager;
 use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyForm;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyFormGroup;
 use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyFormGroupField;
 
 class FilamentSatisfactionSurveyFormResource extends Resource
@@ -266,17 +267,28 @@ class FilamentSatisfactionSurveyFormResource extends Resource
                                 'notification_emails' => $record->notification_emails,
                             ]);
 
-                            $record->filamentFormFields->each(function ($field) use ($formCopy) {
-                                SurveyFormGroupField::create([
-                                    'filament_form_id' => $formCopy->id,
-                                    'label' => $field->label,
-                                    'type' => $field->type,
-                                    'required' => $field->required,
-                                    'order' => $field->order,
-                                    'hint' => $field->hint,
-                                    'options' => $field->options,
-                                    'rules' => $field->rules,
+                            $record->filamentFormGroups->each(function ($group) use ($formCopy) {
+                                $groupCopy = SurveyFormGroup::create([
+                                    'survey_form_id' => $formCopy->id,
+                                    'name' => $group->name,
+                                    'order' => $group->order,
+                                    'description' => $group->description,
                                 ]);
+
+                                $group->filamentFormGroupFields->each(function ($field) use ($groupCopy) {
+                                    SurveyFormGroupField::create([
+                                        'survey_form_group_id' => $groupCopy->id,
+                                        'label' => $field->label,
+                                        'type' => $field->type,
+                                        'required' => $field->required,
+                                        'order' => $field->order,
+                                        'hint' => $field->hint,
+                                        'options' => $field->options,
+                                        'rules' => $field->rules,
+                                        'schema' => $field->schema,
+                                        'average' => $field->average,
+                                    ]);
+                                });
                             });
 
                             Notification::make()

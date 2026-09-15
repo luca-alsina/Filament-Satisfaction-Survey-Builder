@@ -52,7 +52,7 @@ class SurveyFormUser extends Model implements HasMedia
 
     public function filamentForm(): BelongsTo
     {
-        return $this->belongsTo(SurveyForm::class);
+        return $this->belongsTo(SurveyForm::class, 'survey_form_id');
     }
 
     public function getFormLinkWithTokenAttribute(): string
