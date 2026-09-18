@@ -83,6 +83,9 @@ class Show extends Component implements HasActions, HasForms
                 } elseif ($fieldData->type === FilamentFieldTypeEnum::CHECKBOX_LIST) {
                     $filamentField = $filamentField
                         ->default([]);
+                } elseif ($fieldData->type === FilamentFieldTypeEnum::RADIO) {
+                    $filamentField = $filamentField
+                        ->inline();
                 } elseif ($fieldData->type === FilamentFieldTypeEnum::REPEATER) {
                     $filamentField = $filamentField
                         ->schema(function () use ($fieldData) {
