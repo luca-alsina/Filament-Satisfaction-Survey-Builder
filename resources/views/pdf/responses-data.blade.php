@@ -4,11 +4,15 @@
     <meta charset="UTF-8">
     <title>{{ $form->name }} - Réponses individuelles</title>
     <style>
+        @page {
+            margin: 18mm 12mm;
+        }
+
         body {
             font-family: Arial, sans-serif;
             font-size: 12px;
             color: #111827;
-            margin: 24px;
+            margin: 0;
         }
 
         h1 {
@@ -27,7 +31,6 @@
             border-radius: 6px;
             padding: 14px 16px;
             margin-bottom: 20px;
-            page-break-inside: avoid;
         }
 
         .respondent-header {
@@ -38,6 +41,8 @@
             border-bottom: 1px solid #e5e7eb;
             padding-bottom: 6px;
             margin-bottom: 10px;
+            break-after: avoid;
+            page-break-after: avoid;
         }
 
         .respondent-meta {
@@ -51,6 +56,8 @@
             margin-bottom: 6px;
             padding: 4px 0;
             border-bottom: 1px solid #f3f4f6;
+            break-inside: avoid;
+            page-break-inside: avoid;
         }
 
         .answer-label {
@@ -83,6 +90,38 @@
             margin-bottom: 20px;
             font-size: 11px;
             color: #4b5563;
+        }
+
+        .group-block {
+            margin: 20px 0 12px;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .group-block-first {
+            margin-top: 0;
+        }
+
+        .group-header {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1f2937;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            padding: 6px 10px;
+            margin-bottom: 6px;
+            break-inside: avoid;
+            page-break-inside: avoid;
+            break-after: avoid;
+            page-break-after: avoid;
+        }
+
+        .group-description {
+            font-size: 10px;
+            color: #6b7280;
+            margin: -2px 0 6px;
+            padding: 0 2px;
         }
     </style>
 </head>
@@ -119,31 +158,83 @@
                 {{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.pdf.responses.no_answers') }}
             </div>
         @else
-            @foreach ($answers as $fieldEntry)
-                @php
-                    $fieldId = $fieldEntry['field'] ?? null;
-                    $fieldLabel = $fields[$fieldId] ?? ($fieldId ? '- ' . $fieldId : '—');
-                    $answer = $fieldEntry['answer'] ?? null;
-
-                    if (is_array($answer)) {
-                        $displayAnswer = implode(', ', array_filter(array_map('strval', $answer)));
-                    } elseif ($answer === null || $answer === '') {
-                        $displayAnswer = null;
-                    } elseif (is_bool($answer) || $answer === 'true' || $answer === 'false') {
-                        $displayAnswer = $answer === 'true' ? 'Oui' : 'Non';
-                    } else {
-                        $displayAnswer = (string) $answer;
+            @php
+                // Regroupe les réponses par catégorie (groupe), comme les Sections dans Show.php
+                $groupedAnswers = [];
+                $groupOrder = [];
+                foreach ($answers as $position => $fieldEntry) {
+                    // Les entrées stockent 'field_id' (id) + 'field' (label) ; 'field' seul = legacy
+                    $rawFieldId = $fieldEntry['field_id'] ?? $fieldEntry['field'] ?? null;
+                    $fieldIdKey = $rawFieldId !== null ? (string) $rawFieldId : null;
+                    $group = ($fieldIdKey !== null && isset($fieldGroups[$fieldIdKey]))
+                        ? $fieldGroups[$fieldIdKey]
+                        : null;
+                    $groupKey = $group ? 'group_' . $group['id'] : 'ungrouped';
+                    if (! isset($groupedAnswers[$groupKey])) {
+                        $groupedAnswers[$groupKey] = [
+                            'name' => $group['name'] ?? null,
+                            'description' => $group['description'] ?? null,
+                            'items' => [],
+                        ];
+                        $groupOrder[] = $groupKey;
                     }
-                @endphp
-                <div class="answer-row">
-                    <div class="answer-label">{{ $fieldLabel }}</div>
-                    <div class="answer-value">
-                        @if ($displayAnswer !== null && $displayAnswer !== '')
-                            {{ $displayAnswer }}
-                        @else
-                            <span class="no-answer">—</span>
+                    $groupedAnswers[$groupKey]['items'][] = ['entry' => $fieldEntry, 'position' => $position];
+                }
+                // Les groupes sans correspondance gardent l'ordre d'apparition (fin en pratique),
+                // les groupes connus suivent l'ordre des Sections du formulaire
+                $orderedGroupKeys = [];
+                foreach (($formGroups ?? []) as $formGroup) {
+                    $key = 'group_' . $formGroup['id'];
+                    if (isset($groupedAnswers[$key])) {
+                        $orderedGroupKeys[] = $key;
+                    }
+                }
+                foreach ($groupOrder as $key) {
+                    if (! in_array($key, $orderedGroupKeys, true)) {
+                        $orderedGroupKeys[] = $key;
+                    }
+                }
+            @endphp
+            @foreach ($orderedGroupKeys as $groupKey)
+                @php $groupData = $groupedAnswers[$groupKey]; @endphp
+                <div class="group-block{{ $loop->first ? ' group-block-first' : '' }}">
+                    @if ($groupData['name'])
+                        <div class="group-header">{{ $groupData['name'] }}</div>
+                        @if ($groupData['description'])
+                            <div class="group-description">{{ $groupData['description'] }}</div>
                         @endif
-                    </div>
+                    @endif
+                    @foreach ($groupData['items'] as $item)
+                        @php
+                            $fieldEntry = $item['entry'];
+                            $rawFieldId = $fieldEntry['field_id'] ?? $fieldEntry['field'] ?? null;
+                            $fieldIdKey = $rawFieldId !== null ? (string) $rawFieldId : null;
+                            $fieldLabel = ($fieldIdKey !== null && isset($fields[$fieldIdKey]))
+                                ? $fields[$fieldIdKey]
+                                : ($fieldEntry['field'] ?? ($rawFieldId ? '- ' . $rawFieldId : '—'));
+                            $answer = $fieldEntry['answer'] ?? null;
+
+                            if (is_array($answer)) {
+                                $displayAnswer = implode(', ', array_filter(array_map('strval', $answer)));
+                            } elseif ($answer === null || $answer === '') {
+                                $displayAnswer = null;
+                            } elseif (is_bool($answer) || $answer === 'true' || $answer === 'false') {
+                                $displayAnswer = $answer === 'true' ? 'Oui' : 'Non';
+                            } else {
+                                $displayAnswer = (string) $answer;
+                            }
+                        @endphp
+                        <div class="answer-row">
+                            <div class="answer-label">{{ $fieldLabel }}</div>
+                            <div class="answer-value">
+                                @if ($displayAnswer !== null && $displayAnswer !== '')
+                                    {{ $displayAnswer }}
+                                @else
+                                    <span class="no-answer">—</span>
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
             @endforeach
         @endif

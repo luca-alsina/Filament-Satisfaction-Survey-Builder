@@ -37,6 +37,7 @@ Route::get('/survey-forms/{form}/average-pdf', function (SurveyForm $form) {
 })->middleware('web')->name('filament-satisfaction-survey-builder.pdf.average');
 
 Route::get('/survey-forms/{form}/responses-pdf', function (SurveyForm $form) {
+    $form->load('filamentFormGroups', 'filamentFormGroups.filamentFormGroupFields');
     $entries = $form->filamentFormUsers()->with('user')->get();
 
     if ($entries->isEmpty()) {
@@ -51,12 +52,35 @@ Route::get('/survey-forms/{form}/responses-pdf', function (SurveyForm $form) {
         }
     }
 
+    // Map field id => groupe (comme les Sections dans Show.php)
+    $fieldGroups = [];
+    $formGroups = [];
+    foreach ($form->filamentFormGroups as $group) {
+        $formGroups[] = [
+            'id' => $group->id,
+            'name' => $group->name,
+            'description' => $group->description,
+        ];
+        foreach ($group->filamentFormGroupFields as $groupField) {
+            $fieldGroups[(string) $groupField->id] = [
+                'id' => $group->id,
+                'name' => $group->name,
+                'description' => $group->description,
+            ];
+            if (! isset($fields[(string) $groupField->id]) && ! isset($fields[$groupField->id])) {
+                $fields[(string) $groupField->id] = (string) $groupField->label;
+            }
+        }
+    }
+
     $filename = Str::slug($form->name) . '-responses-' . now()->format('Y-m-d-His') . '.pdf';
 
     return Pdf::view('filament-satisfaction-survey-builder::pdf.responses-data', [
         'form'        => $form,
         'entries'     => $entries,
         'fields'      => $fields,
+        'fieldGroups' => $fieldGroups,
+        'formGroups'  => $formGroups,
         'generatedAt' => now(),
     ])
         ->format('a4')
