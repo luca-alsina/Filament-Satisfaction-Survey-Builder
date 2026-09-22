@@ -37,9 +37,13 @@ class Show extends Component implements HasActions, HasForms
 
     public bool $preview;
 
+    public ?string $token = null;
+
     public ?array $data = [];
 
-    public function mount(SurveyForm|string|int $form, bool $blockRedirect = false, bool $preview = false)
+    public ?SurveyFormUser $existingEntry = null;
+
+    public function mount(SurveyForm|string|int $form, bool $blockRedirect = false, bool $preview = false, ?string $token = null)
     {
         $this->preview = $preview;
 
@@ -54,9 +58,85 @@ class Show extends Component implements HasActions, HasForms
 
         $this->filamentForm = $form->load('filamentFormGroups', 'filamentFormGroups.filamentFormGroupFields');
 
+        $this->token = $token ?? request()->route('token') ?? request()->query('token');
+
+        $this->existingEntry = $this->resolveExistingEntry();
+
         $this->form->fill($this->data);
 
         $this->blockRedirect = $blockRedirect;
+    }
+
+    public function getHasAlreadySubmittedProperty(): bool
+    {
+        return $this->existingEntry !== null;
+    }
+
+    public function getExistingEntryUrlProperty(): ?string
+    {
+        if ($this->existingEntry === null) {
+            return null;
+        }
+
+        return route(
+            config('filament-satisfaction-survey-builder.filament-form-user-show-route'),
+            ['entry' => $this->existingEntry->getKey()]
+        );
+    }
+
+    protected function resolveExistingEntry(): ?SurveyFormUser
+    {
+        if ($this->preview) {
+            return null;
+        }
+
+        $token = $this->token ?? request()->route('token') ?? request()->query('token');
+
+        // Si un token est présent, on ignore le compte connecté et on ne
+        // bloque que si l'entrée liée à ce token a déjà été remplie.
+        if (! empty($token)) {
+            $candidate = SurveyFormUser::query()
+                ->where('survey_form_id', $this->filamentForm->getKey())
+                ->where('token', $token)
+                ->whereNotNull('entry')
+                ->latest('id')
+                ->first();
+
+            if ($candidate === null) {
+                return null;
+            }
+
+            $entry = $candidate->entry;
+
+            if (! is_array($entry) || $entry === []) {
+                return null;
+            }
+
+            return $candidate;
+        }
+
+        if (! Auth::check()) {
+            return null;
+        }
+
+        $candidate = SurveyFormUser::query()
+            ->where('survey_form_id', $this->filamentForm->getKey())
+            ->where('user_id', Auth::id())
+            ->whereNotNull('entry')
+            ->latest('id')
+            ->first();
+
+        if ($candidate === null) {
+            return null;
+        }
+
+        $entry = $candidate->entry;
+
+        if (! is_array($entry) || $entry === []) {
+            return null;
+        }
+
+        return $candidate;
     }
 
     public function form(Schema $schema): Schema
@@ -190,6 +270,18 @@ class Show extends Component implements HasActions, HasForms
             return;
         }
 
+        if ($this->resolveExistingEntry() !== null) {
+            $this->existingEntry = $this->resolveExistingEntry();
+
+            \Filament\Notifications\Notification::make()
+                ->danger()
+                ->title(__('filament-satisfaction-survey-builder::views.livewire.filament-form.show.already_submitted_title'))
+                ->body(__('filament-satisfaction-survey-builder::views.livewire.filament-form.show.already_submitted_message'))
+                ->send();
+
+            return;
+        }
+
         $formState = $this->form->getState();
 
         if ($this->preview) {
@@ -251,7 +343,25 @@ class Show extends Component implements HasActions, HasForms
             }
         }
 
-        if (Auth::check()) {
+        $activeToken = $this->token ?? request()->route('token') ?? request()->query('token');
+
+        if (! empty($activeToken)) {
+            $tokenEntry = SurveyFormUser::query()
+                ->where('survey_form_id', $this->filamentForm->id)
+                ->where('token', $activeToken)
+                ->first();
+
+            if ($tokenEntry !== null) {
+                $tokenEntry->update(['entry' => $entry]);
+                $entryModel = $tokenEntry->refresh();
+            } else {
+                $entryModel = SurveyFormUser::create([
+                    'survey_form_id' => $this->filamentForm->id,
+                    'entry' => $entry,
+                    'token' => $activeToken,
+                ]);
+            }
+        } elseif (Auth::check()) {
             $entryModel = SurveyFormUser::updateOrCreate(
                 [
                     'user_id' => Auth::user()->id ?? null,

@@ -6,6 +6,9 @@ return [
             'show' => [
                 'submit' => __('Submit'),
                 'template_message' => __('This form is a template and cannot be filled out.'),
+                'already_submitted_title' => __('You have already filled out this form.'),
+                'already_submitted_message' => __('You cannot fill out this form a second time. You can view your answers using the button below.'),
+                'view_answers' => __('View my answers'),
             ],
         ],
         'filament-form-user' => [

@@ -13,6 +13,8 @@ class ShowForm extends Page
 {
     public SurveyForm $form;
 
+    public ?string $token = null;
+
     protected static ?string $navigationLabel = null;
 
     protected static bool $shouldRegisterNavigation = false;
@@ -54,7 +56,7 @@ class ShowForm extends Page
         return Filament::getPanel($guestPanelId);
     }
 
-    public function mount(SurveyForm|string|int $form): void
+    public function mount(SurveyForm|string|int $form, ?string $token = null): void
     {
         // Resolve the configured model so custom models extending the base work
         // even when implicit binding returned the base class or a raw key.
@@ -67,9 +69,9 @@ class ShowForm extends Page
                 $form = $configured;
             }
         }
-        // Check if token is provided and valid (from query string)
+        // Check if token is provided and valid (from route param or query string)
         $isValidToken = false;
-        $token = request()->query('token');
+        $token = $token ?? request()->route('token') ?? request()->query('token');
         if ($token) {
             $surveyFormUser = $form->getFormUserByToken($token);
             $isValidToken = $surveyFormUser !== null;
@@ -88,6 +90,7 @@ class ShowForm extends Page
         }
 
         // Show form (middleware sets the appropriate panel based on authentication)
+        $this->token = $token;
         $this->form = $form->load('filamentFormGroups', 'filamentFormGroups.filamentFormGroupFields');
     }
 

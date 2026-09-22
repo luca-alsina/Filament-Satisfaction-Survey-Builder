@@ -6,6 +6,9 @@ return [
             'show' => [
                 'submit' => __('Soumettre'),
                 'template_message' => __('Ce formulaire est un modèle et ne peut pas être rempli.'),
+                'already_submitted_title' => __('Vous avez déjà rempli ce formulaire.'),
+                'already_submitted_message' => __('Vous ne pouvez pas renseigner ce formulaire une seconde fois. Vous pouvez consulter vos réponses via le bouton ci-dessous.'),
+                'view_answers' => __('Voir mes réponses'),
             ],
         ],
         'filament-form-user' => [
