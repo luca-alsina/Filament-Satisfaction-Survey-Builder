@@ -138,6 +138,13 @@ return [
             ],
             'responses' => [
                 'total_respondents' => __('Total respondents'),
+                'registered' => __('Registered'),
+                'with_response' => __('With response'),
+                'response_rate' => __('Response rate'),
+                'generated_at' => __('Generated at'),
+                'statistics' => __('Statistics'),
+                'individual_responses' => __('Individual responses'),
+                'no_statistics' => __('No statistics available.'),
                 'guest' => __('Guest'),
                 'submitted_at' => __('Submitted at'),
                 'no_answers' => __('No answers recorded.'),

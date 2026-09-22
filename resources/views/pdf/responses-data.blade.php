@@ -20,6 +20,18 @@
             margin: 0 0 8px;
         }
 
+        h2 {
+            font-size: 16px;
+            margin: 28px 0 12px;
+            color: #1f2937;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 6px;
+        }
+
+        h2:first-of-type {
+            margin-top: 0;
+        }
+
         .meta {
             color: #4b5563;
             margin-bottom: 20px;
@@ -123,15 +135,182 @@
             margin: -2px 0 6px;
             padding: 0 2px;
         }
+
+        .stat-grid {
+            display: table;
+            width: 100%;
+            margin-bottom: 6px;
+        }
+
+        .stat-row {
+            display: table-row;
+        }
+
+        .stat-cell {
+            display: table-cell;
+            padding: 3px 8px 3px 0;
+            font-size: 11px;
+            color: #4b5563;
+        }
+
+        .stat-cell strong {
+            color: #111827;
+            font-size: 12px;
+        }
+
+        .stat-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 10px 12px;
+            margin-bottom: 10px;
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        .stat-title {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #1f2937;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 400;
+            color: #374151;
+            margin-left: 6px;
+        }
+
+        .list {
+            margin: 6px 0 0 0;
+            padding-left: 16px;
+        }
+
+        .muted {
+            color: #6b7280;
+            font-size: 10px;
+            margin-top: 4px;
+        }
     </style>
 </head>
 <body>
 <h1>{{ $form->name }}</h1>
+<div class="meta">
+    {{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.pdf.responses.generated_at') }}
+    : {{ isset($generatedAt) ? $generatedAt->format('Y-m-d H:i') : now()->format('Y-m-d H:i') }}
+</div>
+
+@php
+    $registeredCount = isset($totalRegistered) ? (int) $totalRegistered : $entries->count();
+    $responsesCount = isset($totalResponses) ? (int) $totalResponses : $entries->whereNotNull('entry')->count();
+    $rate = $responseRate ?? null;
+    $statRows = $averageDataRows ?? [];
+@endphp
 
 <div class="summary">
-    {{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.pdf.responses.total_respondents') }} :
-    <strong>{{ $entries->count() }}</strong>
+    <div class="stat-grid">
+        <div class="stat-row">
+            <div class="stat-cell">
+                {{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.pdf.responses.total_respondents') }} :
+                <strong>{{ $entries->count() }}</strong>
+            </div>
+            <div class="stat-cell">
+                {{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.pdf.responses.registered') }} :
+                <strong>{{ $registeredCount }}</strong>
+            </div>
+        </div>
+        <div class="stat-row">
+            <div class="stat-cell">
+                {{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.pdf.responses.with_response') }} :
+                <strong>{{ $responsesCount }}</strong>
+            </div>
+            <div class="stat-cell">
+                {{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.pdf.responses.response_rate') }} :
+                <strong>
+                    @if ($rate !== null)
+                        {{ number_format((float) $rate, 2) }}%
+                    @else
+                        —
+                    @endif
+                </strong>
+                <span class="muted">
+                    ({{ $responsesCount }} / {{ $registeredCount }})
+                </span>
+            </div>
+        </div>
+    </div>
 </div>
+
+<h2>{{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.pdf.responses.statistics') }}</h2>
+
+@if (empty($statRows))
+    <div class="summary">
+        {{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.pdf.responses.no_statistics') }}
+    </div>
+@else
+    @foreach ($statRows as $row)
+        @php
+            $label = (string) ($row['label'] ?? ('#' . ($row['field_id'] ?? '')));
+            $fieldType = $row['field_type'] ?? null;
+            $averageType = $row['average_type'] ?? null;
+            $average = is_array($row['average'] ?? null) ? $row['average'] : [];
+        @endphp
+
+        <div class="stat-card">
+            <div class="stat-title">
+                {{ $label }}
+                @if ($fieldType)
+                    <span class="badge">{{ $fieldType }}</span>
+                @endif
+            </div>
+
+            @if ($averageType === 1)
+                <div>
+                    <strong>{{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.average_data.fill_rate') }}:</strong>
+                    {{ number_format((float) ($average['result'] ?? 0), 2) }}%
+                </div>
+                <div class="muted">
+                    {{ (int) ($average['filled_count'] ?? 0) }} / {{ (int) ($average['total_entries'] ?? 0) }}
+                    {{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.average_data.entries') }}
+                </div>
+            @elseif ($averageType === 2)
+                <div>
+                    <strong>{{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.average_data.average_value') }}:</strong>
+                    {{ number_format((float) ($average['result'] ?? 0), 2) }}
+                </div>
+                <div class="muted">
+                    {{ (int) ($average['valid_count'] ?? 0) }} / {{ (int) ($average['total_entries'] ?? 0) }}
+                    {{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.average_data.valid_entries') }}
+                </div>
+            @elseif ($averageType === 3)
+                @php
+                    $options = is_array($average['result'] ?? null) ? $average['result'] : [];
+                @endphp
+                @if (!empty($options))
+                    <ul class="list">
+                        @foreach ($options as $option => $percent)
+                            <li>{{ $option }}: {{ number_format((float) $percent, 2) }}%</li>
+                        @endforeach
+                    </ul>
+                @else
+                    <div>{{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.average_data.no_option_data') }}</div>
+                @endif
+                <div class="muted">
+                    {{ (int) ($average['total_entries'] ?? 0) }}
+                    {{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.average_data.total_entries') }}
+                </div>
+            @else
+                <div>{{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.average_data.unsupported') }}</div>
+            @endif
+        </div>
+    @endforeach
+@endif
+
+<h2>{{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.pdf.responses.individual_responses') }}</h2>
 
 @forelse ($entries as $index => $entry)
     @php

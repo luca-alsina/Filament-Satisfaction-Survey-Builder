@@ -87,12 +87,34 @@ Route::get('/survey-forms/{form}/responses-pdf', function ($form) {
 
     $filename = Str::slug($form->name) . '-responses-' . now()->format('Y-m-d-His') . '.pdf';
 
+    // Statistiques globales : mêmes informations que le PDF des moyennes
+    $totalRegistered = $form->filamentFormUsers()->count();
+    $totalResponses = $form->filamentFormUsers()->whereNotNull('entry')->count();
+    $responseRate = $totalRegistered > 0 ? ($totalResponses / $totalRegistered) * 100 : null;
+
+    // Statistiques par question depuis average_data (même mapping que average-pdf)
+    $averageDataRows = collect($form->average_data ?? [])->map(function ($fieldData, $fieldId) {
+        return [
+            'field_id'     => $fieldId,
+            'label'        => (string)($fieldData['label'] ?? ('#' . $fieldId)),
+            'field_type'   => isset($fieldData['field_type'])
+                ? (FilamentFieldTypeEnum::fromString($fieldData['field_type'])?->getLabel() ?? $fieldData['field_type'])
+                : null,
+            'average_type' => isset($fieldData['average_type']) ? (int)$fieldData['average_type'] : null,
+            'average'      => $fieldData['average'] ?? null,
+        ];
+    })->values()->all();
+
     return Pdf::view('filament-satisfaction-survey-builder::pdf.responses-data', [
         'form'        => $form,
         'entries'     => $entries,
         'fields'      => $fields,
         'fieldGroups' => $fieldGroups,
         'formGroups'  => $formGroups,
+        'totalRegistered' => $totalRegistered,
+        'totalResponses' => $totalResponses,
+        'responseRate' => $responseRate,
+        'averageDataRows' => $averageDataRows,
         'generatedAt' => now(),
     ])
         ->format('a4')

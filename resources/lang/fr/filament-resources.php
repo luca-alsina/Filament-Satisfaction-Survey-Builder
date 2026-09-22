@@ -138,6 +138,13 @@ return [
             ],
             'responses' => [
                 'total_respondents' => __('Nombre de répondants'),
+                'registered' => __('Inscrits'),
+                'with_response' => __('Avec réponse'),
+                'response_rate' => __('Taux de réponse'),
+                'generated_at' => __('Généré le'),
+                'statistics' => __('Statistiques'),
+                'individual_responses' => __('Réponses individuelles'),
+                'no_statistics' => __('Aucune statistique disponible.'),
                 'guest' => __('Invité'),
                 'submitted_at' => __('Soumis le'),
                 'no_answers' => __('Aucune réponse enregistrée.'),
