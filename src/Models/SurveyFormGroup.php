@@ -26,6 +26,6 @@ class SurveyFormGroup extends Model
 
     public function filamentForm(): BelongsTo
     {
-        return $this->belongsTo(SurveyForm::class, 'survey_form_id');
+        return $this->belongsTo(SurveyForm::configuredClass(), 'survey_form_id');
     }
 }

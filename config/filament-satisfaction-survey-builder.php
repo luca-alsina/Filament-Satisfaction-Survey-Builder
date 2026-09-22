@@ -5,8 +5,30 @@ use Luca\FilamentSatisfactionSurveyBuilder\Filament\Pages\ShowForm;
 use Luca\FilamentSatisfactionSurveyBuilder\Enums\FilamentFieldTypeEnum;
 use Luca\FilamentSatisfactionSurveyBuilder\Filament\Resources\FilamentSatisfactionSurveyFormResource\FilamentSatisfactionSurveyFormResource;
 use Luca\FilamentSatisfactionSurveyBuilder\Http\Middleware\SetFormPanel;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyForm;
 
 return [
+    /*
+    |--------------------------------------------------------------------------
+    | Survey Form Model Configuration
+    |--------------------------------------------------------------------------
+    |
+    | The Eloquent model class to use for survey forms throughout the package.
+    | Your custom model MUST extend the package base model to keep
+    | type-hints, instanceof checks and Filament integration working:
+    |
+    |   use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyForm as BaseSurveyForm;
+    |
+    |   class SurveyForm extends BaseSurveyForm
+    |   {
+    |       // protected $table = 'survey_forms'; // inherited, override only if needed
+    |   }
+    |
+    | Example: 'survey_form_model' => \App\Models\SurveyForm::class,
+    |
+    */
+    'survey_form_model' => SurveyForm::class,
+
     'filament-form-user-show-route' => 'filament-satisfaction-survey-builder-users.show',
 
     'filament-form-show-route' => 'filament-satisfaction-survey-builder.show',

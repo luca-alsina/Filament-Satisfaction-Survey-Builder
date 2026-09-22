@@ -13,6 +13,7 @@ use Luca\FilamentSatisfactionSurveyBuilder\Listeners\GenerateSurveyFormUserToken
 use Luca\FilamentSatisfactionSurveyBuilder\Livewire\FilamentForm\Form as FilamentForm;
 use Luca\FilamentSatisfactionSurveyBuilder\Livewire\FilamentForm\Show as FilamentFormShow;
 use Luca\FilamentSatisfactionSurveyBuilder\Livewire\FilamentFormUser\Show as FilamentFormUserShow;
+use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyForm;
 use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyFormUser;
 use Luca\FilamentSatisfactionSurveyBuilder\Observers\FilamentFormUserObserver;
 use Spatie\LaravelPackageTools\Package;
@@ -48,6 +49,12 @@ class FilamentSatisfactionSurveyBuilderServiceProvider extends PackageServicePro
     public function boot()
     {
         parent::boot();
+
+        // Bind the {form} route parameter to the configured SurveyForm model
+        // so a custom model (extending the base) is resolved everywhere,
+        // including implicit bindings like `function (SurveyForm $form)`.
+        $surveyFormModel = SurveyForm::configuredClass();
+        Route::bind('form', fn ($value) => $surveyFormModel::query()->whereKey($value)->firstOrFail());
 
         // Register event listeners
         Event::listen(

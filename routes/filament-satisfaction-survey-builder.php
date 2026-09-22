@@ -6,7 +6,9 @@ use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyForm;
 use Spatie\Browsershot\Browsershot;
 use Spatie\LaravelPdf\Facades\Pdf;
 
-Route::get('/survey-forms/{form}/average-pdf', function (SurveyForm $form) {
+Route::get('/survey-forms/{form}/average-pdf', function ($form) {
+    $formModel = SurveyForm::configuredClass();
+    $form = $form instanceof SurveyForm ? $form : $formModel::query()->whereKey($form)->firstOrFail();
     $averageDataRows = $form->average_data; // Assurez-vous d'avoir accès à ces données
 
     if (empty($averageDataRows)) {
@@ -44,7 +46,9 @@ Route::get('/survey-forms/{form}/average-pdf', function (SurveyForm $form) {
         ->inline();
 })->middleware('web')->name('filament-satisfaction-survey-builder.pdf.average');
 
-Route::get('/survey-forms/{form}/responses-pdf', function (SurveyForm $form) {
+Route::get('/survey-forms/{form}/responses-pdf', function ($form) {
+    $formModel = SurveyForm::configuredClass();
+    $form = $form instanceof SurveyForm ? $form : $formModel::query()->whereKey($form)->firstOrFail();
     $form->load('filamentFormGroups', 'filamentFormGroups.filamentFormGroupFields');
     $entries = $form->filamentFormUsers()->with('user')->get();
 

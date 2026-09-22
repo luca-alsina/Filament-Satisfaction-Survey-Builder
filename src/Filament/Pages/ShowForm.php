@@ -54,8 +54,19 @@ class ShowForm extends Page
         return Filament::getPanel($guestPanelId);
     }
 
-    public function mount(SurveyForm $form): void
+    public function mount(SurveyForm|string|int $form): void
     {
+        // Resolve the configured model so custom models extending the base work
+        // even when implicit binding returned the base class or a raw key.
+        if (! $form instanceof SurveyForm) {
+            $form = SurveyForm::configuredQuery()->whereKey($form)->firstOrFail();
+        } elseif (get_class($form) !== SurveyForm::configuredClass()) {
+            // Re-fetch as the configured class to get custom behavior/accessors.
+            $configured = SurveyForm::configuredQuery()->whereKey($form->getKey())->first();
+            if ($configured) {
+                $form = $configured;
+            }
+        }
         // Check if token is provided and valid (from query string)
         $isValidToken = false;
         $token = request()->query('token');

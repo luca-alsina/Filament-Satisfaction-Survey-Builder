@@ -32,6 +32,39 @@ class SurveyForm extends Model
         'id'
     ];
 
+    /**
+     * Resolve the Eloquent model class configured for survey forms.
+     *
+     * Override via config `filament-satisfaction-survey-builder.survey_form_model`
+     * (or `filament-satisfaction-survey-builder.models.survey_form`).
+     * The custom class MUST extend this base class.
+     */
+    public static function configuredClass(): string
+    {
+        $configured = config('filament-satisfaction-survey-builder.models.survey_form')
+            ?? config('filament-satisfaction-survey-builder.survey_form_model')
+            ?? self::class;
+
+        if (! is_string($configured) || ! class_exists($configured) || ! is_a($configured, self::class, true)) {
+            return self::class;
+        }
+
+        return $configured;
+    }
+
+    /**
+     * Start a query on the configured model, not necessarily static::class.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder<static>
+     */
+    public static function configuredQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        /** @var SurveyForm $instance */
+        $instance = app(static::configuredClass());
+
+        return $instance->newQuery();
+    }
+
     protected $casts = [
         'permit_guest_entries' => 'boolean',
         'private_entries' => 'boolean',
@@ -75,12 +108,12 @@ class SurveyForm extends Model
 
     public function template(): BelongsTo
     {
-        return $this->belongsTo(SurveyForm::class, 'template_id');
+        return $this->belongsTo(static::configuredClass(), 'template_id');
     }
 
     public function templates(): HasMany
     {
-        return $this->hasMany(SurveyForm::class, 'template_id');
+        return $this->hasMany(static::configuredClass(), 'template_id');
     }
 
     public function getFormLinkAttribute(): string

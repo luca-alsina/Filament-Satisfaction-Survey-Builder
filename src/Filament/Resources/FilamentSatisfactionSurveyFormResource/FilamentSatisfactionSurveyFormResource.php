@@ -41,6 +41,11 @@ class FilamentSatisfactionSurveyFormResource extends Resource
 {
     protected static ?string $model = SurveyForm::class;
 
+    public static function getModel(): string
+    {
+        return SurveyForm::configuredClass();
+    }
+
     protected static ?int $navigationSort = 99;
 
     /**
@@ -60,7 +65,9 @@ class FilamentSatisfactionSurveyFormResource extends Resource
             return 'tenant';
         }
 
-        return SurveyForm::getTenantRelationshipName();
+        $model = static::getModel();
+
+        return $model::getTenantRelationshipName();
     }
 
     public static function getBreadcrumb(): string
@@ -258,7 +265,8 @@ class FilamentSatisfactionSurveyFormResource extends Resource
                         ->visible(fn(): bool => static::canCreate())
                         ->authorize(fn(): bool => static::canCreate())
                         ->action(function ($record) {
-                            $formCopy = SurveyForm::create([
+                            $modelClass = static::getModel();
+                            $formCopy = $modelClass::create([
                                 'name' => $record->name . ' - (Copy)',
                                 'permit_guest_entries' => $record->permit_guest_entries,
                                 'private_entries' => $record->private_entries,

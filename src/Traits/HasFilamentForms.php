@@ -10,6 +10,6 @@ trait HasFilamentForms
 {
     public function FilamentForms(): BelongsToMany
     {
-        return $this->belongsToMany(SurveyForm::class);
+        return $this->belongsToMany(SurveyForm::configuredClass());
     }
 }

@@ -18,6 +18,11 @@ class CheckFormGuestAccess
 
         $form = $request->route('form');
 
+        // Resolve raw keys via the configured model so custom models work.
+        if (! $form instanceof SurveyForm && $form !== null) {
+            $form = SurveyForm::configuredQuery()->whereKey($form)->first();
+        }
+
         // If form allows guest entries, allow access
         if ($form instanceof SurveyForm && $form->permit_guest_entries) {
             return $next($request);

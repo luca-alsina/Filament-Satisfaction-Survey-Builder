@@ -23,7 +23,7 @@ class CreateFilamentForm extends CreateRecord
         $record = $this->record;
         $templateId = $this->data['template_id'] ?? null;
 
-        if ($templateId && $template = SurveyForm::find($templateId)) {
+        if ($templateId && $template = SurveyForm::configuredQuery()->find($templateId)) {
             $this->copyFromTemplate($record, $template);
 
             Notification::make()

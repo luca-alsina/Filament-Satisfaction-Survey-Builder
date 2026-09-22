@@ -39,9 +39,18 @@ class Show extends Component implements HasActions, HasForms
 
     public ?array $data = [];
 
-    public function mount(SurveyForm $form, bool $blockRedirect = false, bool $preview = false)
+    public function mount(SurveyForm|string|int $form, bool $blockRedirect = false, bool $preview = false)
     {
         $this->preview = $preview;
+
+        if (! $form instanceof SurveyForm) {
+            $form = SurveyForm::configuredQuery()->whereKey($form)->firstOrFail();
+        } elseif (get_class($form) !== SurveyForm::configuredClass()) {
+            $configured = SurveyForm::configuredQuery()->whereKey($form->getKey())->first();
+            if ($configured) {
+                $form = $configured;
+            }
+        }
 
         $this->filamentForm = $form->load('filamentFormGroups', 'filamentFormGroups.filamentFormGroupFields');
 

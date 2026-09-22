@@ -11,8 +11,12 @@ class Form extends Component
 {
     public SurveyForm $form;
 
-    public function mount(SurveyForm $form)
+    public function mount(SurveyForm|string|int $form)
     {
+        if (! $form instanceof SurveyForm) {
+            $form = SurveyForm::configuredQuery()->whereKey($form)->firstOrFail();
+        }
+
         $this->form = $form;
     }
 
