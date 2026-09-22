@@ -55,6 +55,20 @@
             font-size: 11px;
             margin-top: 4px;
         }
+
+        .summary {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 10px 14px;
+            margin-bottom: 20px;
+            font-size: 12px;
+            color: #374151;
+        }
+
+        .summary strong {
+            color: #111827;
+        }
     </style>
 </head>
 <body>
@@ -62,6 +76,19 @@
 <div class="meta">
     {{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.sections.average_data') }}
     - {{ $generatedAt->format('Y-m-d H:i') }}
+</div>
+
+<div class="summary">
+    <strong>{{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.pdf.average.response_rate') }} :</strong>
+    @if ($responseRate !== null)
+        {{ number_format((float) $responseRate, 2) }}%
+    @else
+        —
+    @endif
+    <span class="muted">
+        ({{ (int) $totalResponses }} / {{ (int) $totalRegistered }}
+        {{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.pdf.average.responses_per_registered') }})
+    </span>
 </div>
 
 @foreach ($averageDataRows as $row)

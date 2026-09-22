@@ -132,6 +132,10 @@ return [
         ],
 
         'pdf' => [
+            'average' => [
+                'response_rate' => __('Response rate'),
+                'responses_per_registered' => __('responses out of registered'),
+            ],
             'responses' => [
                 'total_respondents' => __('Total respondents'),
                 'guest' => __('Guest'),

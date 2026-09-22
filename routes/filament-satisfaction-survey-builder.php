@@ -15,8 +15,16 @@ Route::get('/survey-forms/{form}/average-pdf', function (SurveyForm $form) {
 
     $filename = Str::slug($form->name) . '-average-stats-' . now()->format('Y-m-d-His') . '.pdf';
 
+    // Taux de réponse : nombre de réponses par rapport au nombre de personnes inscrites
+    $totalRegistered = $form->filamentFormUsers()->count();
+    $totalResponses = $form->filamentFormUsers()->whereNotNull('entry')->count();
+    $responseRate = $totalRegistered > 0 ? ($totalResponses / $totalRegistered) * 100 : null;
+
     return Pdf::view('filament-satisfaction-survey-builder::pdf.average-data', [
         'form' => $form,
+        'totalRegistered' => $totalRegistered,
+        'totalResponses' => $totalResponses,
+        'responseRate' => $responseRate,
         'averageDataRows' => collect($averageDataRows)->map(function ($fieldData, $fieldId) {
             return [
                 'field_id'     => $fieldId,
