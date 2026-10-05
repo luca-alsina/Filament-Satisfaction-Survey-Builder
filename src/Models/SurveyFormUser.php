@@ -16,6 +16,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property int|null $user_id
  * @property string|null $token
  * @property-read array $key_value_entry
+ * @property-read string $entry_link_with_token
  * @property-read SurveyForm $filamentForm
  */
 class SurveyFormUser extends Model implements HasMedia
@@ -61,6 +62,34 @@ class SurveyFormUser extends Model implements HasMedia
             'form' => $this->survey_form_id,
             'token' => $this->token,
         ]);
+    }
+
+    /**
+     * Whether the given token identifies this submission.
+     *
+     * The token is the bearer credential sent by email (or built through
+     * `form_link_with_token`): whoever holds it is considered to be the
+     * person the submission belongs to, authenticated or not.
+     */
+    public function hasValidToken(?string $token): bool
+    {
+        if (blank($token) || blank($this->token)) {
+            return false;
+        }
+
+        return hash_equals((string) $this->token, (string) $token);
+    }
+
+    /**
+     * URL of the entry page carrying the identification token, so the
+     * recipient can be authorized without a session.
+     */
+    public function getEntryLinkWithTokenAttribute(): string
+    {
+        return route(
+            config('filament-satisfaction-survey-builder.filament-form-user-show-route'),
+            ['entry' => $this->getKey(), 'token' => $this->token],
+        );
     }
 
     public function getKeyValueEntryAttribute()

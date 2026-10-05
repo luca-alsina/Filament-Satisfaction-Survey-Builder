@@ -72,14 +72,18 @@ class ShowEntry extends Page
     {
         $loginRoute = config('filament-satisfaction-survey-builder.login-route', 'filament.app.auth.login');
 
-        // For guest entries, require a valid signed URL
-        if ($entry->user_id === null) {
-            if (! request()->hasValidSignature()) {
-                abort(403, 'This link has expired or is invalid.');
-            }
-        } else {
-            // For authenticated user entries: use policy if registered, otherwise only allow submitter
-            if (auth()->check()) {
+        // The token issued for this submission identifies its recipient: holding it is
+        // enough to view the entry, whether or not a session is authenticated.
+        $identifiedByToken = $entry->hasValidToken($this->resolveTokenFromRequest());
+
+        if (! $identifiedByToken) {
+            if ($entry->user_id === null) {
+                // For guest entries, require a valid signed URL
+                if (! request()->hasValidSignature()) {
+                    abort(403, 'This link has expired or is invalid.');
+                }
+            } elseif (auth()->check()) {
+                // For authenticated user entries: use policy if registered, otherwise only allow submitter
                 $user = auth()->user();
                 $policy = policy($entry);
                 if ($policy && method_exists($policy, 'view')) {
@@ -90,7 +94,7 @@ class ShowEntry extends Page
                     abort(403, 'You can only view your own form submissions.');
                 }
             } else {
-                // Not authenticated and entry has a user - redirect to login
+                // Not authenticated, no token and entry has a user - redirect to login
                 $this->redirect(route($loginRoute, [
                     'redirect' => request()->fullUrl(),
                 ]), navigate: false);
@@ -103,6 +107,17 @@ class ShowEntry extends Page
             'user',
             'filamentForm.filamentFormGroups.filamentFormGroupFields',
         );
+    }
+
+    /**
+     * Token carried by the current request, either as a route segment
+     * (`/token/{token}`) or as a query parameter (`?token=`).
+     */
+    protected function resolveTokenFromRequest(): ?string
+    {
+        $token = request()->route('token') ?? request()->query('token');
+
+        return is_string($token) && $token !== '' ? $token : null;
     }
 
     public function getTitle(): string

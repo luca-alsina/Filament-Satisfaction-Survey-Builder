@@ -78,6 +78,14 @@ class Show extends Component implements HasActions, HasForms
             return null;
         }
 
+        $token = $this->token ?? request()->route('token') ?? request()->query('token');
+
+        // Forward the token identifying this entry so the entry page can
+        // authorize the visitor without an authenticated session.
+        if ($this->existingEntry->hasValidToken(is_string($token) ? $token : null)) {
+            return $this->existingEntry->entry_link_with_token;
+        }
+
         return route(
             config('filament-satisfaction-survey-builder.filament-form-user-show-route'),
             ['entry' => $this->existingEntry->getKey()]
@@ -421,22 +429,37 @@ class Show extends Component implements HasActions, HasForms
 
         if ($this->filamentForm->redirect_url) {
             return redirect($this->filamentForm->redirect_url);
-        } else {
-            // For guest submissions, use a signed temporary URL
-            // For authenticated users, use a regular route (policy will handle authorization)
-            if ($entryModel->user_id === null) {
-                return redirect()->to(
-                    URL::temporarySignedRoute(
-                        config('filament-satisfaction-survey-builder.filament-form-user-show-route'),
-                        now()->addDays(7), // Link expires in 7 days
-                        ['entry' => $entryModel->id]
-                    )
-                );
-            }
-
-            return redirect()
-                ->route(config('filament-satisfaction-survey-builder.filament-form-user-show-route'), $entryModel);
         }
+
+        // The token used to fill the form identifies the submitter: forward it to the
+        // entry page so it can authorize the visitor, even without an authenticated
+        // session (guest, or user not allowed by the SurveyFormUser policy).
+        if (! empty($activeToken)) {
+            return redirect()->to(
+                URL::temporarySignedRoute(
+                    config('filament-satisfaction-survey-builder.filament-form-user-show-route'),
+                    now()->addDays(7), // Link expires in 7 days
+                    ['entry' => $entryModel->getKey(), 'token' => $activeToken]
+                )
+            );
+        }
+
+        if ($entryModel->user_id === null) {
+            // For guest submissions without token, use a signed temporary URL
+            return redirect()->to(
+                URL::temporarySignedRoute(
+                    config('filament-satisfaction-survey-builder.filament-form-user-show-route'),
+                    now()->addDays(7), // Link expires in 7 days
+                    ['entry' => $entryModel->getKey()]
+                )
+            );
+        }
+
+        // For authenticated users, use a regular route (policy will handle authorization)
+        return redirect()->route(
+            config('filament-satisfaction-survey-builder.filament-form-user-show-route'),
+            $entryModel,
+        );
     }
 
     public function parseValue(SurveyFormGroupField $field, string|array|null $value): string|array
