@@ -7,6 +7,13 @@ is not a drop-in replacement for the original package, but it extends its functi
 satisfaction surveys, needed for a professional project. **This extension is not working for now** but feel free to make
 some suggestion. I'll try to keep it up as much as possible, even beyond my job's requirements.
 
+## Form submission redirects
+
+Set `form-submission-redirect-resolver` in the package config to a class implementing
+`FormSubmissionRedirectResolver` to customize the destination after a successful submission. Its `resolve` method
+receives the configured redirect URL and the saved `SurveyFormUser`, and must return the URL to redirect to. Set the
+option to `null` to use the configured URL unchanged.
+
 ## TODO
 
 - [X] Add fields groups in form

@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\HtmlString;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
+use Luca\FilamentSatisfactionSurveyBuilder\Contracts\FormSubmissionRedirectResolver;
 use Luca\FilamentSatisfactionSurveyBuilder\Enums\FilamentFieldTypeEnum;
 use Luca\FilamentSatisfactionSurveyBuilder\Events\EntrySaved;
 use Luca\FilamentSatisfactionSurveyBuilder\Jobs\CalculateAverageDataJob;
@@ -272,6 +273,25 @@ class Show extends Component implements HasActions, HasForms
         return $filamentField;
     }
 
+    private function resolveSubmissionRedirect(string $redirectUrl, SurveyFormUser $entry): string
+    {
+        $resolverClass = config('filament-satisfaction-survey-builder.form-submission-redirect-resolver');
+
+        if (! $resolverClass) {
+            return $redirectUrl;
+        }
+
+        $resolver = app($resolverClass);
+
+        if (! $resolver instanceof FormSubmissionRedirectResolver) {
+            throw new \LogicException(
+                'The configured form submission redirect resolver must implement '.FormSubmissionRedirectResolver::class.'.'
+            );
+        }
+
+        return $resolver->resolve($redirectUrl, $entry);
+    }
+
     public function create()
     {
         if ($this->filamentForm->is_template) {
@@ -428,7 +448,7 @@ class Show extends Component implements HasActions, HasForms
         }
 
         if ($this->filamentForm->redirect_url) {
-            return redirect($this->filamentForm->redirect_url);
+            return redirect($this->resolveSubmissionRedirect($this->filamentForm->redirect_url, $entryModel));
         }
 
         // The token used to fill the form identifies the submitter: forward it to the

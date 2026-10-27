@@ -33,6 +33,8 @@ return [
 
     'filament-form-show-route' => 'filament-satisfaction-survey-builder.show',
 
+    'form-submission-redirect-resolver' => null,
+
     'filament-form-user-uri' => 'entries',
 
     'filament-form-uri' => 'forms',
