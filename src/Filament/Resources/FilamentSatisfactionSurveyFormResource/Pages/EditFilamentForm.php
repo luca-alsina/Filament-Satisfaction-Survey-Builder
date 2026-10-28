@@ -36,6 +36,12 @@ class EditFilamentForm extends EditRecord
                     ->visible(fn(SurveyForm $record): bool => !empty($this->getAverageDataRows($record)))
                     ->openUrlInNewTab()
                     ->url(fn(SurveyForm $record) => route('filament-satisfaction-survey-builder.pdf.average', ['form' => $record])),
+                Action::make('download_synthesis_pdf')
+                    ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.actions.download_synthesis_pdf'))
+                    ->icon('heroicon-o-document-chart-bar')
+                    ->visible(fn(SurveyForm $record): bool => $record->filamentFormUsers()->exists())
+                    ->openUrlInNewTab()
+                    ->url(fn(SurveyForm $record) => route('filament-satisfaction-survey-builder.pdf.synthesis', ['form' => $record])),
                 Action::make('download_responses_pdf')
                     ->label(__('filament-satisfaction-survey-builder::filament-resources.survey-form.actions.download_responses_pdf'))
                     ->icon('heroicon-o-users')

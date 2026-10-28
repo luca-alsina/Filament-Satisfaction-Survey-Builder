@@ -113,6 +113,7 @@ return [
             'regenerate_average_in_progress' => __('Les moyennes sont en cours de régénération ! Cela peut prendre quelques minutes...'),
             'download_average_pdf' => __('PDF des moyennes'),
             'download_average_pdf_empty' => __('Aucune donnée de moyenne disponible à exporter.'),
+            'download_synthesis_pdf' => __('PDF de synthèse'),
             'download_responses_pdf' => __('PDF des réponses'),
             'copy' => __('Copier'),
             'copy_success_title' => __('Formulaire copié avec succès'),
@@ -135,6 +136,12 @@ return [
             'average' => [
                 'response_rate' => __('Taux de réponse'),
                 'responses_per_registered' => __('réponses sur inscrits'),
+            ],
+            'synthesis' => [
+                'individual_text_responses' => __('Réponses aux questions textuelles'),
+                'no_text_responses' => __('Aucune réponse textuelle enregistrée.'),
+                'no_answer' => __('Aucune réponse'),
+                'ungrouped' => __('Autres questions'),
             ],
             'responses' => [
                 'total_respondents' => __('Nombre de répondants'),

@@ -1,8 +1,8 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
-    <title>{{ $form->name }} - Average Statistics</title>
+    <title>{{ $form->name }} - {{ $documentTitle ?? __('filament-satisfaction-survey-builder::filament-resources.survey-form.sections.average_data') }}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -69,12 +69,79 @@
         .summary strong {
             color: #111827;
         }
+
+        h2 {
+            font-size: 16px;
+            margin: 26px 0 10px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #e5e7eb;
+            color: #1f2937;
+            page-break-after: avoid;
+        }
+
+        .group-description,
+        .respondent-meta {
+            color: #6b7280;
+            font-size: 10px;
+            margin: -4px 0 8px;
+        }
+
+        .respondent-block {
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 12px 14px;
+            margin-bottom: 14px;
+            page-break-inside: avoid;
+        }
+
+        .respondent-header {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .group-header {
+            font-size: 12px;
+            font-weight: 700;
+            margin: 10px 0 4px;
+            padding: 5px 8px;
+            border: 1px solid #e5e7eb;
+            background: #f3f4f6;
+            page-break-after: avoid;
+        }
+
+        .answer-row {
+            display: flex;
+            padding: 5px 0;
+            border-bottom: 1px solid #f3f4f6;
+            page-break-inside: avoid;
+        }
+
+        .answer-label {
+            width: 35%;
+            padding-right: 10px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .answer-value {
+            width: 65%;
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+        }
+
+        .no-answer {
+            color: #9ca3af;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
 <h1>{{ $form->name }}</h1>
 <div class="meta">
-    {{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.sections.average_data') }}
+    {{ $documentTitle ?? __('filament-satisfaction-survey-builder::filament-resources.survey-form.sections.average_data') }}
     - {{ $generatedAt->format('Y-m-d H:i') }}
 </div>
 
@@ -91,7 +158,28 @@
     </span>
 </div>
 
-@foreach ($averageDataRows as $row)
+@php
+    $averageGroups = $questionGroups ?? [[
+        'name' => null,
+        'description' => null,
+        'averageDataRows' => $averageDataRows,
+    ]];
+@endphp
+
+@if (empty($averageDataRows))
+    <div class="muted">{{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.pdf.responses.no_statistics') }}</div>
+@endif
+
+@foreach ($averageGroups as $group)
+    @if (!empty($group['averageDataRows']))
+        @if (!empty($group['name']))
+            <h2>{{ $group['name'] }}</h2>
+            @if (!empty($group['description']))
+                <div class="group-description">{{ $group['description'] }}</div>
+            @endif
+        @endif
+
+        @foreach ($group['averageDataRows'] as $row)
     @php
         $label = (string) ($row['label'] ?? ('#' . ($row['field_id'] ?? '')));
         $fieldType = $row['field_type'] ?? null;
@@ -146,6 +234,59 @@
             <div>{{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.average_data.unsupported') }}</div>
         @endif
     </div>
+        @endforeach
+    @endif
 @endforeach
+
+@isset($respondents)
+    <h2>{{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.pdf.synthesis.individual_text_responses') }}</h2>
+
+    @if (empty($textResponseGroups))
+        <div class="muted">{{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.pdf.synthesis.no_text_responses') }}</div>
+    @else
+        @forelse ($respondents as $index => $respondent)
+            <div class="respondent-block">
+                <div class="respondent-header">
+                    #{{ $index + 1 }} — {{ $respondent['name'] }}
+                    @if ($respondent['email'])
+                        &lt;{{ $respondent['email'] }}&gt;
+                    @endif
+                </div>
+                <div class="respondent-meta">
+                    {{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.pdf.responses.submitted_at') }}
+                    : {{ $respondent['submitted_at'] }}
+                </div>
+
+                @foreach ($textResponseGroups as $group)
+                    <div class="group-header">{{ $group['name'] }}</div>
+                    @if (!empty($group['description']))
+                        <div class="group-description">{{ $group['description'] }}</div>
+                    @endif
+                    @foreach ($group['textFields'] as $field)
+                        @php
+                            $answer = $respondent['answers'][$field['id']] ?? null;
+                            if (is_bool($answer)) {
+                                $answer = $answer ? 'Oui' : 'Non';
+                            }
+                            $answer = is_scalar($answer) ? trim((string) $answer) : null;
+                        @endphp
+                        <div class="answer-row">
+                            <div class="answer-label">{{ $field['label'] }}</div>
+                            <div class="answer-value">
+                                @if ($answer !== null && $answer !== '')
+                                    {{ $answer }}
+                                @else
+                                    <span class="no-answer">{{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.pdf.synthesis.no_answer') }}</span>
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
+                @endforeach
+            </div>
+        @empty
+            <div class="muted">{{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.pdf.responses.no_entries') }}</div>
+        @endforelse
+    @endif
+@endisset
 </body>
 </html>
