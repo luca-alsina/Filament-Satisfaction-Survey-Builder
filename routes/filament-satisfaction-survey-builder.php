@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Str;
 use Luca\FilamentSatisfactionSurveyBuilder\Enums\FilamentFieldTypeEnum;
+use Luca\FilamentSatisfactionSurveyBuilder\Jobs\CalculateAverageDataJob;
 use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyForm;
 use Spatie\Browsershot\Browsershot;
 use Spatie\LaravelPdf\Facades\Pdf;
@@ -51,8 +52,10 @@ Route::get('/survey-forms/{form}/synthesis-pdf', function ($form) {
     $form = $form instanceof SurveyForm ? $form : $formModel::query()->whereKey($form)->firstOrFail();
     $form->load('filamentFormGroups', 'filamentFormGroups.filamentFormGroupFields');
     $entries = $form->filamentFormUsers()->get();
+    $form->setRelation('filamentFormUsers', $entries);
+    $form->setRelation('filamentFormFields', $form->filamentFormGroups->flatMap->filamentFormGroupFields);
 
-    $averageDataRows = collect($form->average_data ?? [])->map(function ($fieldData, $fieldId) {
+    $averageDataRows = collect((new CalculateAverageDataJob($form))->calculate())->map(function ($fieldData, $fieldId) {
         $fieldData = is_array($fieldData) ? $fieldData : [];
 
         return [
@@ -67,7 +70,6 @@ Route::get('/survey-forms/{form}/synthesis-pdf', function ($form) {
     })->values();
     $unassignedAverageDataRows = $averageDataRows->keyBy('field_id');
 
-    $textFieldTypes = ['TEXT', 'TEXTAREA', 'RICH_EDITOR', 'MARKDOWN_EDITOR'];
     $textFieldsById = [];
     $textFieldIdsByLabel = [];
     $questionGroups = [];
@@ -93,8 +95,8 @@ Route::get('/survey-forms/{form}/synthesis-pdf', function ($form) {
                 ? $field->type->name
                 : strtoupper((string) $field->type);
 
-            if (in_array($fieldType, $textFieldTypes, true)) {
-                $textField = ['id' => $fieldId, 'label' => $field->label];
+            if ($fieldType !== 'HEADING' && $fieldType !== 'REPEATER') {
+                $textField = ['id' => $fieldId, 'label' => $field->label, 'field_type' => $fieldType];
                 $groupData['questions'][] = ['type' => 'text', ...$textField];
                 $textFieldsById[$fieldId] = $textField;
                 $textFieldIdsByLabel[$field->label] ??= $fieldId;
@@ -119,29 +121,41 @@ Route::get('/survey-forms/{form}/synthesis-pdf', function ($form) {
     }
 
     $textAnswersByFieldId = [];
+    $unmatchedQuestions = [];
     foreach ($entries as $entry) {
         foreach (is_array($entry->entry) ? $entry->entry : [] as $fieldEntry) {
             if (! is_array($fieldEntry)) {
                 continue;
             }
 
-            $fieldId = (string) ($fieldEntry['field_id'] ?? $fieldEntry['field'] ?? '');
-            if (! isset($textFieldsById[$fieldId])) {
+            $fieldId = (string) ($fieldEntry['field_id'] ?? '');
+            if ($fieldId === '') {
                 $fieldId = $textFieldIdsByLabel[(string) ($fieldEntry['field'] ?? '')] ?? '';
             }
             if (! isset($textFieldsById[$fieldId])) {
-                continue;
+                $label = (string) ($fieldEntry['field'] ?? '');
+                if ($label === '') {
+                    continue;
+                }
+                $fieldId = 'unmatched:' . ($fieldId !== '' ? $fieldId : $label);
+                $unmatchedQuestions[$fieldId] ??= ['type' => 'text', 'id' => $fieldId, 'label' => $label];
             }
 
             $answer = $fieldEntry['answer'] ?? null;
             if (is_array($answer)) {
-                $answer = implode(', ', array_filter(array_map('strval', $answer)));
-            } elseif (is_string($answer)) {
+                $answer = implode(', ', array_map('strval', array_filter(
+                    $answer,
+                    fn ($value) => is_scalar($value) && (string) $value !== ''
+                )));
+            } elseif (in_array($textFieldsById[$fieldId]['field_type'] ?? null, ['TOGGLE', 'CHECKBOX'], true)
+                && in_array($answer, ['true', 'false', 0, 1, '0', '1', false, true], true)) {
+                $answer = in_array($answer, ['true', 1, '1', true], true) ? __('Yes') : __('No');
+            } elseif (is_string($answer) && ($textFieldsById[$fieldId]['field_type'] ?? null) === 'RICH_EDITOR') {
                 // Rich editor answers are stored as HTML; render their text in the PDF.
                 $answer = preg_replace('/<\s*(br\s*\/?>|\/(p|div)\s*)>/i', "\n", $answer);
                 $answer = html_entity_decode(strip_tags($answer), ENT_QUOTES | ENT_HTML5, 'UTF-8');
             } elseif (is_bool($answer)) {
-                $answer = $answer ? 'Oui' : 'Non';
+                $answer = $answer ? __('Yes') : __('No');
             }
 
             if (is_scalar($answer) && trim((string) $answer) !== '') {
@@ -150,8 +164,17 @@ Route::get('/survey-forms/{form}/synthesis-pdf', function ($form) {
         }
     }
 
-    $totalRegistered = $form->filamentFormUsers()->count();
-    $totalResponses = $form->filamentFormUsers()->whereNotNull('entry')->count();
+    if ($unmatchedQuestions) {
+        $questionGroups[] = [
+            'id' => null,
+            'name' => __('filament-satisfaction-survey-builder::filament-resources.survey-form.pdf.synthesis.ungrouped'),
+            'description' => null,
+            'questions' => array_values($unmatchedQuestions),
+        ];
+    }
+
+    $totalRegistered = $entries->count();
+    $totalResponses = $entries->whereNotNull('entry')->count();
     $responseRate = $totalRegistered > 0 ? ($totalResponses / $totalRegistered) * 100 : null;
     $filename = Str::slug($form->name) . '-synthesis-' . now()->format('Y-m-d-His') . '.pdf';
 

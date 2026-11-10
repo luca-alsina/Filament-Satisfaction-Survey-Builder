@@ -8,6 +8,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
+use Luca\FilamentSatisfactionSurveyBuilder\Enums\FilamentFieldTypeEnum;
 use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyForm;
 use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyFormGroupField;
 use Luca\FilamentSatisfactionSurveyBuilder\Models\SurveyFormUser;
@@ -23,6 +24,13 @@ class CalculateAverageDataJob implements ShouldQueue
     }
 
     public function handle(): void
+    {
+        $averageData = $this->calculate();
+
+        $this->surveyForm->update(['average_data' => $averageData]);
+    }
+
+    public function calculate(): array
     {
         $averageData = [];
 
@@ -43,23 +51,19 @@ class CalculateAverageDataJob implements ShouldQueue
             $averageData[$fieldId]['average_type'] = $canAverage;
             $averageData[$fieldId]['average'] = match ($canAverage) {
                 // Average fill rate (TOGGLE, CHECKBOX)
-                1 => $this->calculateFillRateAverage($entries, $fieldId),
+                1 => $this->calculateFillRateAverage($entries, $field),
                 // Content average (STAR_RATING)
-                2 => $this->calculateContentAverage($entries, $fieldId),
+                2 => $this->calculateContentAverage($entries, $field),
                 // Average selection rate by option (SELECT, SELECT_MULTIPLE, CHECKBOX_LIST, RADIO)
-                3 => $this->calculateSelectionRateByOption($entries, $fieldId, $field),
+                3 => $this->calculateSelectionRateByOption($entries, $field),
                 default => null
             };
         }
 
-//
-        // Update the survey form with the new average data
-        $this->surveyForm->update([
-            'average_data' => $averageData,
-        ]);
+        return $averageData;
     }
 
-    protected function calculateFillRateAverage($entries, $fieldId): array
+    protected function calculateFillRateAverage($entries, SurveyFormGroupField $field): array
     {
         $entries = collect($entries);
         $totalEntries = $entries->count();
@@ -75,8 +79,7 @@ class CalculateAverageDataJob implements ShouldQueue
         $filledCount = 0;
 
         foreach ($entries as $entry) {
-            $fieldEntry = collect($entry->entry)
-                ->first(fn($item) => $item['field_id'] == $fieldId);
+            $fieldEntry = $this->findFieldEntry($entry, $field);
 
             if ($fieldEntry) {
                 $answer = $fieldEntry['answer'] ?? null;
@@ -94,7 +97,7 @@ class CalculateAverageDataJob implements ShouldQueue
         ];
     }
 
-    protected function calculateContentAverage($entries, $fieldId): array
+    protected function calculateContentAverage($entries, SurveyFormGroupField $field): array
     {
         $entries = collect($entries);
         $totalEntries = $entries->count();
@@ -111,8 +114,7 @@ class CalculateAverageDataJob implements ShouldQueue
         $validCount = 0;
 
         foreach ($entries as $entry) {
-            $fieldEntry = collect($entry->entry)
-                ->first(fn($item) => ($item['field_id'] ?? $item['field']) == $fieldId);
+            $fieldEntry = $this->findFieldEntry($entry, $field);
 
             if ($fieldEntry) {
                 $answer = $fieldEntry['answer'] ?? null;
@@ -145,7 +147,7 @@ class CalculateAverageDataJob implements ShouldQueue
         ];
     }
 
-    protected function calculateSelectionRateByOption(\Illuminate\Database\Eloquent\Collection $entries, $fieldId, SurveyFormGroupField $field): array
+    protected function calculateSelectionRateByOption(\Illuminate\Database\Eloquent\Collection $entries, SurveyFormGroupField $field): array
     {
         /** @var Collection<SurveyFormUser> $entries */
         $entries = collect($entries);
@@ -165,8 +167,7 @@ class CalculateAverageDataJob implements ShouldQueue
 
         foreach ($entries as $entry) {
 
-            $fieldEntry = collect($entry->entry)
-                ->first(fn($item) => $item['field_id'] == $fieldId);
+            $fieldEntry = $this->findFieldEntry($entry, $field);
 
             if ($fieldEntry) {
                 $answer = $fieldEntry['answer'] ?? null;
@@ -176,20 +177,29 @@ class CalculateAverageDataJob implements ShouldQueue
                     continue;
                 }
 
-                // For SELECT, RADIO: answer is a single key
-                if (is_string($answer) || is_numeric($answer)) {
-                    if (isset($optionCounts[$answer])) {
-                        $optionCounts[$answer]++;
-                    }
+                // Current submissions store labels, with multiple labels joined by comma.
+                // Older submissions may contain option keys or arrays instead.
+                if (is_array($answer)) {
+                    $selected = $answer;
+                } elseif (in_array($field->type, [FilamentFieldTypeEnum::SELECT_MULTIPLE, FilamentFieldTypeEnum::CHECKBOX_LIST], true)
+                    && ! array_key_exists((string) $answer, $optionCounts)) {
+                    $selected = explode(', ', (string) $answer);
+                } else {
+                    $selected = [$answer];
                 }
 
-                // For SELECT_MULTIPLE, CHECKBOX_LIST: answer is an array of keys
-                if (is_array($answer)) {
-                    foreach ($answer as $selectedOption) {
-                        if (isset($optionCounts[$selectedOption])) {
-                            $optionCounts[$selectedOption]++;
-                        }
+                $matched = [];
+                foreach ($selected as $option) {
+                    if (! is_string($option) && ! is_numeric($option)) {
+                        continue;
                     }
+                    $label = array_key_exists($option, $optionCounts) ? $option : ($options[$option] ?? null);
+                    if ($label !== null && isset($optionCounts[$label])) {
+                        $matched[$label] = true;
+                    }
+                }
+                foreach (array_keys($matched) as $label) {
+                    $optionCounts[$label]++;
                 }
             }
         }
@@ -203,5 +213,15 @@ class CalculateAverageDataJob implements ShouldQueue
         }
 
         return $result;
+    }
+
+    private function findFieldEntry(SurveyFormUser $entry, SurveyFormGroupField $field): ?array
+    {
+        return collect(is_array($entry->entry) ? $entry->entry : [])
+            ->first(fn ($item) => is_array($item) && (
+                isset($item['field_id'])
+                    ? (string) $item['field_id'] === (string) $field->id
+                    : (string) ($item['field'] ?? '') === (string) $field->label
+            ));
     }
 }

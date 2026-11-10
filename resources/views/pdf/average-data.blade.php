@@ -143,7 +143,7 @@
     ]];
 @endphp
 
-@if (empty($averageDataRows))
+@if (empty($averageDataRows) && !isset($questionGroups))
     <div class="muted">{{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.pdf.responses.no_statistics') }}</div>
 @endif
 
@@ -222,7 +222,7 @@
                             @endforeach
                         </ul>
                     @else
-                        <div class="muted">{{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.pdf.synthesis.no_text_responses') }}</div>
+                        <div class="muted">{{ __('filament-satisfaction-survey-builder::filament-resources.survey-form.pdf.synthesis.no_answer') }}</div>
                     @endif
                 </div>
             @endif
