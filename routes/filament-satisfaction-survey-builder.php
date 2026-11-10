@@ -68,10 +68,11 @@ Route::get('/survey-forms/{form}/synthesis-pdf', function ($form) {
             'average' => $fieldData['average'] ?? null,
         ];
     })->values();
-    $unassignedAverageDataRows = $averageDataRows->keyBy('field_id');
+    $averageDataByFieldId = $averageDataRows->keyBy('field_id');
+    $unassignedAverageDataRows = clone $averageDataByFieldId;
 
     $textFieldsById = [];
-    $textFieldIdsByLabel = [];
+    $fieldIdsByLabel = [];
     $questionGroups = [];
 
     foreach ($form->filamentFormGroups as $group) {
@@ -84,11 +85,13 @@ Route::get('/survey-forms/{form}/synthesis-pdf', function ($form) {
 
         foreach ($group->filamentFormGroupFields as $field) {
             $fieldId = (string) $field->id;
+            $fieldIdsByLabel[$field->label] ??= $fieldId;
             if ($unassignedAverageDataRows->has($fieldId)) {
                 $groupData['questions'][] = [
                     'type' => 'average',
                     'row' => $unassignedAverageDataRows->pull($fieldId),
                 ];
+                continue;
             }
 
             $fieldType = $field->type instanceof FilamentFieldTypeEnum
@@ -99,7 +102,6 @@ Route::get('/survey-forms/{form}/synthesis-pdf', function ($form) {
                 $textField = ['id' => $fieldId, 'label' => $field->label, 'field_type' => $fieldType];
                 $groupData['questions'][] = ['type' => 'text', ...$textField];
                 $textFieldsById[$fieldId] = $textField;
-                $textFieldIdsByLabel[$field->label] ??= $fieldId;
             }
         }
 
@@ -130,7 +132,10 @@ Route::get('/survey-forms/{form}/synthesis-pdf', function ($form) {
 
             $fieldId = (string) ($fieldEntry['field_id'] ?? '');
             if ($fieldId === '') {
-                $fieldId = $textFieldIdsByLabel[(string) ($fieldEntry['field'] ?? '')] ?? '';
+                $fieldId = $fieldIdsByLabel[(string) ($fieldEntry['field'] ?? '')] ?? '';
+            }
+            if ($averageDataByFieldId->has($fieldId)) {
+                continue;
             }
             if (! isset($textFieldsById[$fieldId])) {
                 $label = (string) ($fieldEntry['field'] ?? '');
